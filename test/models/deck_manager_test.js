@@ -18,8 +18,8 @@ describe("DECK MANAGER", () => {
     );
   });
 
-  describe("MURDER COMBINATION", () => {
-    it("should give murder combination", () => {
+  describe("murder combination", () => {
+    it(" => should give murder combination", () => {
       const murderCombination = deckManager.getMurderCombination();
       assertEquals(murderCombination, {
         suspect: SUSPECTS[0],
@@ -29,8 +29,8 @@ describe("DECK MANAGER", () => {
     });
   });
 
-  describe("REMAINING CARDS", () => {
-    it("should give remaining cards which are not present in murder combination", () => {
+  describe("remaining cards", () => {
+    it(" => should give remaining cards which are not present in murder combination", () => {
       const murderCombination = deckManager.getMurderCombination();
       const remainingCards = deckManager.getRemainingCards();
       const isInMurderCombination = remainingCards
@@ -40,17 +40,17 @@ describe("DECK MANAGER", () => {
     });
   });
 
-  describe("PLAYERS HAND", () => {
-    it("should create and give unique player's hand from remaining cards if total player is 6", () => {
+  describe("distribute cards", () => {
+    it(" => should distribute cards and give unique player's hand from remaining cards if total player is 6", () => {
       const remainingCards = deckManager.getRemainingCards();
-      const hands = deckManager.getPlayersHands([1, 2, 3, 4, 5, 6]);
+      const hands = deckManager.distributeCards([1, 2, 3, 4, 5, 6]);
       const uniqueCardsInHands = distinct(Object.values(hands).flat());
       assertEquals(remainingCards.length, uniqueCardsInHands.length);
     });
 
-    it("should create and give unique player's hand from remaining cards if total player is less than 6", () => {
+    it(" => should distribute cards and give unique player's hand from remaining cards if total player is less than 6", () => {
       const remainingCards = deckManager.getRemainingCards();
-      const hands = deckManager.getPlayersHands([1, 2, 3, 4]);
+      const hands = deckManager.distributeCards([1, 2, 3, 4]);
       const uniqueCardsInHands = distinct(Object.values(hands).flat());
       assertEquals(hands[1].length, 5);
       assertEquals(hands[2].length, 5);

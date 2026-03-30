@@ -37,7 +37,7 @@ export class DeckManager {
     return [...this.#remainingCards];
   }
 
-  getPlayersHands(players) {
+  distributeCards(players) {
     const hands = {};
     let inc = 0;
 
@@ -50,4 +50,5 @@ export class DeckManager {
 
     return hands;
   }
+
 }
