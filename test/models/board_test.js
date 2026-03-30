@@ -172,4 +172,50 @@ describe("BOARD buildBoard", () => {
       assert(graph["room1"].adj.includes("tile-0-1"));
     });
   });
+  describe("get reachable nodes", () => {
+    it(" => should give all possible reachable positions: from a door", () => {
+      const smallBoard = new Board({
+        ...baseConfig,
+        size: { height: 2, width: 2 },
+      });
+      smallBoard.buildBoard();
+      assertEquals(smallBoard.getReachableNodes("tile-0-1", 2), ["room1"]);
+    });
+
+    it(" => should give all possible reachable positions: from a tile", () => {
+      const smallBoard = new Board({
+        ...baseConfig,
+        size: { height: 2, width: 2 },
+      });
+      smallBoard.buildBoard();
+      const board = smallBoard.getBoardState();
+      console.log({ board });
+
+      assertEquals(smallBoard.getReachableNodes("tile-0-1", 1), ["room1"]);
+    });
+
+    it(" => should give all possible reachable positions: from a occupied tile", () => {
+      const smallBoard = new Board({
+        ...baseConfig,
+        size: { height: 2, width: 2 },
+      });
+      smallBoard.buildBoard();
+      const board = smallBoard.getBoardState();
+      console.log({ board });
+
+      assertEquals(smallBoard.getReachableNodes("tile-0-0", 1), []);
+    });
+
+    it(" => should give all possible reachable positions: from a room", () => {
+      const smallBoard = new Board({
+        ...baseConfig,
+        size: { height: 2, width: 2 },
+      });
+      smallBoard.buildBoard();
+      const board = smallBoard.getBoardState();
+      console.log({ board });
+
+      assertEquals(smallBoard.getReachableNodes("room1", 1), ["tile-0-1"]);
+    });
+  });
 });
