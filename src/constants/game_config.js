@@ -1,0 +1,29 @@
+export const SUSPECTS = [
+  "MISS SCARLETT",
+  "COLONEL MUSTARD",
+  "MRS WHITE",
+  "REVEREND GREEN",
+  "MRS PEACOCK",
+  "PROFESSOR PLUM",
+];
+
+export const WEAPONS = [
+  "DAGGER",
+  "ROPE",
+  "REVOLVER",
+  "SPANNER",
+  "LEAD PIPING",
+  "CANDLESTICK",
+];
+
+export const ROOMS = [
+  "DINING ROOM",
+  "KITCHEN",
+  "BALLROOM",
+  "CONSERVATORY",
+  "BILLIARD ROOM",
+  "LIBRARY",
+  "STUDY",
+  "HALL",
+  "LOUNGE",
+];
