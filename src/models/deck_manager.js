@@ -36,4 +36,18 @@ export class DeckManager {
   getRemainingCards() {
     return [...this.#remainingCards];
   }
+
+  getPlayersHands(players) {
+    const hands = {};
+    let inc = 0;
+
+    while (this.#remainingCards.length !== 0) {
+      const card = this.#remainingCards.pop();
+      const currentPlayer = players[(inc++) % players.length];
+      hands[currentPlayer] ||= [];
+      hands[currentPlayer].push(card);
+    }
+
+    return hands;
+  }
 }

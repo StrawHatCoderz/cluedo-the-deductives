@@ -1,8 +1,9 @@
+import { distinct } from "@std/collections";
+
 import { beforeEach, describe, it } from "@std/testing/bdd";
-import { assertEquals } from "@std/assert/equals";
+import { assertEquals, assertFalse } from "@std/assert";
 import { DeckManager } from "../../src/models/deck_manager.js";
 import { ROOMS, SUSPECTS, WEAPONS } from "../../src/constants/game_config.js";
-import { assertFalse } from "@std/assert/false";
 
 describe("DECK MANAGER", () => {
   let deckManager;
@@ -36,6 +37,26 @@ describe("DECK MANAGER", () => {
         .some((card) => card.includes(Object.values(murderCombination)));
 
       assertFalse(isInMurderCombination);
+    });
+  });
+
+  describe("PLAYERS HAND", () => {
+    it("should create and give unique player's hand from remaining cards if total player is 6", () => {
+      const remainingCards = deckManager.getRemainingCards();
+      const hands = deckManager.getPlayersHands([1, 2, 3, 4, 5, 6]);
+      const uniqueCardsInHands = distinct(Object.values(hands).flat());
+      assertEquals(remainingCards.length, uniqueCardsInHands.length);
+    });
+
+    it("should create and give unique player's hand from remaining cards if total player is less than 6", () => {
+      const remainingCards = deckManager.getRemainingCards();
+      const hands = deckManager.getPlayersHands([1, 2, 3, 4]);
+      const uniqueCardsInHands = distinct(Object.values(hands).flat());
+      assertEquals(hands[1].length, 5);
+      assertEquals(hands[2].length, 5);
+      assertEquals(hands[3].length, 4);
+      assertEquals(hands[4].length, 4);
+      assertEquals(remainingCards.length, uniqueCardsInHands.length);
     });
   });
 });
