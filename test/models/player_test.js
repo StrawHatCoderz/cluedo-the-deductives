@@ -1,6 +1,7 @@
 import { beforeEach, describe, it } from "@std/testing/bdd";
 import { assertEquals } from "@std/assert";
 import { Player } from "../../src/models/player.js";
+import { Pawn } from "../../src/models/movement.js";
 
 describe("PLAYER", () => {
   let player;
@@ -40,5 +41,14 @@ describe("PLAYER", () => {
     const cards = ["kitchen", "rope", "dagger"];
     player.setHand(cards);
     assertEquals((player.get()).hand, cards);
+  });
+
+  it(" => assign pawn should assign a pawn to the player", () => {
+    const pawn = new Pawn("Scarlet", "0_0", "red", 1);
+    player.assignPawn(pawn);
+
+    assertEquals(player.getPawn().name, "Scarlet");
+    assertEquals(player.getPawn().color, "red");
+    assertEquals(player.getPawn().position, "0_0");
   });
 });

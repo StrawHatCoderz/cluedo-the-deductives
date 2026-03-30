@@ -2,6 +2,7 @@ export class Player {
   #id;
   #playerName;
   #isHost;
+  #pawn;
   #isEliminated;
   #hand;
   #isWon;
@@ -13,6 +14,7 @@ export class Player {
     this.#isEliminated = false;
     this.#isWon = false;
     this.#hand = [];
+    this.#pawn = null;
   }
 
   get() {
@@ -36,5 +38,13 @@ export class Player {
 
   setWon() {
     this.#isWon = true;
+  }
+
+  assignPawn(pawn) {
+    this.#pawn = pawn;
+  }
+
+  getPawn() {
+    return this.#pawn.get();
   }
 }

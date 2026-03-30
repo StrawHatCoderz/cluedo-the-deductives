@@ -15,3 +15,24 @@ describe("PAWN POSITION", () => {
     assertEquals(scarlet.getPosition(), [23, 19]);
   });
 });
+
+describe("GET PAWN", () => {
+  it(" => should give pawn details", () => {
+    const scarlet = new Pawn("Ms.Scarlet", [23, 19], "red", 1);
+    const expected = {
+      name: "Ms.Scarlet",
+      position: [23, 19],
+      color: "red",
+      playerId: 1,
+    };
+    assertEquals(scarlet.get(), expected);
+  });
+});
+
+describe("UPDATE POSITION", () => {
+  it(" => should update the position of the pawn", () => {
+    const scarlet = new Pawn("Ms.Scarlet", [23, 19], "red", 1);
+    scarlet.updatePosition([27, 9]);
+    assertEquals(scarlet.get().position, [27, 9]);
+  });
+});

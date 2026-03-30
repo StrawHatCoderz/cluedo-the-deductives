@@ -1,9 +1,9 @@
 export class Pawn {
-  #id;
   #name;
   #position;
   #color;
   #playerId;
+
   constructor(name, position, color, playerId) {
     this.#name = name;
     this.#position = position;
@@ -11,8 +11,21 @@ export class Pawn {
     this.#playerId = playerId;
   }
 
+  get() {
+    return {
+      name: this.#name,
+      position: this.#position,
+      color: this.#color,
+      playerId: this.#playerId,
+    };
+  }
+
   getPosition() {
     return this.#position;
+  }
+
+  updatePosition(currentPosition) {
+    this.#position = currentPosition;
   }
 }
 
