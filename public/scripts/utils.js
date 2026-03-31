@@ -13,64 +13,49 @@ export const getCharacterColor = (char) => {
   return colors[char] || "white";
 };
 
-export const fetchBoardConfig = (_url) => {
+const parsePlayersData = (config) => {
+  const { players } = config;
+
+  return players.map((player) => ({
+    id: player.id,
+    name: player.playerName,
+    pawn: toId(player.pawn.name),
+    hand: player.hand,
+  }));
+};
+
+const toId = (data) => data.toLowerCase().replace(" ", "_");
+
+const parsePawnsData = (config) => {
+  const { pawns } = config;
+
+  return pawns.map(({ position, name }) => ({
+    pos: {
+      x: position?.x,
+      y: position?.y,
+      room: position?.room,
+    },
+    char: toId(name),
+  }));
+};
+
+const getCurrentPlayerHand = (currentPlayerId, players) => {
+  const currentPlayer = players.filter(
+    (player) => player.id === currentPlayerId,
+  )[0];
+
+  return currentPlayer?.hand;
+};
+
+export const fetchGameConfig = async (url) => {
+  const gameContext = await fetch(url).then((data) => data.json());
+
   return {
-    secretPassages: {
-      kitchen: "study",
-      study: "kitchen",
-      lounge: "conservatory",
-      conservatory: "lounge",
-    },
-
-    pawnPositions: {
-      mustard: { x: 0, y: 17 },
-      scarlet: { x: 7, y: 24 },
-      plum: { x: 23, y: 19 },
-      peacock: { x: 23, y: 6, room: "conservatory" },
-      green: { x: 14, y: 0, room: "lounge" },
-      white: { x: null, y: null, room: "lounge" },
-    },
-
-    players: [
-      {
-        id: 1,
-        name: "deadpool",
-        pawn: "mustard",
-        pawnLocation: {
-          x: 1,
-          y: 2,
-        },
-      },
-      {
-        id: 2,
-        name: "spiderman",
-        pawn: "peacock",
-      },
-      {
-        id: 3,
-        name: "ironman",
-        pawn: "scarlet",
-      },
-      {
-        id: 2,
-        name: "thor",
-        pawn: "plum",
-      },
-      {
-        id: 2,
-        name: "captain",
-        pawn: "white",
-      },
-      {
-        id: 2,
-        name: "groot",
-        pawn: "green",
-      },
-    ],
-
+    players: parsePlayersData(gameContext),
+    pawns: parsePawnsData(gameContext),
     currentPlayer: {
       id: 1,
-      hand: ["mustard", "rope", "scarlet", "hall", "dining_room", "dagger"],
+      hand: getCurrentPlayerHand(1, gameContext.players),
     },
   };
 };

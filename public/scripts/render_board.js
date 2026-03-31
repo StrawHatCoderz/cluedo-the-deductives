@@ -25,7 +25,7 @@ const createSlots = (roomId) => {
   ];
 };
 
-const movePawnToRoom = (pawnId, room) => {
+const movePawnToRoom = (pawnId, room, existingPawnCount) => {
   const usedSlots = new Set(Object.values(room.occupied));
   const freeIndex = room.slots.findIndex((_, i) => !usedSlots.has(i));
 
@@ -35,7 +35,7 @@ const movePawnToRoom = (pawnId, room) => {
   const { x, y } = room.slots[freeIndex];
 
   const pawn = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-  pawn.setAttribute("cx", x);
+  pawn.setAttribute("cx", x + existingPawnCount + 12);
   pawn.setAttribute("cy", y);
   pawn.setAttribute("r", 5);
   pawn.setAttribute("id", `pawn-${pawnId}`);
@@ -45,7 +45,7 @@ const movePawnToRoom = (pawnId, room) => {
 };
 
 const placeCharacters = (boardConfig) => {
-  for (const [char, pos] of Object.entries(boardConfig.pawnPositions)) {
+  for (const { char, pos } of boardConfig.pawns) {
     if (pos.room) {
       const room = {
         slots: createSlots(pos.room),
@@ -55,7 +55,7 @@ const placeCharacters = (boardConfig) => {
       movePawnToRoom(char, room);
     } else {
       const tile = document.getElementById(`tile-${pos.x}-${pos.y}`);
-      if (tile) tile.style.fill = `url(#${char}-pawn)`;
+      if (tile) tile.style.fill = `url(#${char}_pawn)`;
     }
   }
 };
