@@ -47,48 +47,11 @@ describe("GAME", () => {
           hand: [],
           isHost: false,
           isWon: false,
+          pawn: new Pawn(),
         },
       ];
       const players = game.getAllPlayers();
       assertEquals(players, expected);
-    });
-  });
-
-  describe("get player", () => {
-    it(" => should return details of one player ", () => {
-      const player = new Player(1, "Javed", false);
-      game.addPlayer(player);
-      const expected = {
-        id: 1,
-        playerName: "Javed",
-        isEliminated: false,
-        hand: [],
-        isHost: false,
-        isWon: false,
-      };
-      assertEquals(game.getPlayer(1), expected);
-    });
-  });
-
-  describe("getAllPawns", () => {
-    it(" => should return all pawns ", () => {
-      const pawns = game.getAllPawns();
-      const expected = [
-        { id: 1, name: "Scarlet", position: "0_0", color: "red" },
-        {
-          id: 2,
-          name: "Colonel",
-          position: "0_9",
-          color: "yellow",
-        },
-      ];
-      assertEquals(pawns, expected);
-    });
-  });
-
-  describe("getPawn", () => {
-    it(" => should return the details of pawn ", () => {
-      assertEquals(game.getPawn(2).name, "Colonel");
     });
   });
 
@@ -109,35 +72,6 @@ describe("GAME", () => {
     it(" => should change current game state", () => {
       game.changeCurrentState();
       assertEquals(game.getCurrentState().state, "setup");
-    });
-  });
-
-  describe("distribute cards", () => {
-    beforeEach(() => {
-      const playersData = [
-        { id: 1, playerName: "Thor", isHost: true },
-        {
-          id: 2,
-          playerName: "Hulk",
-          isHost: false,
-        },
-        { id: 3, playerName: "Loki", isHost: false },
-      ];
-
-      playersData.forEach(({ id, playerName, isHost }) => {
-        const player = new Player(id, playerName, isHost);
-        game.addPlayer(player);
-      });
-    });
-
-    it(" => should distribute cards and give unique player's hand from remaining cards if total card is divisible by total player", () => {
-      game.distributeCards();
-      const players = game.getAllPlayers();
-      const hands = players.map((player) => player.hand);
-
-      assertEquals(hands[0].length, 6);
-      assertEquals(hands[1].length, 6);
-      assertEquals(hands[2].length, 6);
     });
   });
 });

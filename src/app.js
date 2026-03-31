@@ -1,7 +1,12 @@
 import { Hono } from "hono";
 import { serveStatic } from "hono/deno";
 import { logger } from "hono/logger";
-import { getGameState, startGame, updateGameState } from "./handlers/game.js";
+import {
+  getGameState,
+  getTotalPlayers,
+  startGame,
+  updateGameState,
+} from "./handlers/game.js";
 import { addMockPlayer } from "./middleware/mock_player.js";
 import {
   serveRollAndTurns,
@@ -17,9 +22,10 @@ export const createApp = (game) => {
     await next();
   });
 
-  app.get("/start-game", addMockPlayer, startGame);
+  app.post("/start-game", addMockPlayer, startGame);
   app.get("/game-state", getGameState);
   app.get("/roll-and-get-turns", (c) => serveRollAndTurns(c));
+  app.get("/total-players", getTotalPlayers);
   app.post("/update-state", updateGameState);
   app.get("*", serveStatic({ root: "./public" }));
   app.post("/update-pawn-position", serveUpdatePawnPosition);

@@ -17,6 +17,7 @@ describe("PLAYER", () => {
       isHost: false,
       hand: [],
       isEliminated: false,
+      pawn: null,
       isWon: false,
     };
     assertEquals(actualPlayer, expectedPlayer);

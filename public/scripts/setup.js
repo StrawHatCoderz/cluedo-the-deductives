@@ -171,9 +171,9 @@ const redirect = async () => {
 const init = async () => {
   ["deck1", "deck2", "deck3"].forEach((id, i) => createDeck(id, [6, 6, 9][i]));
 
-  const totalPlayers = await fetch("/game-state")
+  const totalPlayers = await fetch("/total-players")
     .then((res) => res.json())
-    .then((x) => x.players.length)
+    .then((x) => x.totalPlayers)
     .catch((e) => console.log(e));
 
   dealToEnvelope(() => collectAndDeal(totalPlayers));

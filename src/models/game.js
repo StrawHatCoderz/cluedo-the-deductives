@@ -22,11 +22,16 @@ export class Game {
     this.#pawnsToAssign = shuffleFn(pawns);
   }
 
+  start() {
+    this.#distributeCards();
+    this.changeCurrentState();
+  }
+
   getCurrentState() {
     return {
       state: this.#currentState,
       players: this.getAllPlayers(),
-      pawns: this.getAllPawns(),
+      pawns: this.#getAllPawns(),
     };
   }
 
@@ -48,16 +53,8 @@ export class Game {
     return Object.values(this.#players).map((player) => player?.get());
   }
 
-  getPlayer(id) {
-    return this.#players[id]?.get();
-  }
-
-  getAllPawns() {
+  #getAllPawns() {
     return this.#pawns.map((pawn) => pawn?.get());
-  }
-
-  getPawn(id) {
-    return this.#pawns.find((pawn) => pawn?.get().id === id)?.get();
   }
 
   getBoard() {
@@ -75,7 +72,7 @@ export class Game {
     return this.#rollDice(randomGenerator) + this.#rollDice(randomGenerator);
   }
 
-  distributeCards() {
+  #distributeCards() {
     const players = Object.values(this.#players);
     this.#deck.distributeCards(players);
   }

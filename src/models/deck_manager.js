@@ -22,11 +22,11 @@ export class DeckManager {
     const [room, ...remainingRooms] = this.#shuffle(this.#rooms);
 
     this.#murderCombination = { weapon, suspect, room };
-    this.#remainingCards = [
+    this.#remainingCards = this.#shuffle([
       ...remainingSuspects,
       ...remainingWeapons,
       ...remainingRooms,
-    ];
+    ]);
   }
 
   getMurderCombination() {

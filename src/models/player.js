@@ -25,6 +25,7 @@ export class Player {
       hand: [...this.#hand],
       isHost: this.#isHost,
       isWon: this.#isWon,
+      pawn: this.#pawn,
     };
   }
 

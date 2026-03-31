@@ -58,7 +58,9 @@ describe("DECK MANAGER", () => {
     it(" => should distribute cards and give unique player's hand from remaining cards if total card is divisible by total player", () => {
       const remainingCards = deckManager.getRemainingCards();
       deckManager.distributeCards(players);
+
       const hands = players.map((player) => player.get().hand);
+      console.log(players[0].get().hand);
       const uniqueCardsInHands = distinct(hands.flat());
       assertEquals(hands[0].length, 6);
       assertEquals(hands[1].length, 6);
