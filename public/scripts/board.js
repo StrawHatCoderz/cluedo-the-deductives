@@ -175,6 +175,14 @@ const displayPopup = (p, message) => {
   }, 1000);
 };
 
+const highlightPaths = () => {
+  const nodes = ["tile-9-1", "tile-14-1"];
+  nodes.forEach((node) => {
+    const tile = document.querySelector(`#${node}`);
+    tile.setAttribute("style", "fill:white");
+  });
+};
+
 const diceListener = (dice, p) => {
   dice.addEventListener("click", async (event) => {
     event.preventDefault();
@@ -183,6 +191,7 @@ const diceListener = (dice, p) => {
     );
     const message = `dice value is ${diceValue}`;
     displayPopup(p, message);
+    highlightPaths();
   });
 };
 const getCharacterColor = (char) => {

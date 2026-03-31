@@ -236,3 +236,7 @@ path,
 .popup > p {
   color: white;
 }
+
+.highlight {
+  fill: white;
+}
