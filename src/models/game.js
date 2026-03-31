@@ -25,7 +25,7 @@ export class Game {
   start() {
     this.#distributeCards();
     this.changeCurrentState();
-    this.setTurnOrder();
+    this.#setTurnOrder();
   }
 
   getCurrentState() {
@@ -40,7 +40,7 @@ export class Game {
     this.#currentState = this.#states.shift();
   }
 
-  setTurnOrder() {
+  #setTurnOrder() {
     this.#turnOrder = this.#shuffle(Object.values(this.#players));
   }
 
