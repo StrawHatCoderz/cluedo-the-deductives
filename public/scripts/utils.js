@@ -72,17 +72,5 @@ export const fetchBoardConfig = (_url) => {
       id: 1,
       hand: ["mustard", "rope", "scarlet", "hall", "dining_room", "dagger"],
     },
-
-    rooms: [
-      "kitchen",
-      "dining_room",
-      "lounge",
-      "hall",
-      "study",
-      "library",
-      "billiard_room",
-      "conservatory",
-      "ballroom",
-    ],
   };
 };

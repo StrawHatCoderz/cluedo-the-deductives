@@ -25,15 +25,6 @@ const createSlots = (roomId) => {
   ];
 };
 
-const createRoomInfo = (roomIds) =>
-  roomIds.reduce(
-    (acc, roomId) => ({
-      ...acc,
-      [`${roomId}`]: { slots: createSlots(roomId), occupied: {} },
-    }),
-    {},
-  );
-
 const movePawnToRoom = (pawnId, room) => {
   const usedSlots = new Set(Object.values(room.occupied));
   const freeIndex = room.slots.findIndex((_, i) => !usedSlots.has(i));
@@ -54,11 +45,13 @@ const movePawnToRoom = (pawnId, room) => {
 };
 
 const placeCharacters = (boardConfig) => {
-  const roomsInfo = createRoomInfo(boardConfig.rooms);
-
   for (const [char, pos] of Object.entries(boardConfig.pawnPositions)) {
-    if (pos.room && pos.room !== null) {
-      const room = roomsInfo[pos.room];
+    if (pos.room) {
+      const room = {
+        slots: createSlots(pos.room),
+        occupied: {},
+      };
+
       movePawnToRoom(char, room);
     } else {
       const tile = document.getElementById(`tile-${pos.x}-${pos.y}`);
