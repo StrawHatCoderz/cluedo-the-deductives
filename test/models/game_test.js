@@ -2,20 +2,20 @@ import { beforeEach, describe, it } from "@std/testing/bdd";
 import { assertEquals } from "@std/assert";
 import { Game } from "../../src/models/game.js";
 import { Player } from "../../src/models/player.js";
-import { Pawn } from "../../src/models/movement.js";
+import { Pawn } from "../../src/models/pawn.js";
 
 describe("Game", () => {
   let game;
   beforeEach(() => {
-    const scarlet = new Pawn("Scarlet", "0_0", "red", 1);
-    const colonel = new Pawn("Colonel", "0_9", "yellow", 2);
+    const scarlet = new Pawn(1, "Scarlet", "0_0", "red", 1);
+    const colonel = new Pawn(2, "Colonel", "0_9", "yellow", 2);
     game = new Game(
       1,
       {},
-      {
-        1: scarlet,
-        2: colonel,
-      },
+      [
+        scarlet,
+        colonel,
+      ],
       {},
       (list) => [...list],
     );
@@ -68,8 +68,14 @@ describe("Game", () => {
     it(" => should return all pawns ", () => {
       const pawns = game.getAllPawns();
       const expected = [
-        { name: "Scarlet", position: "0_0", color: "red", playerId: 1 },
-        { name: "Colonel", position: "0_9", color: "yellow", playerId: 2 },
+        { id: 1, name: "Scarlet", position: "0_0", color: "red", playerId: 1 },
+        {
+          id: 2,
+          name: "Colonel",
+          position: "0_9",
+          color: "yellow",
+          playerId: 2,
+        },
       ];
       assertEquals(pawns, expected);
     });
@@ -78,6 +84,13 @@ describe("Game", () => {
   describe("getPawn", () => {
     it(" => should return the details of pawn ", () => {
       assertEquals(game.getPawn(2).name, "Colonel");
+    });
+  });
+
+  describe("roll dice", () => {
+    it(" => should give dice value", () => {
+      const randomGenerator = () => 1;
+      assertEquals(game.getRolledNumber(randomGenerator), 12);
     });
   });
 });

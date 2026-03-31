@@ -19,7 +19,7 @@ export class Game {
     this.#deck = deck;
     this.#players = {};
     this.#shuffle = shuffleFn;
-    this.#pawnsToAssign = shuffleFn(Object.values(pawns));
+    this.#pawnsToAssign = shuffleFn(pawns);
   }
 
   setTurnOrder() {
@@ -41,10 +41,18 @@ export class Game {
   }
 
   getAllPawns() {
-    return Object.values(this.#pawns).map((pawn) => pawn.get());
+    return this.#pawns.map((pawn) => pawn.get());
   }
 
   getPawn(id) {
-    return this.#pawns[id].get();
+    return this.#pawns.find((pawn) => pawn.get().id === id).get();
+  }
+
+  #rollDice(randomGenerator) {
+    return Math.ceil(randomGenerator() * 6);
+  }
+
+  getRolledNumber(randomGenerator = Math.random) {
+    return this.#rollDice(randomGenerator) + this.#rollDice(randomGenerator);
   }
 }

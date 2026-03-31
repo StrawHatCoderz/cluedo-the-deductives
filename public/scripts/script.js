@@ -1,9 +1,9 @@
 globalThis.onload = () => {
-  const dice = document.querySelector("#dice");
-  dice.addEventListener("click", (event) => {
+  const dice = document.querySelector("#dice-button");
+  dice.addEventListener("click", async (event) => {
     event.preventDefault();
-    // const { diceValue } = await fetch("/getDiceValue")
-    //   .then((response) => response.json());
-    alert("dice rolled");
+    const { diceValue } = await fetch("/get-dice-value")
+      .then((response) => response.json());
+    alert(diceValue);
   });
 };
