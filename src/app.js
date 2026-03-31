@@ -10,7 +10,7 @@ export const createApp = (game) => {
     c.set("game", game);
     await next();
   });
-  app.get("/get-dice-value", serveDiceValue);
+  app.get("/get-dice-value", (c) => serveDiceValue(c));
   app.get("*", serveStatic({ root: "./public" }));
   return app;
 };

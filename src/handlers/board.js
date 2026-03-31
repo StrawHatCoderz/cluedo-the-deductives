@@ -1,5 +1,5 @@
-export const serveDiceValue = (c) => {
+export const serveDiceValue = (c, randomFn = Math.random) => {
   const game = c.get("game");
-  const diceValue = game.getRolledNumber();
+  const diceValue = game.getRolledNumber(randomFn);
   return c.json({ diceValue });
 };
