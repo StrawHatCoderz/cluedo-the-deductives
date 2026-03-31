@@ -33,6 +33,7 @@ const movePlayer = (turns) => {
 export const diceListener = (dice, p) => {
   dice.addEventListener("click", async (event) => {
     event.preventDefault();
+    dice.setAttribute("disabled", true);
     const { diceValue, turns } = await fetch("/roll-and-get-turns").then((
       response,
     ) => response.json());

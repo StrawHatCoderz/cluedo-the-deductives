@@ -121,22 +121,18 @@ export class Board {
 
   getReachableNodes(from, steps, start = from, visited = [], res = new Set()) {
     const board = this.getBoardState();
-
     if (board[from].isOccupied && start !== from) return [];
+
     if ((start !== from && board[from].type === "room") || steps === 0) {
       res.add(from);
       return Array.from(res);
     }
 
-    const unVisitedTiles = board[from].adj.filter((tile) =>
-      !visited.includes(tile)
-    );
+    const unVisitedTiles = board[from].adj
+      .filter((tile) => !visited.includes(tile));
 
     for (const tile of unVisitedTiles) {
-      this.getReachableNodes(tile, steps - 1, start, [
-        ...visited,
-        from,
-      ], res);
+      this.getReachableNodes(tile, steps - 1, start, [...visited, from], res);
     }
 
     return Array.from(res);

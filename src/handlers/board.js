@@ -6,9 +6,13 @@ export const serveRollAndTurns = (c, randomFn = Math.random) => {
 };
 
 const getReachableTurns = (game, steps) => {
-  const pawnPosition = "tile-7-24";
+  const currentPawn = 2;
+  const pawn = game.getPawnInstance(currentPawn);
+  const { x, y } = pawn.get().position;
+  const position = `tile-${x}-${y}`;
+
   const board = game.getBoard();
-  return board.getReachableNodes(pawnPosition, steps);
+  return board.getReachableNodes(position, steps);
 };
 
 export const serveUpdatePawnPosition = async (c) => {
