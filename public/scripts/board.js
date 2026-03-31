@@ -69,5 +69,9 @@ const renderBoard = (boardConfig) => {
   markCharacters(boardConfig);
 };
 
-const boardConfig = fetchBoardConfig("example.url");
-globalThis.window.onload = () => renderBoard(boardConfig);
+const main = () => {
+  const boardConfig = fetchBoardConfig("example.url");
+  renderBoard(boardConfig);
+};
+
+globalThis.window.onload = main;
