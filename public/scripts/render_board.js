@@ -95,7 +95,31 @@ const setupSecretPassageEvents = () => {
   });
 };
 
+const tooltip = document.getElementById("tooltip");
+
+const weaponHoverHandler = () => {
+  const weapons = document.querySelectorAll(".weapon");
+
+  weapons.forEach((weapon) => {
+    weapon.addEventListener("mouseenter", (e) => {
+      const name = e.target.dataset.name;
+      tooltip.textContent = name;
+      tooltip.classList.remove("hidden");
+    });
+
+    weapon.addEventListener("mousemove", (e) => {
+      tooltip.style.left = e.pageX + 10 + "px";
+      tooltip.style.top = e.pageY + 10 + "px";
+    });
+
+    weapon.addEventListener("mouseleave", () => {
+      tooltip.classList.add("hidden");
+    });
+  });
+};
+
 export const renderBoard = (boardConfig) => {
   setupSecretPassageEvents();
+  weaponHoverHandler();
   placeCharacters(boardConfig);
 };

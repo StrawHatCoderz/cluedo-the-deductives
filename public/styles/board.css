@@ -320,3 +320,12 @@ path,
 .tooltip-right {
   transform: translate(20%, -50%);
 }
+
+.weapon {
+  fill: #444;
+  cursor: pointer;
+}
+
+.weapon:hover {
+  fill: #ffcc00;
+}
