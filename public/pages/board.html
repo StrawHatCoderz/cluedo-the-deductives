@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cluedo Board</title>
     <link rel="stylesheet" href="/styles/board.css">
-    <script type="module" src="/scripts/board.js"></script>
+    <script type="module" src="/scripts/script.js"></script>
   </head>
 
   <body>
@@ -16,6 +16,11 @@
           <span class="player-name"></span>
           <span class="player-pawn"></span>
         </div>
+      </div>
+    </template>
+    <template id="card-template">
+      <div class="card">
+        <span class="card-name"></span>
       </div>
     </template>
     <div id="players-details-container"></div>
@@ -332,6 +337,7 @@
         </g>
       </svg>
     </div>
+    <div id="players-cards-details"></div>
     <div class="action-buttons">
       <button id="dice-button">dice</button>
     </div>
