@@ -8,6 +8,7 @@ export class Board {
   constructor(boardConfig) {
     this.#config = boardConfig;
     this.#graph = {};
+    this.buildBoard();
   }
 
   #getTileId(x, y) {
@@ -120,9 +121,8 @@ export class Board {
 
   getReachableNodes(from, steps, start = from, visited = [], res = new Set()) {
     const board = this.getBoardState();
-    console.log(board[from]);
 
-    if (board[from].isOccupied) return [];
+    if (board[from].isOccupied && start !== from) return [];
     if ((start !== from && board[from].type === "room") || steps === 0) {
       res.add(from);
       return Array.from(res);

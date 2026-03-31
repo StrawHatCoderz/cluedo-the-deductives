@@ -5,13 +5,9 @@ const displayPopup = (p, message) => {
   }, 1000);
 };
 
-const highlightPaths = async () => {
-  // const nodes = ["tile-9-1", "tile-14-1"];
-  const { nodes } = await fetch("/get-reachable-nodes").then((response) =>
-    response.json()
-  );
-  nodes.forEach((node) => {
-    const tile = document.querySelector(`#${node}`);
+const highlightTurns = (turns) => {
+  turns.forEach((turn) => {
+    const tile = document.querySelector(`#${turn}`);
     tile.setAttribute("style", "fill:white");
   });
 };
@@ -19,11 +15,11 @@ const highlightPaths = async () => {
 export const diceListener = (dice, p) => {
   dice.addEventListener("click", async (event) => {
     event.preventDefault();
-    const { diceValue } = await fetch("/get-dice-value").then((response) =>
-      response.json()
-    );
+    const { diceValue, turns } = await fetch("/roll-and-get-turns").then((
+      response,
+    ) => response.json());
     const message = `dice value is ${diceValue}`;
     displayPopup(p, message);
-    highlightPaths();
+    highlightTurns(turns);
   });
 };

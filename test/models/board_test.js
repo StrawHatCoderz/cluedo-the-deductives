@@ -197,7 +197,10 @@ describe("BOARD buildBoard", () => {
         size: { height: 2, width: 2 },
       });
       smallBoard.buildBoard();
-      assertEquals(smallBoard.getReachableNodes("tile-0-0", 1), []);
+      assertEquals(smallBoard.getReachableNodes("tile-0-0", 1), [
+        "tile-1-0",
+        "tile-0-1",
+      ]);
     });
 
     it(" => should give all possible reachable positions: from a room", () => {
