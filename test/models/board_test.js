@@ -188,9 +188,6 @@ describe("BOARD buildBoard", () => {
         size: { height: 2, width: 2 },
       });
       smallBoard.buildBoard();
-      const board = smallBoard.getBoardState();
-      console.log({ board });
-
       assertEquals(smallBoard.getReachableNodes("tile-0-1", 1), ["room1"]);
     });
 
@@ -200,9 +197,6 @@ describe("BOARD buildBoard", () => {
         size: { height: 2, width: 2 },
       });
       smallBoard.buildBoard();
-      const board = smallBoard.getBoardState();
-      console.log({ board });
-
       assertEquals(smallBoard.getReachableNodes("tile-0-0", 1), []);
     });
 
@@ -212,9 +206,6 @@ describe("BOARD buildBoard", () => {
         size: { height: 2, width: 2 },
       });
       smallBoard.buildBoard();
-      const board = smallBoard.getBoardState();
-      console.log({ board });
-
       assertEquals(smallBoard.getReachableNodes("room1", 1), ["tile-0-1"]);
     });
   });

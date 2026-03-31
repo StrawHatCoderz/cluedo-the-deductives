@@ -5,8 +5,11 @@ const displayPopup = (p, message) => {
   }, 1000);
 };
 
-const highlightPaths = () => {
-  const nodes = ["tile-9-1", "tile-14-1"];
+const highlightPaths = async () => {
+  // const nodes = ["tile-9-1", "tile-14-1"];
+  const { nodes } = await fetch("/get-reachable-nodes").then((response) =>
+    response.json()
+  );
   nodes.forEach((node) => {
     const tile = document.querySelector(`#${node}`);
     tile.setAttribute("style", "fill:white");

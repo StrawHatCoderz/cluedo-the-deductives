@@ -48,6 +48,10 @@ export class Game {
     return this.#pawns.find((pawn) => pawn.get().id === id).get();
   }
 
+  getBoard() {
+    return this.#board;
+  }
+
   #rollDice(randomGenerator) {
     return Math.ceil(randomGenerator() * 6);
   }

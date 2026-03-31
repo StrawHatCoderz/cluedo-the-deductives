@@ -117,6 +117,7 @@ export class Board {
   getBoardState() {
     return this.#graph;
   }
+
   getReachableNodes(from, steps, start = from, visited = [], res = new Set()) {
     const board = this.getBoardState();
     console.log(board[from]);

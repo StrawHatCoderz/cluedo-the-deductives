@@ -11,6 +11,7 @@ export const createApp = (game) => {
     await next();
   });
   app.get("/get-dice-value", (c) => serveDiceValue(c));
+  app.get("/get-reachable-nodes", (c) => serveReachableNodes(c));
   app.get("*", serveStatic({ root: "./public" }));
   return app;
 };
