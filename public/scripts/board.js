@@ -15,6 +15,39 @@ const fetchBoardConfig = (_url) => {
       green: { x: 14, y: 0 },
       white: { x: 9, y: 0 },
     },
+
+    players: [
+      {
+        id: 1,
+        name: "deadpool",
+        pawn: "mustard",
+      },
+      {
+        id: 2,
+        name: "spiderman",
+        pawn: "peacock",
+      },
+      {
+        id: 3,
+        name: "ironman",
+        pawn: "scarlet",
+      },
+      {
+        id: 2,
+        name: "thor",
+        pawn: "plum",
+      },
+      {
+        id: 2,
+        name: "captain",
+        pawn: "white",
+      },
+      {
+        id: 2,
+        name: "groot",
+        pawn: "green",
+      },
+    ],
   };
 };
 
@@ -69,9 +102,41 @@ const renderBoard = (boardConfig) => {
   markCharacters(boardConfig);
 };
 
-const main = () => {
-  const boardConfig = fetchBoardConfig("example.url");
-  renderBoard(boardConfig);
+const createPlayer = (node, player) => {
+  const icon = node.querySelector(".player-icon");
+  icon.setAttribute("id", `${player.pawn}-icon`);
+
+  const playerName = node.querySelector(".player-name");
+  playerName.textContent = player.name;
+
+  const playerPawn = node.querySelector(".player-pawn");
+  playerPawn.textContent = player.pawn;
 };
+
+const renderPlayers = (boardConfig) => {
+  const allPlayerContainer = document.querySelector(
+    "#players-details-container",
+  );
+  const playerTemplate = document.getElementById("player-template");
+
+  allPlayerContainer.innerHTML = "";
+
+  if (!boardConfig.players) return;
+
+  for (const player of boardConfig.players) {
+    const playerClone = playerTemplate.content.cloneNode(true);
+    createPlayer(playerClone, player);
+    allPlayerContainer.appendChild(playerClone);
+  }
+};
+
+const main = async () => {
+  const boardConfig = await fetchBoardConfig("example.url");
+
+  renderBoard(boardConfig);
+  renderPlayers(boardConfig);
+};
+
+main();
 
 globalThis.window.onload = main;
