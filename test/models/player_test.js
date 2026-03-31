@@ -39,7 +39,9 @@ describe("PLAYER", () => {
 
   it(" => should setHand of a player", () => {
     const cards = ["kitchen", "rope", "dagger"];
-    player.setHand(cards);
+    player.addCard(cards[0]);
+    player.addCard(cards[1]);
+    player.addCard(cards[2]);
     assertEquals((player.get()).hand, cards);
   });
 

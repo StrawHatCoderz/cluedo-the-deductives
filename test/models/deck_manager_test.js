@@ -4,6 +4,7 @@ import { beforeEach, describe, it } from "@std/testing/bdd";
 import { assertEquals, assertFalse } from "@std/assert";
 import { DeckManager } from "../../src/models/deck_manager.js";
 import { ROOMS, SUSPECTS, WEAPONS } from "../../src/constants/game_config.js";
+import { Player } from "../../src/models/player.js";
 
 describe("DECK MANAGER", () => {
   let deckManager;
@@ -41,21 +42,41 @@ describe("DECK MANAGER", () => {
   });
 
   describe("distribute cards", () => {
-    it(" => should distribute cards and give unique player's hand from remaining cards if total player is 6", () => {
+    let players;
+    beforeEach(() => {
+      const playersData = [{ id: 1, playerName: "Thor", isHost: true }, {
+        id: 2,
+        playerName: "Hulk",
+        isHost: false,
+      }, { id: 3, playerName: "Loki", isHost: false }];
+
+      players = playersData.map(({ id, playerName, isHost }) =>
+        new Player(id, playerName, isHost)
+      );
+    });
+
+    it(" => should distribute cards and give unique player's hand from remaining cards if total card is divisible by total player", () => {
       const remainingCards = deckManager.getRemainingCards();
-      const hands = deckManager.distributeCards([1, 2, 3, 4, 5, 6]);
-      const uniqueCardsInHands = distinct(Object.values(hands).flat());
+      deckManager.distributeCards(players);
+      const hands = players.map((player) => player.get().hand);
+      const uniqueCardsInHands = distinct(hands.flat());
+      assertEquals(hands[0].length, 6);
+      assertEquals(hands[1].length, 6);
+      assertEquals(hands[2].length, 6);
       assertEquals(remainingCards.length, uniqueCardsInHands.length);
     });
 
-    it(" => should distribute cards and give unique player's hand from remaining cards if total player is less than 6", () => {
+    it(" => should distribute cards and give unique player's hand from remaining cards if total card is not divisible by total player", () => {
       const remainingCards = deckManager.getRemainingCards();
-      const hands = deckManager.distributeCards([1, 2, 3, 4]);
-      const uniqueCardsInHands = distinct(Object.values(hands).flat());
+      const newPlayer = new Player(0, "abc", false);
+      players.push(newPlayer);
+      deckManager.distributeCards(players);
+      const hands = players.map((player) => player.get().hand);
+      const uniqueCardsInHands = distinct(hands.flat());
+      assertEquals(hands[0].length, 5);
       assertEquals(hands[1].length, 5);
-      assertEquals(hands[2].length, 5);
+      assertEquals(hands[2].length, 4);
       assertEquals(hands[3].length, 4);
-      assertEquals(hands[4].length, 4);
       assertEquals(remainingCards.length, uniqueCardsInHands.length);
     });
   });

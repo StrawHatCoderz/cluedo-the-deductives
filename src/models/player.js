@@ -32,8 +32,8 @@ export class Player {
     this.#isEliminated = true;
   }
 
-  setHand(hand) {
-    this.#hand = hand;
+  addCard(card) {
+    this.#hand.push(card);
   }
 
   setWon() {

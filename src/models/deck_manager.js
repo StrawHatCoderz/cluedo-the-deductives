@@ -38,16 +38,12 @@ export class DeckManager {
   }
 
   distributeCards(players) {
-    const hands = {};
     let inc = 0;
 
     while (this.#remainingCards.length !== 0) {
       const card = this.#remainingCards.pop();
       const currentPlayer = players[(inc++) % players.length];
-      hands[currentPlayer] ||= [];
-      hands[currentPlayer].push(card);
+      currentPlayer.addCard(card);
     }
-
-    return hands;
   }
 }

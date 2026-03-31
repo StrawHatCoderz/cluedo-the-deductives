@@ -1,7 +1,7 @@
 import { shuffle } from "@std/random";
 
 export class Game {
-  #states = { WAITING: "waiting", SETUP: "setup" };
+  #states = ["waiting", "setup", "running", "finished"];
   #currentState;
   #id;
   #board;
@@ -12,7 +12,7 @@ export class Game {
   #turnOrder;
   #shuffle;
   constructor(id, board, pawns, deck, shuffleFn = shuffle) {
-    this.#currentState = this.#states.WAITING;
+    this.#currentState = this.#states.shift();
     this.#id = id;
     this.#board = board;
     this.#pawns = pawns;
@@ -20,6 +20,18 @@ export class Game {
     this.#players = {};
     this.#shuffle = shuffleFn;
     this.#pawnsToAssign = shuffleFn(pawns);
+  }
+
+  getCurrentState() {
+    return {
+      state: this.#currentState,
+      players: this.getAllPlayers(),
+      pawns: this.getAllPawns(),
+    };
+  }
+
+  changeCurrentState() {
+    this.#currentState = this.#states.shift();
   }
 
   setTurnOrder() {
@@ -33,19 +45,19 @@ export class Game {
   }
 
   getAllPlayers() {
-    return Object.values(this.#players).map((player) => player.get());
+    return Object.values(this.#players).map((player) => player?.get());
   }
 
   getPlayer(id) {
-    return this.#players[id].get();
+    return this.#players[id]?.get();
   }
 
   getAllPawns() {
-    return this.#pawns.map((pawn) => pawn.get());
+    return this.#pawns.map((pawn) => pawn?.get());
   }
 
   getPawn(id) {
-    return this.#pawns.find((pawn) => pawn.get().id === id).get();
+    return this.#pawns.find((pawn) => pawn?.get().id === id)?.get();
   }
 
   getBoard() {
@@ -58,5 +70,10 @@ export class Game {
 
   getRolledNumber(randomGenerator = Math.random) {
     return this.#rollDice(randomGenerator) + this.#rollDice(randomGenerator);
+  }
+
+  distributeCards() {
+    const players = Object.values(this.#players);
+    this.#deck.distributeCards(players);
   }
 }

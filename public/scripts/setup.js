@@ -1,6 +1,5 @@
 let dealtOnce = false;
 
-// Initialize decks
 const createDeck = (deckId, count) => {
   const deck = document.getElementById(deckId);
   deck.innerHTML = "";
@@ -103,10 +102,8 @@ const distributeCards = (
   startPos,
 ) => {
   setTimeout(() => {
-    // Shuffle cards
     allCards = shuffle(allCards);
 
-    // Deal cards to players
     let delay = 0;
     allCards.forEach((card, i) => {
       card.classList.remove("deck-card");
@@ -119,7 +116,6 @@ const distributeCards = (
       const offsetX = (i / numPlayers) * 2;
       const offsetY = (i / numPlayers) * 2;
 
-      // Start position at center of all players
       card.style.left = startPos.x + "px";
       card.style.top = startPos.y + "px";
 
@@ -171,13 +167,12 @@ const collectRemainingCards = (decks) => {
   decks.forEach((deck) => {
     deck.querySelectorAll(".deck-card").forEach((c) => {
       allCards.push(c);
-      c.remove(); // remove from deck to fly from center
+      c.remove();
     });
   });
 
   return allCards;
 };
-// Move envelope down, collect remaining cards, shuffle, and deal
 const collectRemainingAndDeal = () => {
   const envelope = document.getElementById("envelope");
   const decks = [
@@ -188,16 +183,13 @@ const collectRemainingAndDeal = () => {
 
   const table = document.getElementById("table");
 
-  // Collect remaining cards
   let allCards = collectRemainingCards(decks);
 
-  // Create players first to know their positions
   const numPlayers = 6;
   createPlayers(numPlayers);
   const playerElements = document.querySelectorAll(".player");
   const startPos = getPlayersCenter();
 
-  // Move envelope down off-screen
   envelope.style.transition = "all 1s ease";
   envelope.style.bottom = "-200px";
 
@@ -232,4 +224,4 @@ await start();
 
 setTimeout(() => {
   redirect();
-}, 7000);
+}, 6000);
