@@ -1,0 +1,177 @@
+:root {
+  --bg-dark: #0f1117;
+  --bg-accent: #1a1f2e;
+
+  --board-frame: #d4aa60;
+  --board-shadow: rgba(212, 170, 96, 0.15);
+
+  --tile: #3a4e3a;
+  --tile-border: #2a3a2a;
+  --tile-door: #4a6040;
+
+  --room: #c8b68a;
+  --dark: #b2a074;
+  --wall: #2f2f2f;
+
+  --kitchen: #f2dfa7;
+  --ballroom: #aecde8;
+  --conservatory: #aee8bb;
+  --dining: #e8aeae;
+  --lounge: #d4aedf;
+  --hall: #f5c98a;
+  --study: #e8d5ae;
+  --library: #aedfdf;
+  --billiard: #c5e8ae;
+
+  --cluedo-bg: #1a1a2e;
+  --cluedo-border: #d4aa60;
+
+  --text-dark: #1a1a1a;
+  --text-light: #d4aa60;
+
+  --grid-line: #dddddd;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--bg-dark);
+  font-family: sans-serif;
+}
+
+.board-container {
+  width: 100vw;
+  height: 100vh;
+}
+
+svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.tiles rect {
+  width: 10px;
+  height: 10px;
+  fill: var(--tile);
+  stroke: var(--tile-border);
+  stroke-width: 0.3;
+
+  shape-rendering: crispEdges;
+  transition: fill 0.5s ease;
+}
+
+.secret-passage {
+  width: 10px;
+  height: 10px;
+}
+
+.tiles rect:hover {
+  fill: #4f6a4f;
+}
+
+path,
+#cluedo {
+  fill: var(--room);
+  stroke: var(--wall);
+  stroke-width: 1;
+}
+
+.room {
+  stroke: #111;
+  stroke-width: 1.2;
+}
+
+#kitchen {
+  fill: var(--kitchen);
+}
+
+#ballroom {
+  fill: var(--ballroom);
+}
+
+#conservatory {
+  fill: var(--conservatory);
+}
+
+#dining_room {
+  fill: var(--dining);
+}
+
+#lounge {
+  fill: var(--lounge);
+}
+
+#hall {
+  fill: var(--hall);
+}
+
+#study {
+  fill: var(--study);
+}
+
+#library {
+  fill: var(--library);
+}
+
+#billiard_room {
+  fill: var(--billiard);
+}
+
+#cluedo {
+  fill: var(--cluedo-bg);
+  stroke: var(--cluedo-border);
+  stroke-width: 2;
+}
+
+.room-label {
+  font-size: 12px;
+  font-weight: 700;
+  fill: var(--text-dark);
+
+  text-anchor: middle;
+  dominant-baseline: middle;
+
+  pointer-events: none;
+}
+
+.room-label-cluedo {
+  font-size: 12px;
+  fill: var(--text-light);
+  letter-spacing: 0.2em;
+}
+
+.secret-passage {
+  fill: var(--bg-accent);
+  stroke: var(--bg-dark);
+  stroke-width: 1;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+/*
+.secret-passage::after {
+	content: attr(data-target);
+	position: absolute;
+	display: none;
+	background: var(--text-light);
+	color: var(--bg-dark);
+	padding: 2px 6px;
+	font-size: 10px;
+	font-weight: 700;
+	border-radius: 3px;
+	pointer-events: none;
+	white-space: nowrap;
+	z-index: 10;
+} */
+/*
+.secret-passage:hover::after {
+	display: block;
+} */
