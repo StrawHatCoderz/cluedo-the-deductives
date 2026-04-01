@@ -1,14 +1,22 @@
-const displayPopup = (p, message) => {
+const displayPopup = (message) => {
+  const messageContainer = document.querySelector("#message-container");
+  messageContainer.setAttribute(
+    "style",
+    "background: linear-gradient(145deg, #f5e6c8, #d8c79a);",
+  );
+  const p = messageContainer.querySelector("p");
   p.textContent = message;
   setTimeout(() => {
+    messageContainer.setAttribute("style", "visibility:hidden");
     p.textContent = "";
-  }, 1000);
+  }, 2000);
 };
 
 const highlightTurns = (turns) => {
   turns.forEach((turn) => {
     const tile = document.querySelector(`#${turn}`);
-    tile.setAttribute("style", "fill:white");
+    tile.classList.add("highlight");
+    tile.parentNode.appendChild(tile);
   });
 };
 
@@ -21,9 +29,7 @@ const movePlayer = (turns) => {
 
       await fetch("/update-pawn-position", {
         method: "post",
-        headers: {
-          "content-type": "application/json",
-        },
+        headers: { "content-type": "application/json" },
         body: JSON.stringify({ currentNodeId, turns }),
       });
       globalThis.window.location.reload();
@@ -31,15 +37,16 @@ const movePlayer = (turns) => {
   });
 };
 
-export const diceListener = (dice, p) => {
+export const diceListener = (dice) => {
   dice.addEventListener("click", async (event) => {
     event.preventDefault();
     dice.setAttribute("disabled", true);
-    const { diceValue, turns } = await fetch("/roll-and-get-turns").then((
-      response,
-    ) => response.json());
+
+    const { diceValue, turns } = await fetch("/roll-and-get-turns")
+      .then((response) => response.json());
     const message = `dice value is ${diceValue}`;
-    displayPopup(p, message);
+
+    displayPopup(message);
     highlightTurns(turns);
     movePlayer(turns);
   });

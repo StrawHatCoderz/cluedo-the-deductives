@@ -11,7 +11,6 @@ const main = async () => {
   const p = document.querySelector(".popup > p");
 
   renderBoard(boardConfig);
-
   renderPlayers(boardConfig);
   renderPlayerCards(boardConfig.currentPlayer.hand);
   diceListener(dice, p);

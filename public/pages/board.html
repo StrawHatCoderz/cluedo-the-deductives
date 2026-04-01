@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cluedo Board</title>
-    <link rel="stylesheet" href="/styles/board.css">
+    <link rel="stylesheet" href="/styles/board.css" />
     <script type="module" src="/scripts/script.js"></script>
   </head>
 
@@ -383,7 +383,13 @@
           </rect>
         </g>
         <g id="weapons-group">
-          <circle class="weapon" cx="330" cy="190" r="5" data-name="Knife">
+          <circle
+            class="weapon"
+            cx="330"
+            cy="190"
+            r="5"
+            data-name="Knife"
+          >
           </circle>
           <circle
             class="weapon"
@@ -393,24 +399,54 @@
             data-name="Candlestick"
           >
           </circle>
-          <circle class="weapon" cx="340" cy="205" r="5" data-name="Revolver">
+          <circle
+            class="weapon"
+            cx="340"
+            cy="205"
+            r="5"
+            data-name="Revolver"
+          >
           </circle>
-          <circle class="weapon" cx="370" cy="205" r="5" data-name="Rope">
+          <circle
+            class="weapon"
+            cx="370"
+            cy="205"
+            r="5"
+            data-name="Rope"
+          >
           </circle>
-          <circle class="weapon" cx="330" cy="220" r="5" data-name="Lead Pipe">
+          <circle
+            class="weapon"
+            cx="330"
+            cy="220"
+            r="5"
+            data-name="Lead Pipe"
+          >
           </circle>
-          <circle class="weapon" cx="360" cy="220" r="5" data-name="Wrench">
+          <circle
+            class="weapon"
+            cx="360"
+            cy="220"
+            r="5"
+            data-name="Wrench"
+          >
           </circle>
         </g>
       </svg>
     </div>
     <div id="players-cards-details"></div>
     <div class="action-buttons">
-      <button id="dice-button">dice</button>
+      <button id="dice-button">
+        🎲
+        <span class="hover-text">dice</span>
+      </button>
     </div>
     <div class="popup">
       <p></p>
     </div>
     <div id="tooltip" class="tooltip hidden"></div>
+    <div id="message-container">
+      <p></p>
+    </div>
   </body>
 </html>

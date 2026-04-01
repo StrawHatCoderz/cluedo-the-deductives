@@ -239,7 +239,26 @@ path,
 }
 
 .highlight {
-  fill: white;
+  stroke: red;
+  stroke-width: 1;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0% {
+    stroke-width: 2;
+    opacity: 1;
+  }
+
+  50% {
+    stroke-width: 2;
+    opacity: 0.6;
+  }
+
+  100% {
+    stroke-width: 2;
+    opacity: 1;
+  }
 }
 
 #players-cards-details {
@@ -328,4 +347,58 @@ path,
 
 .weapon:hover {
   fill: #ffcc00;
+}
+
+.action-buttons {
+  position: fixed;
+  right: 15%;
+  bottom: 7%;
+  display: flex;
+  flex-direction: column;
+}
+
+.hover-text {
+  visibility: hidden;
+}
+#dice-button:hover .hover-text {
+  visibility: visible;
+}
+
+#message-container {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 50px;
+  width: 300px;
+  border-radius: 2px;
+}
+
+#message-container p {
+  text-align: center;
+  color: black;
+}
+
+#dice-button {
+  position: relative;
+  font-size: 24px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+#dice-button span {
+  position: absolute;
+  transform: translateX(60%);
+
+  background: black;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-size: 12px;
+
+  opacity: 0;
+  transition: all 0.5s;
+}
+
+#dice-button:hover span {
+  opacity: 1;
 }
