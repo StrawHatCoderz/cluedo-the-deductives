@@ -2,7 +2,7 @@ import { diceListener, passBtnListener } from "./board.js";
 import { renderBoard } from "./render_board.js";
 import { renderPlayers } from "./render_player.js";
 import { renderPlayerCards } from "./render_player_cards.js";
-import { fetchGameConfig } from "./utils.js";
+import { displayPopup, fetchGameConfig } from "./utils.js";
 
 const main = async () => {
   const boardConfig = await fetchGameConfig("/game-state");
@@ -16,5 +16,13 @@ const main = async () => {
   renderPlayerCards(boardConfig.currentPlayer.hand);
   diceListener(dice, p);
   passBtnListener(passBtn);
+
+  const alreadyShown = sessionStorage.getItem("gameStartedPopup");
+
+  if (boardConfig.state === "running" && !alreadyShown) {
+    displayPopup("Game has started!");
+    sessionStorage.setItem("gameStartedPopup", "true");
+  }
 };
+
 globalThis.window.onload = main;

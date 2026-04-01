@@ -1,16 +1,4 @@
-const displayPopup = (message) => {
-  const messageContainer = document.querySelector("#message-container");
-  messageContainer.setAttribute(
-    "style",
-    "background: linear-gradient(145deg, #f5e6c8, #d8c79a);",
-  );
-  const p = messageContainer.querySelector("p");
-  p.textContent = message;
-  setTimeout(() => {
-    messageContainer.setAttribute("style", "visibility:hidden");
-    p.textContent = "";
-  }, 2000);
-};
+import { displayPopup } from "./utils.js";
 
 const highlightTurns = (turns) => {
   turns.forEach((turn) => {
@@ -42,8 +30,9 @@ export const diceListener = (dice) => {
     event.preventDefault();
     dice.setAttribute("disabled", true);
 
-    const { diceValue, turns } = await fetch("/roll-and-get-turns")
-      .then((response) => response.json());
+    const { diceValue, turns } = await fetch("/roll-and-get-turns").then(
+      (response) => response.json(),
+    );
     const message = `dice value is ${diceValue}`;
 
     displayPopup(message);

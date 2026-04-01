@@ -50,8 +50,10 @@ const getCurrentPlayerHand = (currentPlayerId, players) => {
 
 export const fetchGameConfig = async (url) => {
   const gameContext = await fetch(url).then((data) => data.json());
+  console.log(gameContext);
 
   return {
+    state: gameContext.state,
     players: parsePlayersData(gameContext),
     pawns: parsePawnsData(gameContext),
     currentPlayer: {
@@ -59,4 +61,18 @@ export const fetchGameConfig = async (url) => {
       hand: getCurrentPlayerHand(1, gameContext.players),
     },
   };
+};
+
+export const displayPopup = (message) => {
+  const messageContainer = document.querySelector("#message-container");
+  messageContainer.setAttribute(
+    "style",
+    "background: linear-gradient(145deg, #f5e6c8, #d8c79a);",
+  );
+  const p = messageContainer.querySelector("p");
+  p.textContent = message;
+  setTimeout(() => {
+    messageContainer.setAttribute("style", "visibility:hidden");
+    p.textContent = "";
+  }, 2000);
 };
