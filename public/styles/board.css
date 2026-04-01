@@ -309,6 +309,7 @@ path,
 .secret-passage:hover {
   opacity: 0.8;
 }
+
 .tooltip {
   position: absolute;
   padding: 6px 10px;

@@ -9,21 +9,8 @@
   </head>
 
   <body>
-    <template id="player-template">
-      <div class="player">
-        <div class="player-icon"></div>
-        <div class="player-info">
-          <span class="player-name"></span>
-          <span class="player-pawn"></span>
-        </div>
-      </div>
-    </template>
-    <template id="card-template">
-      <div class="card">
-        <span class="card-name"></span>
-      </div>
-    </template>
     <div id="players-details-container"></div>
+
     <div class="board-container">
       <svg
         id="board-svg"
@@ -35,11 +22,11 @@
           <pattern
             id="colonel_mustard_pawn"
             patternUnits="objectBoundingBox"
-            width="10"
-            height="10"
+            width="8"
+            height="8"
           >
             <rect x="0" y="0" fill="#3a4e3a" width="10" height="10"></rect>
-            <circle cx="5" cy="5" r="4" fill="#E1C05A" />
+            <circle cx="5" cy="5" r="5" fill="#E1C05A" />
           </pattern>
           <pattern
             id="mrs_white_pawn"
@@ -48,7 +35,7 @@
             height="10"
           >
             <rect x="0" y="0" fill="#3a4e3a" width="10" height="10"></rect>
-            <circle cx="5" cy="5" r="4" fill="#FFFFFF" />
+            <circle cx="5" cy="5" r="5" fill="#FFFFFF" />
           </pattern>
           <pattern
             id="miss_scarlett_pawn"
@@ -57,7 +44,7 @@
             height="10"
           >
             <rect x="0" y="0" fill="#3a4e3a" width="10" height="10"></rect>
-            <circle cx="5" cy="5" r="4" fill="#D42A2A" />
+            <circle cx="5" cy="5" r="5" fill="#D42A2A" />
           </pattern>
           <pattern
             id="professor_plum_pawn"
@@ -66,7 +53,7 @@
             height="10"
           >
             <rect x="0" y="0" fill="#3a4e3a" width="10" height="10"></rect>
-            <circle cx="5" cy="5" r="4" fill="#7D4CA1" />
+            <circle cx="5" cy="5" r="5" fill="#7D4CA1" />
           </pattern>
           <pattern
             id="mrs_peacock_pawn"
@@ -75,7 +62,7 @@
             height="10"
           >
             <rect x="0" y="0" fill="#3a4e3a" width="10" height="10"></rect>
-            <circle cx="5" cy="5" r="4" fill="#2C75FF" />
+            <circle cx="5" cy="5" r="5" fill="#2C75FF" />
           </pattern>
           <pattern
             id="reverend_green_pawn"
@@ -84,7 +71,7 @@
             height="10"
           >
             <rect x="0" y="0" fill="#3a4e3a" width="10" height="10"></rect>
-            <circle cx="5" cy="5" r="4" fill="#2E7D32" />
+            <circle cx="5" cy="5" r="5" fill="#2E7D32" />
           </pattern>
         </defs>
         <g
@@ -283,51 +270,123 @@
         </g>
         <g class="rooms-group">
           <rect id="cluedo" x="321.41016" y="182.49559" />
-          <path
-            class="room"
-            d="m 175.41368,41.485311 c 90.60453,0 88.25118,-1.172847 88.25118,-1.172847 v 99.691626 h -17.06191 l -14.70851,-7.62346 v 6.45063 H 176.002 Z"
-            id="kitchen"
-          />
-          <path
-            class="room"
-            d="m 177.04796,167.24224 h 72.99823 v 13.07431 l 43.58104,1.08953 v 83.89349 l -14.70861,0.54476 -15.25335,-8.17144 v 8.17144 l -85.52778,-0.54476 z"
-            id="dining_room"
-          />
-          <path
-            class="room"
-            d="m 175.95844,308.33584 h 87.16207 v 14.16383 l 14.70859,-13.0743 v 84.43825 H 176.50321 Z"
-            id="lounge"
-          />
-          <path
-            class="room"
-            d="m 306.15679,294.72278 44.12579,-0.55079 v 13.76957 l 14.89247,-13.21878 h 29.23333 v 99.14085 h -88.25159 z"
-            id="hall"
-          />
-          <path
-            class="room"
-            d="m 422.73606,336.66351 15.4165,13.45885 v -13.45885 h 87.5437 v 57.20011 H 423.28667 Z"
-            id="study"
-          />
-          <path
-            class="room"
-            d="m 422.1913,294.17199 h 15.79814 v 14.70861 h 86.61731 v -70.81919 h -87.16209 v 14.16384 h -14.70858 v 14.7086 l 13.61906,11.44002 h -12.52953 z"
-            id="library"
-          />
-          <path
-            class="room"
-            d="m 437.44466,180.74729 v 43.15029 h 87.70685 v -71.36395 h -87.70685 v 14.38344 l 14.43955,13.27701 z"
-            id="billiard_room"
-          />
-          <path
-            class="room"
-            d="m 451.60849,125.29548 h 73.543 V 40.857221 l -88.25159,0.54476 v 69.729659 0 h 15.79812 l 5.44763,4.90287 z"
-            id="conservatory"
-          />
-          <path
-            class="room"
-            d="m 378.61016,40.31263 v 28.051 h 30.507 v 43.45201 l -10.895,14.301 h 10.35 v 28.051 h -87.162 v -13.751 l -14.164,13.751 h -14.708 V 68.91363 h 28.872 v -28.051 z"
-            id="ballroom"
-          />
+          <g id="kitchen-group">
+            <path
+              class="room"
+              d="m 175.41368,41.485311 c 90.60453,0 88.25118,-1.172847 88.25118,-1.172847 v 99.691626 h -17.06191 l -14.70851,-7.62346 v 6.45063 H 176.002 Z"
+              id="kitchen"
+            />
+            <circle class="room-slot" cx="200" cy="70" r="5" />
+            <circle class="room-slot" cx="230" cy="70" r="5" />
+            <circle class="room-slot" cx="260" cy="70" r="5" />
+            <circle class="room-slot" cx="200" cy="110" r="5" />
+            <circle class="room-slot" cx="230" cy="110" r="5" />
+            <circle class="room-slot" cx="260" cy="110" r="5" />
+          </g>
+          <g id="dining_room-group">
+            <path
+              class="room"
+              d="m 177.04796,167.24224 h 72.99823 v 13.07431 l 43.58104,1.08953 v 83.89349 l -14.70861,0.54476 -15.25335,-8.17144 v 8.17144 l -85.52778,-0.54476 z"
+              id="dining_room"
+            />
+            <circle class="room-slot" cx="210" cy="200" r="5" />
+            <circle class="room-slot" cx="240" cy="200" r="5" />
+            <circle class="room-slot" cx="270" cy="200" r="5" />
+            <circle class="room-slot" cx="210" cy="240" r="5" />
+            <circle class="room-slot" cx="240" cy="240" r="5" />
+            <circle class="room-slot" cx="270" cy="240" r="5" />
+          </g>
+          <g id="lounge-group">
+            <path
+              class="room"
+              d="m 175.95844,308.33584 h 87.16207 v 14.16383 l 14.70859,-13.0743 v 84.43825 H 176.50321 Z"
+              id="lounge"
+            />
+            <circle class="room-slot" cx="210" cy="330" r="5" />
+            <circle class="room-slot" cx="240" cy="330" r="5" />
+            <circle class="room-slot" cx="270" cy="330" r="5" />
+            <circle class="room-slot" cx="210" cy="370" r="5" />
+            <circle class="room-slot" cx="240" cy="370" r="5" />
+            <circle class="room-slot" cx="270" cy="370" r="5" />
+          </g>
+          <g id="hall-group">
+            <path
+              class="room"
+              d="m 306.15679,294.72278 44.12579,-0.55079 v 13.76957 l 14.89247,-13.21878 h 29.23333 v 99.14085 h -88.25159 z"
+              id="hall"
+            />
+            <circle class="room-slot" cx="330" cy="320" r="5" />
+            <circle class="room-slot" cx="360" cy="320" r="5" />
+            <circle class="room-slot" cx="390" cy="320" r="5" />
+            <circle class="room-slot" cx="330" cy="360" r="5" />
+            <circle class="room-slot" cx="360" cy="360" r="5" />
+            <circle class="room-slot" cx="390" cy="360" r="5" />
+          </g>
+          <g id="study-group">
+            <path
+              class="room"
+              d="m 422.73606,336.66351 15.4165,13.45885 v -13.45885 h 87.5437 v 57.20011 H 423.28667 Z"
+              id="study"
+            />
+            <circle class="room-slot" cx="450" cy="350" r="5" />
+            <circle class="room-slot" cx="480" cy="350" r="5" />
+            <circle class="room-slot" cx="510" cy="350" r="5" />
+            <circle class="room-slot" cx="450" cy="380" r="5" />
+            <circle class="room-slot" cx="480" cy="380" r="5" />
+            <circle class="room-slot" cx="510" cy="380" r="5" />
+          </g>
+          <g id="library-group">
+            <path
+              class="room"
+              d="m 422.1913,294.17199 h 15.79814 v 14.70861 h 86.61731 v -70.81919 h -87.16209 v 14.16384 h -14.70858 v 14.7086 l 13.61906,11.44002 h -12.52953 z"
+              id="library"
+            />
+            <circle class="room-slot" cx="450" cy="270" r="5" />
+            <circle class="room-slot" cx="480" cy="270" r="5" />
+            <circle class="room-slot" cx="510" cy="270" r="5" />
+            <circle class="room-slot" cx="450" cy="310" r="5" />
+            <circle class="room-slot" cx="480" cy="310" r="5" />
+            <circle class="room-slot" cx="510" cy="310" r="5" />
+          </g>
+          <g id="billiard_room-group">
+            <path
+              class="room"
+              d="m 437.44466,180.74729 v 43.15029 h 87.70685 v -71.36395 h -87.70685 v 14.38344 l 14.43955,13.27701 z"
+              id="billiard_room"
+            />
+            <circle class="room-slot" cx="460" cy="190" r="5" />
+            <circle class="room-slot" cx="490" cy="190" r="5" />
+            <circle class="room-slot" cx="520" cy="190" r="5" />
+            <circle class="room-slot" cx="460" cy="220" r="5" />
+            <circle class="room-slot" cx="490" cy="220" r="5" />
+            <circle class="room-slot" cx="520" cy="220" r="5" />
+          </g>
+          <g id="conservatory-group">
+            <path
+              class="room"
+              d="m 451.60849,125.29548 h 73.543 V 40.857221 l -88.25159,0.54476 v 69.729659 0 h 15.79812 l 5.44763,4.90287 z"
+              id="conservatory"
+            />
+            <circle class="room-slot" cx="460" cy="80" r="5" />
+            <circle class="room-slot" cx="490" cy="80" r="5" />
+            <circle class="room-slot" cx="520" cy="80" r="5" />
+            <circle class="room-slot" cx="460" cy="110" r="5" />
+            <circle class="room-slot" cx="490" cy="110" r="5" />
+            <circle class="room-slot" cx="520" cy="110" r="5" />
+          </g>
+          <g id="ballroom-group">
+            <path
+              class="room"
+              d="m 378.61016,40.31263 v 28.051 h 30.507 v 43.45201 l -10.895,14.301 h 10.35 v 28.051 h -87.162 v -13.751 l -14.164,13.751 h -14.708 V 68.91363 h 28.872 v -28.051 z"
+              id="ballroom"
+            />
+            <circle class="room-slot" cx="320" cy="80" r="5" />
+            <circle class="room-slot" cx="350" cy="80" r="5" />
+            <circle class="room-slot" cx="380" cy="80" r="5" />
+            <circle class="room-slot" cx="320" cy="120" r="5" />
+            <circle class="room-slot" cx="350" cy="120" r="5" />
+            <circle class="room-slot" cx="380" cy="120" r="5" />
+          </g>
         </g>
         <g class="room-labels-group">
           <text class="room-label" x="225" y="90">Kitchen</text>
@@ -434,19 +493,39 @@
         </g>
       </svg>
     </div>
+
     <div id="players-cards-details"></div>
+
     <div class="action-buttons">
       <button id="dice-button">
         🎲
         <span class="hover-text">dice</span>
       </button>
     </div>
+
     <div class="popup">
       <p></p>
     </div>
+
     <div id="tooltip" class="tooltip hidden"></div>
     <div id="message-container">
       <p></p>
     </div>
+
+    <template id="player-template">
+      <div class="player">
+        <div class="player-icon"></div>
+        <div class="player-info">
+          <span class="player-name"></span>
+          <span class="player-pawn"></span>
+        </div>
+      </div>
+    </template>
+
+    <template id="card-template">
+      <div class="card">
+        <span class="card-name"></span>
+      </div>
+    </template>
   </body>
 </html>

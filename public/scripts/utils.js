@@ -3,13 +3,14 @@ export const isCurrentPlayer = (playerId, currentPlayerId) =>
 
 export const getCharacterColor = (char) => {
   const colors = {
-    mustard: "#E1C05A",
-    scarlet: "#D42A2A",
-    plum: "#7D4CA1",
-    peacock: "#2C75FF",
-    green: "#2E7D32",
-    white: "#FFFFFF",
+    colonel_mustard: "#E1C05A",
+    miss_scarlett: "#D42A2A",
+    professor_plum: "#7D4CA1",
+    mrs_peacock: "#2C75FF",
+    reverend_green: "#2E7D32",
+    mrs_white: "#FFFFFF",
   };
+
   return colors[char] || "white";
 };
 
