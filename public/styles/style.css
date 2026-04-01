@@ -1,13 +1,117 @@
+@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap");
+
+:root {
+  --bg-base: #e7e2d6;
+  --bg-surface: #d8d2c2;
+  --bg-elevated: #c9c2b0;
+
+  --gold: #b38a3a;
+  --gold-light: #d4a94a;
+  --gold-dim: #8c6b2a;
+  --gold-ghost: rgba(179, 138, 58, 0.12);
+  --gold-border: rgba(179, 138, 58, 0.35);
+
+  --text-primary: #2c2a26;
+  --text-secondary: #5a5448;
+  --text-muted: #8a8272;
+
+  --edge-soft: #b9b19d;
+  --shadow-soft: rgba(0, 0, 0, 0.08);
+
+  --accent-blue: #4a6fa5;
+  --accent-green: #6a8f4e;
+  --accent-red: #a5544a;
+
+  --font-display: "Cinzel", serif;
+  --font-body: "Crimson Pro", serif;
+}
+
 * {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  box-sizing: "border-box";
 }
 
 body {
-  font-family:
-    system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-  margin: 50vh 40%;
-  font-size: large;
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.landing {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 100vh;
+  background-image: radial-gradient(
+    ellipse 60% 50% at 50% 50%,
+    rgba(0, 0, 0, 0.04) 0%,
+    transparent 70%
+  );
+}
+
+.landing-content {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.landing-subtitle {
+  font-family: var(--font-body);
+  font-size: 22px;
+  font-style: italic;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+}
+
+.landing-title {
+  font-family: var(--font-display);
+  font-size: clamp(56px, 10vw, 96px);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.btn-start {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+
+  color: var(--bg-base);
+  background: var(--gold);
+
+  border: 1px solid var(--gold-border);
+  padding: 14px 40px;
+  border-radius: 4px;
+
+  cursor: pointer;
+
+  box-shadow: 0 2px 6px var(--shadow-soft);
+
+  transition:
+    background-color 0.2s ease,
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.btn-start:hover {
+  background-color: var(--gold-light);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px var(--shadow-soft);
+}
+
+.btn-start:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px var(--shadow-soft);
 }
