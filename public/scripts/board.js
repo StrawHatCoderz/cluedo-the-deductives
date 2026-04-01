@@ -51,3 +51,15 @@ export const diceListener = (dice) => {
     movePlayer(turns);
   });
 };
+
+export const passBtnListener = (passBtn) => {
+  passBtn.addEventListener("click", async (event) => {
+    event.preventDefault();
+    const res = await fetch("/pass", { method: "post" });
+
+    if (res.status === 200) {
+      const { currentPlayer } = await res.json();
+      displayPopup(`${currentPlayer.playerName} turns!`);
+    }
+  });
+};

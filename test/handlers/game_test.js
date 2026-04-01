@@ -8,14 +8,27 @@ describe("game handler", () => {
   let game;
   beforeEach(() => {
     game = createGameInstance();
-    app = createApp(game, () => (_, next) => next());
+
+    app = createApp(game, () => 1, (x) => x, () => (_, next) => next());
+  });
+
+  describe("POST /update-state", () => {
+    it("=> should update current game state", async () => {
+      await app.request("/start-game", { method: "post" });
+      const res = await app.request("/update-state", { method: "post" });
+      const body = await res.json();
+
+      assertEquals(res.status, 200);
+      assertEquals(body.state, "running");
+    });
   });
 
   describe("POST /start-game", () => {
     it("=> should start the game by distribute cards , change the game state and set TurnOrder ", async () => {
+      await app.request("/update-state", { method: "post" });
       const res = await app.request("/start-game", { method: "post" });
       assertEquals(res.status, 303);
-      assertEquals(game.getCurrentState().state, "setup");
+      assertEquals(game.getCurrentState().state, "running");
     });
   });
 
@@ -38,13 +51,14 @@ describe("game handler", () => {
     });
   });
 
-  describe("POST /update-state", () => {
-    it("=> should update current game state", async () => {
-      const res = await app.request("/update-state", { method: "post" });
+  describe("POST /pass", () => {
+    it("=> should update the player turn", async () => {
+      await app.request("/start-game", { method: "post" });
+      await app.request("/update-state", { method: "post" });
+      const res = await app.request("/pass", { method: "post" });
       const body = await res.json();
-
       assertEquals(res.status, 200);
-      assertEquals(body.state, "setup");
+      assertEquals(body.currentPlayer.isEliminated, false);
     });
   });
 });

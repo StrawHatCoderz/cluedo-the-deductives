@@ -19,7 +19,15 @@ export const getTotalPlayers = (c) => {
 export const updateGameState = (c) => {
   const game = c.get("game");
   game.changeCurrentState();
+  game.updateTurn();
   const currentState = game.getCurrentState();
 
   return c.json({ state: currentState.state }, 200);
+};
+
+export const updateTurn = (c) => {
+  const game = c.get("game");
+  const currentPlayer = game.updateTurn();
+
+  return c.json({ currentPlayer }, 200);
 };

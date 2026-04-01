@@ -59,6 +59,15 @@ describe("GAME", () => {
   describe("roll dice", () => {
     it(" => should give dice value", () => {
       const randomGenerator = () => 1;
+      const p1 = new Player(1, "thor", false);
+      const p2 = new Player(2, "hulk", true);
+      const p3 = new Player(3, "deadpool", false);
+      game.addPlayer(p1);
+      game.addPlayer(p2);
+      game.addPlayer(p3);
+      game.changeCurrentState();
+      game.start();
+      game.updateTurn();
       assertEquals(game.getRolledNumber(randomGenerator), 12);
     });
   });
@@ -84,8 +93,24 @@ describe("GAME", () => {
       game.addPlayer(p1);
       game.addPlayer(p2);
       game.addPlayer(p3);
+      game.changeCurrentState();
       game.start();
       assertEquals(p1.get().hand.length, 6);
+    });
+  });
+
+  describe("update current player", () => {
+    it(" => should update the player turn", () => {
+      const p1 = new Player(1, "thor", false);
+      const p2 = new Player(2, "hulk", true);
+      const p3 = new Player(3, "deadpool", false);
+      game.addPlayer(p1);
+      game.addPlayer(p2);
+      game.addPlayer(p3);
+      game.changeCurrentState();
+      game.start();
+      const currentPlayer = game.updateTurn();
+      assertEquals(currentPlayer, p3.get());
     });
   });
 });

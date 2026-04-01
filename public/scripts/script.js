@@ -1,4 +1,4 @@
-import { diceListener } from "./board.js";
+import { diceListener, passBtnListener } from "./board.js";
 import { renderBoard } from "./render_board.js";
 import { renderPlayers } from "./render_player.js";
 import { renderPlayerCards } from "./render_player_cards.js";
@@ -8,11 +8,13 @@ const main = async () => {
   const boardConfig = await fetchGameConfig("/game-state");
 
   const dice = document.querySelector("#dice-button");
+  const passBtn = document.querySelector("#pass-button");
   const p = document.querySelector(".popup > p");
 
   renderBoard(boardConfig);
   renderPlayers(boardConfig);
   renderPlayerCards(boardConfig.currentPlayer.hand);
   diceListener(dice, p);
+  passBtnListener(passBtn);
 };
 globalThis.window.onload = main;

@@ -19,5 +19,6 @@ export const createGameInstance = () => {
     weapons: WEAPONS,
     rooms: ROOMS,
   });
-  return new Game(1, board, pawns, deck);
+  const game = new Game(1, board, pawns, deck);
+  return game;
 };

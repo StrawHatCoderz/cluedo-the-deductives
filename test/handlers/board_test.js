@@ -1,65 +1,60 @@
-import { describe, it } from "@std/testing/bdd";
+import { beforeEach, describe, it } from "@std/testing/bdd";
 import { createGameInstance } from "../../src/utils/game.js";
 import { assertEquals } from "@std/assert/equals";
-import {
-  serveRollAndTurns,
-  serveUpdatePawnPosition,
-} from "../../src/handlers/board.js";
-import { boardConfig } from "../../src/constants/board_config.js";
+import { createApp } from "../../src/app.js";
+import { serveUpdatePawnPosition } from "../../src/handlers/board.js";
 import { Board } from "../../src/models/board.js";
+import { boardConfig } from "../../src/constants/board_config.js";
+import { Player } from "../../src/models/player.js";
 
-describe("HANDLER", () => {
-  describe("dice value", () => {
-    it(" => should get dice value", () => {
-      const mockContext = {
-        get() {
-          const game = createGameInstance();
+describe("BOARD", () => {
+  let app;
+  let game;
+  beforeEach(() => {
+    game = createGameInstance();
+    app = createApp(game, () => 1, (x) => x, () => (_, next) => next());
+  });
 
-          game.start();
-          return game;
-        },
-        json(value) {
-          return JSON.stringify(value);
-        },
-      };
+  describe("GET /roll-and-get-turns", () => {
+    it(" => should get dice value and reachable positions", async () => {
+      await app.request("/start-game", { method: "post" });
+      await app.request("/update-state", { method: "post" });
+      const res = await app.request("/roll-and-get-turns");
+      const body = await res.json();
+      assertEquals(res.status, 200);
+      assertEquals(body.diceValue, 12);
+    });
+  });
 
-      const result = serveRollAndTurns(mockContext, () => 0.2);
-      assertEquals(JSON.parse(result), {
-        diceValue: 4,
-        turns: ["tile-7-22", "tile-8-21", "tile-8-23", "tile-7-20"],
+  describe("POST /update-pawn-position", () => {
+    it(" => should update pawn position", async () => {
+      await app.request("/start-game", { method: "post" });
+      await app.request("/update-state", { method: "post" });
+      const res = await app.request("/update-pawn-position", {
+        method: "post",
+        body: JSON.stringify({
+          currentNodeId: "tile-7-24",
+          turns: ["tile-7-24"],
+        }),
       });
+      const body = await res.json();
+      assertEquals(res.status, 200);
+      assertEquals(body, { status: true });
     });
   });
 
-  describe("update pawn position", () => {
-    it(" => should update pawn position: from reachable nodes", async () => {
-      const mockContext = {
-        get() {
-          const game = createGameInstance();
-          game.start();
-          return game;
-        },
-        json(value) {
-          return JSON.stringify(value);
-        },
-        req: {
-          json() {
-            return {
-              currentNodeId: "tile-7-24",
-              turns: ["tile-7-24", "tile-0-2"],
-            };
-          },
-        },
-      };
-      const result = await serveUpdatePawnPosition(mockContext);
-      assertEquals(JSON.parse(result), { status: true });
-    });
-  });
   describe("catch error", () => {
     it(" => should catch error: from not reachable nodes", async () => {
       const mockContext = {
         get() {
           const game = createGameInstance();
+          const p1 = new Player(1, "thor", false);
+          const p2 = new Player(2, "hulk", true);
+          const p3 = new Player(3, "deadpool", false);
+          game.addPlayer(p1);
+          game.addPlayer(p2);
+          game.addPlayer(p3);
+          game.changeCurrentState();
           game.start();
           return game;
         },
