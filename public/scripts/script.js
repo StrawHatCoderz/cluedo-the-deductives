@@ -6,15 +6,13 @@ import { displayPopup, fetchGameConfig } from "./utils.js";
 
 const main = async () => {
   const boardConfig = await fetchGameConfig("/game-state");
-
   const dice = document.querySelector("#dice-button");
   const passBtn = document.querySelector("#pass-button");
-  const p = document.querySelector(".popup > p");
 
   renderBoard(boardConfig);
   renderPlayers(boardConfig);
   renderPlayerCards(boardConfig.currentPlayer.hand);
-  diceListener(dice, p);
+  diceListener(dice);
   passBtnListener(passBtn);
 
   const alreadyShown = sessionStorage.getItem("gameStartedPopup");

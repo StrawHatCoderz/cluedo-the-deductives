@@ -38,7 +38,6 @@ export class Game {
     this.#distributeCards();
     this.changeCurrentState();
     this.#setTurnOrder();
-    this.#setCurrentPlayer();
   }
 
   updateTurn() {
@@ -69,22 +68,10 @@ export class Game {
     this.#currentState = this.#states.shift();
   }
 
-  #setCurrentPlayer() {
-    this.#currentPlayer = this.#turnOrder[0];
-  }
-
-  getCurrentPlayer() {
-    return this.#currentPlayer;
-  }
-
   #setTurnOrder() {
     this.#turnOrder = Object.values(this.#players).sort((p1, p2) =>
       p1.get().pawn.id - p2.get().pawn.id
     );
-  }
-
-  getTurnOrder() {
-    return this.#turnOrder;
   }
 
   addPlayer(player) {

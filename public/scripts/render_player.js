@@ -16,9 +16,8 @@ const createPlayer = (node, player, currentPlayerId) => {
 };
 
 export const renderPlayers = (boardConfig) => {
-  const allPlayerContainer = document.querySelector(
-    "#players-details-container",
-  );
+  const allPlayerContainer = document
+    .querySelector("#players-details-container");
   const playerTemplate = document.getElementById("player-template");
 
   allPlayerContainer.innerHTML = "";

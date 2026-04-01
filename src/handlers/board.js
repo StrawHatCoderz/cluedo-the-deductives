@@ -1,3 +1,6 @@
+export const toggleTileOccupied = (nodeId, game) =>
+  game.getBoard().toggleIsOccupied(nodeId);
+
 export const serveRollAndTurns = (c, randomFn, ceilFn) => {
   const game = c.get("game");
   const diceValue = game.getRolledNumber(randomFn, ceilFn);
@@ -12,14 +15,13 @@ const getReachableTurns = (game, steps) => {
 
   const { x, y, room } = pawn.get().position;
   const position = room ? room : `tile-${x}-${y}`;
-
   const board = game.getBoard();
+  toggleTileOccupied(position, game);
   return board.getReachableNodes(position, steps);
 };
 
-const isValidTurn = (tileId, possibleTurns) => {
-  return possibleTurns.some((turn) => tileId === turn);
-};
+const isValidTurn = (nodeId, possibleTurns) =>
+  possibleTurns.some((turn) => nodeId === turn);
 
 export const serveUpdatePawnPosition = async (c) => {
   const game = c.get("game");
@@ -35,6 +37,8 @@ export const serveUpdatePawnPosition = async (c) => {
 
   if (isValidTurn(nodeId, turns)) {
     pawn.updatePosition(pos);
+    toggleTileOccupied(nodeId, game);
+
     return c.json({ status: true });
   }
   return c.json({ status: false });
