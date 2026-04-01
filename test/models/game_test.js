@@ -101,16 +101,32 @@ describe("GAME", () => {
 
   describe("update current player", () => {
     it(" => should update the player turn", () => {
-      const p1 = new Player(1, "thor", false);
+      const p3 = new Player(1, "thor", false);
       const p2 = new Player(2, "hulk", true);
-      const p3 = new Player(3, "deadpool", false);
-      game.addPlayer(p1);
-      game.addPlayer(p2);
+      const p1 = new Player(3, "deadpool", false);
       game.addPlayer(p3);
+      game.addPlayer(p2);
+      game.addPlayer(p1);
       game.changeCurrentState();
       game.start();
       const currentPlayer = game.updateTurn();
-      assertEquals(currentPlayer, p3.get());
+      assertEquals(currentPlayer, p1.get());
+    });
+
+    describe("skip  player when eliminated", () => {
+      it(" => should update the player turn", () => {
+        const p3 = new Player(1, "thor", false);
+        const p2 = new Player(2, "hulk", true);
+        const p1 = new Player(3, "deadpool", false);
+        game.addPlayer(p3);
+        game.addPlayer(p2);
+        game.addPlayer(p1);
+        game.changeCurrentState();
+        game.start();
+        p1.eliminate();
+        const currentPlayer = game.updateTurn();
+        assertEquals(currentPlayer, p2.get());
+      });
     });
   });
 });
