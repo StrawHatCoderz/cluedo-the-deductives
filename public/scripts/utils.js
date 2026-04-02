@@ -19,9 +19,8 @@ const parsePlayersData = (config) => {
 
   return players.map((player) => ({
     id: player.id,
-    name: player.playerName,
+    name: player.name,
     pawn: toId(player.pawn.name),
-    hand: player.hand,
   }));
 };
 

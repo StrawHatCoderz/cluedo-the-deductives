@@ -62,6 +62,7 @@ const createFlyingCard = (pos) => {
   el.className = "card";
   el.style.left = `${pos.x}px`;
   el.style.top = `${pos.y}px`;
+  el.style.transform = "translate(-50%, -50%) scale(0.9)";
   getElement("table").appendChild(el);
   return el;
 };
@@ -181,9 +182,9 @@ const redirect = async () => {
 const init = async () => {
   ["deck1", "deck2", "deck3"].forEach((id, i) => createDeck(id, [6, 6, 9][i]));
 
-  const totalPlayers = await fetch("/total-players")
+  const totalPlayers = await fetch("/game-state")
     .then((res) => res.json())
-    .then((x) => x.totalPlayers)
+    .then((x) => x.players.length)
     .catch((e) => console.log(e));
 
   dealToEnvelope(() => collectAndDeal(totalPlayers));

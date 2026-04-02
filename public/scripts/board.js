@@ -48,7 +48,7 @@ export const passBtnListener = (passBtn) => {
 
     if (res.status === 200) {
       const { currentPlayer } = await res.json();
-      displayPopup(`${currentPlayer.playerName} turns!`);
+      displayPopup(`${currentPlayer.name} turns!`);
     }
   });
 };
