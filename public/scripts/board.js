@@ -1,15 +1,15 @@
 import { displayPopup } from "./utils.js";
 
-const highlightTurns = (turns) => {
-  turns.forEach((turn) => {
+const hightlightTiles = (tiles) => {
+  tiles.forEach((turn) => {
     const tile = document.querySelector(`#${turn}`);
     tile.classList.add("highlight");
     tile.parentNode.appendChild(tile);
   });
 };
 
-const movePlayer = (turns) => {
-  turns.map((turn) => {
+const movePlayer = (tiles) => {
+  tiles.map((turn) => {
     const tile = document.querySelector(`#${turn}`);
     tile.addEventListener("click", async (e) => {
       e.preventDefault();
@@ -18,7 +18,7 @@ const movePlayer = (turns) => {
       await fetch("/update-pawn-position", {
         method: "post",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ currentNodeId, turns }),
+        body: JSON.stringify({ currentNodeId, turns: tiles }),
       });
       globalThis.window.location.reload();
     });
@@ -30,13 +30,16 @@ export const diceListener = (dice) => {
     event.preventDefault();
     dice.setAttribute("disabled", true);
 
-    const { diceValue, turns } = await fetch("/roll-and-get-turns").then(
-      (response) => response.json(),
+    const parsedResponse = await fetch("/roll-and-get-turns").then((response) =>
+      response.json()
     );
+    console.log(parsedResponse);
+
+    const { diceValue, turns } = parsedResponse;
     const message = `dice value is ${diceValue}`;
 
     displayPopup(message);
-    highlightTurns(turns);
+    hightlightTiles(turns);
     movePlayer(turns);
   });
 };
