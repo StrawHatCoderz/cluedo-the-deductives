@@ -125,44 +125,45 @@ export const removePawnHighlight = () => {
   });
 };
 
-const onPawnSelect = (e) => {
+const onPawnSelect = (e, suspects) => {
   const pawnElement = e.target.closest("[data-occupied-by]");
-
   if (!pawnElement) return;
 
-  SUSPICION_STATE.selectedSuspect = pawnElement.dataset.occupiedBy;
-
+  const suspect = pawnElement.dataset.occupiedBy;
   removePawnHighlight();
+  const { name } = suspects
+    .find(({ char }) => char === suspect);
+  SUSPICION_STATE.selectedSuspect = name;
 
   showWeaponPopup(e.pageX, e.pageY);
 };
 
-const highlightPawns = (pawns) => {
+const highlightPawns = (pawns, suspects) => {
   pawns.forEach((pawn) => {
     if (!pawn.dataset.occupiedBy) return;
 
     pawn.classList.add("highlight-suspect");
-    pawn.addEventListener("click", onPawnSelect, { once: true });
+    pawn.addEventListener("click", (e) => onPawnSelect(e, suspects));
   });
 };
 
-const startSuspicion = ({ location }) => {
+const startSuspicion = ({ location }, suspects) => {
   if (SUSPICION_STATE.hasMadeSuspicion) {
     return removePawnHighlight();
   }
 
   SUSPICION_STATE.currentRoom = location.room;
   const pawns = document.querySelectorAll("[data-occupied-by]");
-  highlightPawns(pawns);
+  highlightPawns(pawns, suspects);
 };
 
 document.getElementById("close-modal").addEventListener("click", () => {
   modal.classList.add("hidden");
 });
 
-export const suspicionBtnListener = ({ canSuspect, currentPlayer }) => {
+export const suspicionBtnListener = ({ canSuspect, currentPlayer, pawns }) => {
   if (canSuspect) {
-    startSuspicion(currentPlayer);
+    startSuspicion(currentPlayer, pawns);
   } else {
     removePawnHighlight();
   }

@@ -28,13 +28,15 @@ const parsePlayersData = (players) => {
 };
 
 const parsePawnsData = (pawns) => {
-  return pawns.map(({ position, name }) => ({
+  return pawns.map(({ position, name, id }) => ({
     pos: {
       x: position?.x,
       y: position?.y,
       room: position?.room,
     },
     char: toId(name),
+    name,
+    id,
   }));
 };
 
