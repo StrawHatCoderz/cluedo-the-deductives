@@ -1,4 +1,4 @@
-import { diceListener, passBtnListener } from "./board.js";
+import { accuseBtnListener, diceListener, passBtnListener } from "./board.js";
 import { renderBoard } from "./render_board.js";
 import { renderPlayers } from "./render_player.js";
 import { renderPlayerCards } from "./render_player_cards.js";
@@ -9,6 +9,7 @@ const main = async () => {
   const boardConfig = await fetchGameConfig("/game-state");
   const dice = document.querySelector("#dice-button");
   const passBtn = document.querySelector("#pass-button");
+  const accuseBtn = document.querySelector("#accuse-button");
 
   renderBoard(boardConfig);
   renderPlayers(boardConfig);
@@ -16,6 +17,7 @@ const main = async () => {
   diceListener(dice);
   passBtnListener(passBtn);
   suspicionBtnListener();
+  accuseBtnListener(accuseBtn);
 
   const alreadyShown = sessionStorage.getItem("gameStartedPopup");
 

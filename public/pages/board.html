@@ -6,6 +6,7 @@
     <title>Cluedo Board</title>
     <link rel="stylesheet" href="/styles/board.css" />
     <link rel="stylesheet" href="/styles/suspicion.css">
+    <link rel="stylesheet" href="/styles/accusation.css" />
     <script type="module" src="/scripts/script.js"></script>
   </head>
 
@@ -486,6 +487,7 @@
 
       <button id="dice-button">🎲</button>
       <button id="pass-button">&gt;&gt;</button>
+      <button id="accuse-button">Accuse</button>
     </div>
 
     <div class="popup">
@@ -507,6 +509,28 @@
     <template id="card-template">
       <div class="card">
         <span class="card-name"></span>
+      </div>
+    </template>
+
+    <template id="accusation-template">
+      <article id="accusation-popup">
+        <form action="" id="accusation-details">
+          <legend>Suspects</legend>
+          <div class="options" id="suspects"></div>
+          <legend>Weapons</legend>
+          <div class="options" id="weapons"></div>
+          <legend>Rooms</legend>
+          <div class="options" id="rooms"></div>
+        </form>
+        <section id="envelop-container">
+          <div id="envelop"></div>
+        </section>
+      </article>
+    </template>
+    <template id="option-template">
+      <div class="option">
+        <input type="radio">
+        <label></label>
       </div>
     </template>
   </body>

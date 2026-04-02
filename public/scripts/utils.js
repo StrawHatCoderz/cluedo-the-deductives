@@ -24,7 +24,9 @@ const parsePlayersData = (config) => {
   }));
 };
 
-const toId = (data) => data.toLowerCase().replace(" ", "_");
+export const toId = (data) => data.toLowerCase().replace(" ", "_");
+export const toSentenceCase = (data) =>
+  data.charAt(0).toUpperCase() + data.slice(1);
 
 const parsePawnsData = (config) => {
   const { pawns } = config;

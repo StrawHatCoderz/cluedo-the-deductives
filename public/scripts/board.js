@@ -1,3 +1,4 @@
+import { displayAccusationPopup } from "./accusation.js";
 import { displayPopup } from "./utils.js";
 
 const hightlightTiles = (tiles) => {
@@ -53,5 +54,12 @@ export const passBtnListener = (passBtn) => {
       const { currentPlayer } = await res.json();
       displayPopup(`${currentPlayer.name} turns!`);
     }
+  });
+};
+
+export const accuseBtnListener = (accuseBtn) => {
+  accuseBtn.addEventListener("click", (event) => {
+    event.preventDefault();
+    displayAccusationPopup();
   });
 };

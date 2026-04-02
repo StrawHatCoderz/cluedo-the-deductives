@@ -1,3 +1,5 @@
+import { toSentenceCase } from "./utils.js";
+
 const initializeRoomState = (roomId) => {
   const slots = document.querySelectorAll(`#${roomId}-group .room-slot`);
   const available = Array.from({ length: slots.length }, (_, i) => i).reverse();
@@ -60,7 +62,7 @@ const hideSecretPassage = (tooltip) => {
 const previewSecretPassage = (p, tooltip) => {
   const to = p.dataset.to;
   const direction = p.dataset.tooltip;
-  const formatted = to.charAt(0).toUpperCase() + to.slice(1);
+  const formatted = toSentenceCase(to);
   tooltip.textContent = `Go to ${formatted}`;
   tooltip.className = `tooltip tooltip-${direction}`;
   const rect = p.getBoundingClientRect();

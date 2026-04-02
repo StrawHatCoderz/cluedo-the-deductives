@@ -1,0 +1,62 @@
+#accusation-popup {
+  width: 80vw;
+  display: flex;
+  justify-content: center;
+  padding: 5em;
+  align-items: center;
+  background-color: aliceblue;
+}
+
+#accusation-details {
+  width: 55%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+  border-right: 2px solid black;
+}
+
+#envelop-container {
+  width: 45%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.options {
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+legend {
+  font-size: 50px;
+}
+
+label {
+  display: inline-block;
+  font-size: 24px;
+  width: 300px;
+  padding: 1em;
+  text-align: center;
+  border: 1px solid gray;
+}
+
+input {
+  display: none;
+}
+
+input[type="radio"]:checked + label {
+  color: white;
+  background-color: blue;
+  font-weight: bold;
+}
+
+#envelop {
+  width: 400px;
+  height: 600px;
+  background-color: black;
+  border-radius: 20px;
+}
