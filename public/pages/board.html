@@ -512,6 +512,32 @@
       </div>
     </template>
 
+    <template id="suspicion-model-temp">
+      <div id="suspicion-container">
+        <h2>Suspicion</h2>
+        <p class="modal-room-label"></p>
+        <div class="suspicion-cards">
+          <div class="sus-card" id="card-suspect">
+            <span class="card-label">Suspect</span>
+            <span class="card-value"></span>
+          </div>
+          <div class="sus-card" id="card-weapon">
+            <span class="card-label">Weapon</span>
+            <span class="card-value"></span>
+          </div>
+          <div class="sus-card" id="card-room">
+            <span class="card-label">Room</span>
+            <span class="card-value"></span>
+          </div>
+        </div>
+
+        <p id="suspicion-status" class="waiting-text">
+          ....Waiting for players to disprove
+        </p>
+        <button id="close-modal" style="display: none">OK</button>
+      </div>
+    </template>
+
     <template id="accusation-template">
       <article id="accusation-popup">
         <div id="popup-content">
@@ -533,6 +559,7 @@
         </div>
       </article>
     </template>
+
     <template id="option-template">
       <div class="option">
         <input type="radio">
@@ -540,4 +567,6 @@
       </div>
     </template>
   </body>
+</html>
+
 </html>

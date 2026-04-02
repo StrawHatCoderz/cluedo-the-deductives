@@ -36,9 +36,9 @@ export class Game {
     }
 
     this.#distributeCards();
-    this.changeCurrentState();
     this.#setTurnOrder();
     this.#setCurrentPlayer();
+    this.changeCurrentState();
   }
 
   updateTurn() {
@@ -70,6 +70,7 @@ export class Game {
       pawns: this.#getAllPawns(),
       activePlayer: this.#activePlayer?.getPlayerData(),
       canRoll: this.#isRollAllowed(playerId),
+      canSuspect: this.#turn?.canSuspect(),
     };
   }
 
@@ -79,6 +80,7 @@ export class Game {
 
   #setCurrentPlayer() {
     this.#activePlayer = this.#turnOrder[0];
+    this.#turn = new Turn(this.#activePlayer);
   }
 
   getCurrentPlayer() {
@@ -137,5 +139,13 @@ export class Game {
   #isRollAllowed(playerId) {
     return playerId === this.#activePlayer?.getPlayerData().id &&
       !this.#turn?.getIsDiceRolled();
+  }
+
+  getSuspectCombination() {
+    return this.#turn.getSuspectCombination();
+  }
+
+  addSuspect(suspectCombination) {
+    this.#turn.addSuspectCombination(suspectCombination);
   }
 }

@@ -9,6 +9,7 @@ import { displayPopup, fetchGameConfig } from "./utils.js";
 const main = async () => {
   const boardConfig = await fetchGameConfig("/game-state");
   const accuseBtn = document.querySelector("#accuse-button");
+  console.log(accuseBtn);
 
   renderBoard(boardConfig);
   suspicionBtnListener();

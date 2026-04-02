@@ -20,31 +20,20 @@ const modal = document.getElementById("suspicion-modal");
 
 const showModal = (data) => {
   const modalContent = modal.querySelector(".modal-content");
-  modalContent.innerHTML = `
-    <h2>Suspicion</h2>
-    <p class="modal-room-label">Room: ${data.room}</p>
-    <div class="suspicion-cards">
-      <div class="sus-card" id="card-suspect">
-        <span class="card-label">Suspect</span>
-        <span class="card-value">${data.suspect}</span>
-      </div>
-      <div class="sus-card" id="card-weapon">
-        <span class="card-label">Weapon</span>
-        <span class="card-value">${data.weapon}</span>
-      </div>
-      <div class="sus-card" id="card-room">
-        <span class="card-label">Room</span>
-        <span class="card-value">${data.room}</span>
-      </div>
-    </div>
-    <p id="suspicion-status" class="waiting-text">....Waiting for players to disprove</p>
-    <button id="close-modal" style="display:none">OK</button>
-  `;
+  const suspicionTemp = document.querySelector("#suspicion-model-temp");
+  const suspicionClone = suspicionTemp.content.cloneNode(true);
+  suspicionClone.querySelector("#card-suspect .card-value").textContent =
+    data.suspect;
+  suspicionClone.querySelector("#card-weapon .card-value").textContent =
+    data.weapon;
+  suspicionClone.querySelector("#card-room .card-value").textContent =
+    data.room;
+  modalContent.innerHTML =
+    suspicionClone.querySelector("#suspicion-container").innerHTML;
 
   document.getElementById("close-modal").addEventListener("click", () => {
     modal.classList.add("hidden");
   });
-
   modal.classList.remove("hidden");
 };
 
