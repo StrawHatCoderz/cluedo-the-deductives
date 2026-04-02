@@ -13,9 +13,9 @@ const createOption = (option, optionLabel) => {
 
   input.name = optionLabel;
   input.value = toId(option);
-  input.id = toId(option);
+  input.id = `accuse-${toId(option)}`;
   label.textContent = toSentenceCase(option);
-  label.setAttribute("for", option);
+  label.setAttribute("for", input.id);
   return optionElement;
 };
 

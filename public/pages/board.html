@@ -514,17 +514,23 @@
 
     <template id="accusation-template">
       <article id="accusation-popup">
-        <form action="" id="accusation-details">
-          <legend>Suspects</legend>
-          <div class="options" id="suspects"></div>
-          <legend>Weapons</legend>
-          <div class="options" id="weapons"></div>
-          <legend>Rooms</legend>
-          <div class="options" id="rooms"></div>
-        </form>
-        <section id="envelop-container">
-          <div id="envelop"></div>
-        </section>
+        <div id="popup-content">
+          <form action="" id="accusation-details">
+            <legend>Suspects</legend>
+            <div class="options" id="suspects"></div>
+            <legend>Weapons</legend>
+            <div class="options" id="weapons"></div>
+            <legend>Rooms</legend>
+            <div class="options" id="rooms"></div>
+            <div id="actions">
+              <button type="reset">Cancel</button>
+              <button type="submit">Accuse</button>
+            </div>
+          </form>
+          <section id="envelop-container">
+            <div id="envelop"></div>
+          </section>
+        </div>
       </article>
     </template>
     <template id="option-template">
