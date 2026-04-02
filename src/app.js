@@ -1,22 +1,17 @@
 import { Hono } from "hono";
 import { serveStatic } from "hono/deno";
-import { logger } from "hono/logger";
+import { movePawnHanlder, serveRollAndTurns } from "./handlers/board.js";
 import {
   getGameState,
-  getTotalPlayers,
   startGame,
   updateGameState,
   updateTurn,
 } from "./handlers/game.js";
 import { addMockPlayer } from "./middleware/mock_player.js";
-import {
-  serveRollAndTurns,
-  serveUpdatePawnPosition,
-} from "./handlers/board.js";
 
-export const createApp = (game, randomFn, ceilFn, logFn = logger) => {
+export const createApp = ({ game, randomFn, ceilFn, logger }) => {
   const app = new Hono();
-  app.use(logFn());
+  app.use(logger());
 
   app.use(async (c, next) => {
     c.set("game", game);
@@ -25,10 +20,10 @@ export const createApp = (game, randomFn, ceilFn, logFn = logger) => {
 
   app.post("/start-game", addMockPlayer, startGame);
   app.get("/game-state", getGameState);
+
   app.get("/roll-and-get-turns", (c) => serveRollAndTurns(c, randomFn, ceilFn));
-  app.get("/total-players", getTotalPlayers);
   app.post("/update-state", updateGameState);
-  app.post("/update-pawn-position", serveUpdatePawnPosition);
+  app.post("/update-pawn-position", movePawnHanlder);
   app.post("/pass", updateTurn);
   app.get("*", serveStatic({ root: "./public" }));
 

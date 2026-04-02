@@ -1,12 +1,12 @@
 import { shuffle } from "@std/random";
-import { Turn } from "./turn.js";
 import { Player } from "./player.js";
+import { Turn } from "./turn.js";
 
 export class Game {
   #turnNum;
   #turn;
   #states = ["waiting", "setup", "running", "finished"];
-  #currentState;
+  #gameState;
   #id;
   #board;
   #pawns;
@@ -14,10 +14,10 @@ export class Game {
   #deck;
   #players;
   #turnOrder;
-  #currentPlayer;
+  #activePlayer;
   #shuffle;
   constructor(id, board, pawns, deck, shuffleFn = shuffle) {
-    this.#currentState = this.#states.shift();
+    this.#gameState = this.#states.shift();
     this.#id = id;
     this.#board = board;
     this.#pawns = pawns;
@@ -38,40 +38,58 @@ export class Game {
     this.#distributeCards();
     this.changeCurrentState();
     this.#setTurnOrder();
+    this.#setCurrentPlayer();
   }
 
   updateTurn() {
-    if (this.#currentState !== "running") {
+    if (this.#gameState !== "running") {
       throw new Error("Game hasn't started yet");
     }
 
-    this.#currentPlayer =
+    this.#activePlayer =
       this.#turnOrder[this.#turnNum++ % this.#turnOrder.length];
-    if (this.#currentPlayer.get().isEliminated) {
+    if (this.#activePlayer.getPlayerData().isEliminated) {
       this.updateTurn();
     }
 
-    this.#turn = new Turn(this.#currentPlayer);
-    return this.#currentPlayer.get();
+    this.#turn = new Turn(this.#activePlayer);
+    return this.#activePlayer.getPlayerData();
   }
 
-  getCurrentState() {
+  #findPlayer(playerId) {
+    return this.#players[playerId];
+  }
+
+  getState(playerId) {
     return {
-      state: this.#currentState,
-      currentPlayer: this.#currentPlayer?.get(),
-      players: this.getAllPlayers(),
+      state: this.#gameState,
+      players: this.#getAllPlayers(),
+      hand: this.#findPlayer(playerId)?.hand,
       pawns: this.#getAllPawns(),
+      activePlayer: this.#activePlayer?.getPlayerData(),
     };
   }
 
   changeCurrentState() {
-    this.#currentState = this.#states.shift();
+    this.#gameState = this.#states.shift();
+  }
+
+  #setCurrentPlayer() {
+    this.#activePlayer = this.#turnOrder[0];
+  }
+
+  getCurrentPlayer() {
+    return this.#activePlayer;
   }
 
   #setTurnOrder() {
-    this.#turnOrder = Object.values(this.#players).sort((p1, p2) =>
-      p1.get().pawn.id - p2.get().pawn.id
+    this.#turnOrder = Object.values(this.#players).sort(
+      (p1, p2) => p1.getPlayerData().pawn.id - p2.getPlayerData().pawn.id,
     );
+  }
+
+  getTurnOrder() {
+    return this.#turnOrder;
   }
 
   addPlayer(player) {
@@ -81,15 +99,18 @@ export class Game {
 
     const pawn = this.#pawnsToAssign.pop();
     player.assignPawn(pawn);
-    this.#players[player.get().id] = player;
+    this.#players[player.getPlayerData().id] = player;
   }
 
-  getAllPlayers() {
-    return Object.values(this.#players).map((player) => player?.get());
+  #getAllPlayers() {
+    return Object.values(this.#players).map((player) => {
+      const { _hand, ...publicData } = player.getPlayerData();
+      return publicData;
+    });
   }
 
   #getAllPawns() {
-    return this.#pawns.map((pawn) => pawn?.get());
+    return this.#pawns.map((pawn) => pawn?.getPawnData());
   }
 
   getBoard() {
@@ -97,11 +118,11 @@ export class Game {
   }
 
   getPawnInstance(id) {
-    return this.#pawns.find((pawn) => pawn?.get().id === id);
+    return this.#pawns.find((pawn) => pawn?.getPawnData().id === id);
   }
 
   getRolledNumber(randomFn = Math.random, ceilFn = Math.ceil) {
-    if (!this.#turn) throw new Error("Game hasn't started yet");
+    if (!this.#turn) throw new Error("Invalid player turn");
     return this.#turn.rollDice(randomFn, ceilFn);
   }
 

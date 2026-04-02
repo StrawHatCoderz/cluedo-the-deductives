@@ -21,14 +21,14 @@ describe("PAWN", () => {
         position: [23, 19],
         color: "red",
       };
-      assertEquals(scarlet.get(), expected);
+      assertEquals(scarlet.getPawnData(), expected);
     });
   });
 
   describe("update position", () => {
     it(" => should update the position of the pawn", () => {
       scarlet.updatePosition([27, 9]);
-      assertEquals(scarlet.get().position, [27, 9]);
+      assertEquals(scarlet.getPawnData().position, [27, 9]);
     });
   });
 });

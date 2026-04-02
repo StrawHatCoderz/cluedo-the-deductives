@@ -1,7 +1,7 @@
-import { beforeEach, describe, it } from "@std/testing/bdd";
 import { assertEquals } from "@std/assert";
-import { Player } from "../../src/models/player.js";
+import { beforeEach, describe, it } from "@std/testing/bdd";
 import { Pawn } from "../../src/models/pawn.js";
+import { Player } from "../../src/models/player.js";
 
 describe("PLAYER", () => {
   let player;
@@ -10,10 +10,10 @@ describe("PLAYER", () => {
   });
 
   it(" => should give player details", () => {
-    const actualPlayer = player.get();
+    const actualPlayer = player.getPlayerData();
     const expectedPlayer = {
       id: 1,
-      playerName: "Javed",
+      name: "Javed",
       isHost: false,
       hand: [],
       isEliminated: false,
@@ -25,17 +25,17 @@ describe("PLAYER", () => {
 
   it(" => should eliminate player", () => {
     player.eliminate();
-    assertEquals((player.get()).isEliminated, true);
+    assertEquals(player.getPlayerData().isEliminated, true);
   });
 
   it(" => should eliminate player", () => {
     player.eliminate();
-    assertEquals((player.get()).isEliminated, true);
+    assertEquals(player.getPlayerData().isEliminated, true);
   });
 
   it(" => should setWon player", () => {
     player.setWon();
-    assertEquals((player.get()).isWon, true);
+    assertEquals(player.getPlayerData().isWon, true);
   });
 
   it(" => should setHand of a player", () => {
@@ -43,14 +43,14 @@ describe("PLAYER", () => {
     player.addCard(cards[0]);
     player.addCard(cards[1]);
     player.addCard(cards[2]);
-    assertEquals((player.get()).hand, cards);
+    assertEquals(player.getPlayerData().hand, cards);
   });
 
   it(" => assign pawn should assign a pawn to the player", () => {
     const pawn = new Pawn(1, "Scarlet", "0_0", "red", 1);
     player.assignPawn(pawn);
-    assertEquals(player.get().pawn.name, "Scarlet");
-    assertEquals(player.get().pawn.color, "red");
-    assertEquals(player.get().pawn.position, "0_0");
+    assertEquals(player.getPlayerData().pawn.name, "Scarlet");
+    assertEquals(player.getPlayerData().pawn.color, "red");
+    assertEquals(player.getPlayerData().pawn.position, "0_0");
   });
 });

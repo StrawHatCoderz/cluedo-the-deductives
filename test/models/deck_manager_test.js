@@ -1,9 +1,9 @@
 import { distinct } from "@std/collections";
 
-import { beforeEach, describe, it } from "@std/testing/bdd";
 import { assertEquals, assertFalse } from "@std/assert";
-import { DeckManager } from "../../src/models/deck_manager.js";
+import { beforeEach, describe, it } from "@std/testing/bdd";
 import { ROOMS, SUSPECTS, WEAPONS } from "../../src/constants/game_config.js";
+import { DeckManager } from "../../src/models/deck_manager.js";
 import { Player } from "../../src/models/player.js";
 
 describe("DECK MANAGER", () => {
@@ -34,8 +34,9 @@ describe("DECK MANAGER", () => {
     it(" => should give remaining cards which are not present in murder combination", () => {
       const murderCombination = deckManager.getMurderCombination();
       const remainingCards = deckManager.getRemainingCards();
-      const isInMurderCombination = remainingCards
-        .some((card) => card.includes(Object.values(murderCombination)));
+      const isInMurderCombination = remainingCards.some((card) =>
+        card.includes(Object.values(murderCombination))
+      );
 
       assertFalse(isInMurderCombination);
     });
@@ -44,14 +45,18 @@ describe("DECK MANAGER", () => {
   describe("distribute cards", () => {
     let players;
     beforeEach(() => {
-      const playersData = [{ id: 1, playerName: "Thor", isHost: true }, {
-        id: 2,
-        playerName: "Hulk",
-        isHost: false,
-      }, { id: 3, playerName: "Loki", isHost: false }];
+      const playersData = [
+        { id: 1, name: "Thor", isHost: true },
+        {
+          id: 2,
+          name: "Hulk",
+          isHost: false,
+        },
+        { id: 3, name: "Loki", isHost: false },
+      ];
 
-      players = playersData.map(({ id, playerName, isHost }) =>
-        new Player(id, playerName, isHost)
+      players = playersData.map(
+        ({ id, name, isHost }) => new Player(id, name, isHost),
       );
     });
 
@@ -59,7 +64,7 @@ describe("DECK MANAGER", () => {
       const remainingCards = deckManager.getRemainingCards();
       deckManager.distributeCards(players);
 
-      const hands = players.map((player) => player.get().hand);
+      const hands = players.map((player) => player.getPlayerData().hand);
       const uniqueCardsInHands = distinct(hands.flat());
       assertEquals(hands[0].length, 6);
       assertEquals(hands[1].length, 6);
@@ -72,7 +77,7 @@ describe("DECK MANAGER", () => {
       const newPlayer = new Player(0, "abc", false);
       players.push(newPlayer);
       deckManager.distributeCards(players);
-      const hands = players.map((player) => player.get().hand);
+      const hands = players.map((player) => player.getPlayerData().hand);
       const uniqueCardsInHands = distinct(hands.flat());
       assertEquals(hands[0].length, 5);
       assertEquals(hands[1].length, 5);

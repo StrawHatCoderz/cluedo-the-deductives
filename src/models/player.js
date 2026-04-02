@@ -1,25 +1,25 @@
 export class Player {
   #id;
-  #playerName;
+  #name;
   #isHost;
   #pawn;
   #isEliminated;
   #hand;
   #isWon;
 
-  constructor(id, playerName, isHost) {
+  constructor(id, name, isHost) {
     this.#id = id;
-    this.#playerName = playerName;
+    this.#name = name;
     this.#isHost = isHost;
     this.#isEliminated = false;
     this.#isWon = false;
     this.#hand = [];
   }
 
-  get() {
+  getPlayerData() {
     return {
       id: this.#id,
-      playerName: this.#playerName,
+      name: this.#name,
       isEliminated: this.#isEliminated,
       hand: [...this.#hand],
       isHost: this.#isHost,
@@ -45,6 +45,6 @@ export class Player {
   }
 
   #getPawn() {
-    return this.#pawn?.get();
+    return this.#pawn?.getPawnData();
   }
 }

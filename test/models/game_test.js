@@ -8,6 +8,7 @@ import { Player } from "../../src/models/player.js";
 
 describe("GAME", () => {
   let game;
+  let playerId;
   beforeEach(() => {
     const scarlet = new Pawn(1, "Scarlet", "0_0", "red");
     const colonel = new Pawn(2, "Colonel", "0_9", "yellow");
@@ -26,33 +27,14 @@ describe("GAME", () => {
       ),
       (list) => [...list],
     );
+    playerId = 1;
   });
 
   describe("add player ", () => {
     it(" => should add pawn to the player", () => {
       const player = new Player(1, "Javed", false);
       game.addPlayer(player);
-      assertEquals(player.get().pawn.name, "pulm");
-    });
-  });
-
-  describe("get all players ", () => {
-    it(" => should return all the players", () => {
-      const player = new Player(1, "Javed", false);
-      game.addPlayer(player);
-      const expected = [
-        {
-          id: 1,
-          playerName: "Javed",
-          isEliminated: false,
-          hand: [],
-          isHost: false,
-          isWon: false,
-          pawn: player.get().pawn,
-        },
-      ];
-      const players = game.getAllPlayers();
-      assertEquals(players, expected);
+      assertEquals(player.getPlayerData().pawn.name, "pulm");
     });
   });
 
@@ -62,11 +44,12 @@ describe("GAME", () => {
       const p1 = new Player(1, "thor", false);
       const p2 = new Player(2, "hulk", true);
       const p3 = new Player(3, "deadpool", false);
+
       game.addPlayer(p1);
       game.addPlayer(p2);
       game.addPlayer(p3);
-      game.changeCurrentState();
       game.start();
+      game.changeCurrentState();
       game.updateTurn();
       assertEquals(game.getRolledNumber(randomGenerator), 12);
     });
@@ -74,14 +57,14 @@ describe("GAME", () => {
 
   describe("get current game state", () => {
     it(" => should give current game state", () => {
-      assertEquals(game.getCurrentState().state, "waiting");
+      assertEquals(game.getState(playerId).state, "waiting");
     });
   });
 
   describe("change current game state", () => {
     it(" => should change current game state", () => {
       game.changeCurrentState();
-      assertEquals(game.getCurrentState().state, "setup");
+      assertEquals(game.getState(playerId).state, "setup");
     });
   });
 
@@ -95,7 +78,7 @@ describe("GAME", () => {
       game.addPlayer(p3);
       game.changeCurrentState();
       game.start();
-      assertEquals(p1.get().hand.length, 6);
+      assertEquals(p1.getPlayerData().hand.length, 6);
     });
   });
 
@@ -110,7 +93,7 @@ describe("GAME", () => {
       game.changeCurrentState();
       game.start();
       const currentPlayer = game.updateTurn();
-      assertEquals(currentPlayer, p1.get());
+      assertEquals(currentPlayer, p1.getPlayerData());
     });
 
     describe("skip  player when eliminated", () => {
@@ -125,7 +108,7 @@ describe("GAME", () => {
         game.start();
         p1.eliminate();
         const currentPlayer = game.updateTurn();
-        assertEquals(currentPlayer, p2.get());
+        assertEquals(currentPlayer, p2.getPlayerData());
       });
     });
   });

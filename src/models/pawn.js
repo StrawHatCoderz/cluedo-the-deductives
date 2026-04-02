@@ -10,7 +10,7 @@ export class Pawn {
     this.#color = color;
   }
 
-  get() {
+  getPawnData() {
     return {
       id: this.#id,
       name: this.#name,

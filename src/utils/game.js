@@ -22,3 +22,7 @@ export const createGameInstance = () => {
   const game = new Game(1, board, pawns, deck);
   return game;
 };
+
+export const getPlayerId = (_c) => {
+  return 1;
+};

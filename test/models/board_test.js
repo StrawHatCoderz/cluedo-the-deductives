@@ -1,8 +1,8 @@
 import { assert } from "@std/assert/assert";
 import { assertEquals } from "@std/assert/equals";
 import { beforeEach, describe, it } from "@std/testing/bdd";
-import { Board } from "../../src/models/board.js";
 import { boardConfig } from "../../src/constants/board_config.js";
+import { Board } from "../../src/models/board.js";
 
 describe("BOARD buildBoard", () => {
   let board;
