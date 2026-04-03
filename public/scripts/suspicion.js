@@ -5,14 +5,14 @@ const SUSPICION_STATE = {
   hasMadeSuspicion: false,
 };
 
-const WEAPONS = [
-  "DAGGER",
-  "ROPE",
-  "REVOLVER",
-  "SPANNER",
-  "LEAD PIPING",
-  "CANDLESTICK",
-];
+const WEAPONS = {
+  "DAGGER": "https://cdn-icons-png.flaticon.com/128/3863/3863317.png",
+  "ROPE": "https://cdn-icons-png.flaticon.com/128/3539/3539196.png",
+  "REVOLVER": "https://cdn-icons-png.flaticon.com/128/1320/1320476.png",
+  "SPANNER": "https://cdn-icons-png.flaticon.com/128/5233/5233077.png",
+  "LEAD PIPING": "https://cdn-icons-png.flaticon.com/128/5672/5672227.png",
+  "CANDLESTICK": "https://cdn-icons-png.flaticon.com/128/17080/17080905.png",
+};
 
 const weaponPopup = document.getElementById("weapon-popup");
 
@@ -38,7 +38,7 @@ const showModal = (data) => {
   modal.classList.remove("hidden");
 };
 
-const showResult = (data, result) => {
+const showResult = (data, result) => { ///===========
   const statusEl = document.getElementById("suspicion-status");
   const closeBtn = document.getElementById("close-modal");
 
@@ -53,7 +53,6 @@ const showResult = (data, result) => {
   } else {
     statusEl.textContent = "No one could disprove!";
   }
-
   closeBtn.style.display = "inline-block";
 };
 
@@ -87,7 +86,7 @@ const mockFetchSuspicion = async (suspicion) => {
     }, 2000);
     setTimeout(() => {
       globalThis.window.location.reload();
-    }, 3000);
+    }, 30000);
   });
 };
 
@@ -107,8 +106,6 @@ const submitSuspicion = async () => {
   SUSPICION_STATE.hasMadeSuspicion = true;
 };
 
-let selectedWeaponEl = null;
-
 const selectWeapon = (card, selectedLabel, weapon) => {
   if (selectedWeaponEl) {
     selectedWeaponEl.classList.remove("weapon-selected");
@@ -126,104 +123,48 @@ const selectWeapon = (card, selectedLabel, weapon) => {
   }
 };
 
-const createActionButtons = () => {
-  const actions = document.createElement("div");
-  actions.className = "weapon-popup-actions";
+let selectedWeaponEl = null;
 
-  const suspectBtn = createSuspectButton();
+const showWeaponPopup = (x, y) => {
+  selectedWeaponEl = null;
+  SUSPICION_STATE.selectedWeapon = null;
 
-  const cancelBtn = createCancelButton();
+  const temp = document.querySelector("#weapon-popup-temp");
+  const cardTemp = document.querySelector("#weapon-card-temp");
+  const clone = temp.content.cloneNode(true);
 
-  actions.appendChild(suspectBtn);
-  actions.appendChild(cancelBtn);
-  return actions;
-};
+  weaponPopup.innerHTML = "";
+  weaponPopup.appendChild(clone);
 
-const createCancelButton = () => {
-  const cancelBtn = document.createElement("button");
-  cancelBtn.className = "weapon-btn weapon-btn-cancel";
-  cancelBtn.textContent = "cancel";
-  cancelBtn.onclick = () => {
+  document.getElementById("weapon-popup-room").textContent =
+    SUSPICION_STATE.currentRoom;
+
+  document.getElementById("weapon-popup-suspect").textContent =
+    SUSPICION_STATE.selectedSuspect;
+
+  const selectedLabel = document.getElementById("weapon-selected-label");
+  const row = document.getElementById("weapon-cards-row");
+  const weapons = Object.keys(WEAPONS);
+  weapons.forEach((weapon) => {
+    addWeaponEl(cardTemp, weapon, selectedLabel, row);
+  });
+
+  document.getElementById("weapon-suspect-btn").onclick = () => {
+    if (!SUSPICION_STATE.selectedWeapon) return;
+    weaponPopup.classList.add("hidden");
+    submitSuspicion();
+  };
+
+  document.getElementById("weapon-cancel-btn").onclick = () => {
     weaponPopup.classList.add("hidden");
     selectedWeaponEl = null;
     SUSPICION_STATE.selectedWeapon = null;
     SUSPICION_STATE.selectedSuspect = null;
   };
-  return cancelBtn;
-};
-
-const createSuspectButton = () => {
-  const suspectBtn = document.createElement("button");
-  suspectBtn.className = "weapon-btn weapon-btn-confirm";
-  suspectBtn.textContent = "suspect";
-  suspectBtn.onclick = () => {
-    if (!SUSPICION_STATE.selectedWeapon) return;
-    weaponPopup.classList.add("hidden");
-    submitSuspicion();
-  };
-  return suspectBtn;
-};
-
-const createSelectLabel = () => {
-  const selectedLabel = document.createElement("div");
-  selectedLabel.className = "weapon-selected-label";
-  selectedLabel.id = "weapon-selected-label";
-  selectedLabel.textContent = "Select a weapon";
-  weaponPopup.appendChild(selectedLabel);
-  return selectedLabel;
-};
-
-const createRoomLabel = () => {
-  const roomLabel = document.createElement("div");
-  roomLabel.className = "weapon-popup-room";
-  roomLabel.textContent = SUSPICION_STATE.currentRoom;
-  return roomLabel;
-};
-
-const createWeaponRow = (selectedLabel) => {
-  const row = document.createElement("div");
-  row.className = "weapon-cards-row";
-
-  WEAPONS.forEach((weapon) => {
-    appendWeapon(weapon, selectedLabel, row);
-  });
-
-  weaponPopup.appendChild(row);
-};
-
-const appendWeapon = (weapon, selectedLabel, row) => {
-  const card = document.createElement("div");
-  card.className = "weapon-item";
-  card.dataset.weapon = weapon;
-
-  const dot = document.createElement("div");
-  dot.className = "weapon-dot";
-  card.appendChild(dot);
-
-  card.addEventListener("click", () => {
-    selectWeapon(card, selectedLabel, weapon);
-  });
-
-  row.appendChild(card);
-};
-
-const showWeaponPopup = (x, y) => {
-  weaponPopup.innerHTML = "";
-  selectedWeaponEl = null;
-  SUSPICION_STATE.selectedWeapon = null;
-
-  const roomLabel = createRoomLabel();
-  weaponPopup.appendChild(roomLabel);
-
-  const selectedLabel = createSelectLabel();
-  createWeaponRow(selectedLabel);
-
-  const actionBtns = createActionButtons();
-  weaponPopup.append(roomLabel, actionBtns);
 
   weaponPopup.style.left = Math.min(x, globalThis.window.innerWidth - 380) +
     "px";
-  weaponPopup.style.top = Math.min(y, globalThis.window.innerHeight - 180) +
+  weaponPopup.style.top = Math.min(y, globalThis.window.innerHeight - 220) +
     "px";
   weaponPopup.classList.remove("hidden");
 };
@@ -280,3 +221,21 @@ export const suspicionBtnListener = ({ canSuspect, currentPlayer, pawns }) => {
     removePawnHighlight();
   }
 };
+
+function addWeaponEl(cardTemp, weapon, selectedLabel, row) {
+  const cardClone = cardTemp.content.cloneNode(true);
+  const card = cardClone.querySelector(".weapon-item");
+  const img = cardClone.querySelector(".weapon-img");
+  const name = cardClone.querySelector(".weapon-name");
+
+  card.dataset.weapon = weapon;
+  img.src = WEAPONS[weapon];
+  img.alt = weapon;
+  name.textContent = weapon;
+
+  card.addEventListener(
+    "click",
+    () => selectWeapon(card, selectedLabel, weapon),
+  );
+  row.appendChild(cardClone);
+}
