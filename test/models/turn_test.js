@@ -72,4 +72,11 @@ describe("Turn Management", () => {
       assertEquals(turn.getSuspectCombination(), combination);
     });
   });
+
+  describe("secret passage", () => {
+    it(" => should set true : usedSecretPassage", () => {
+      turn.setUsedSecretPassage();
+      assertEquals(turn.getUsedSecretPassage(), true);
+    });
+  });
 });

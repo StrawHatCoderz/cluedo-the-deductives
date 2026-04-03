@@ -69,7 +69,7 @@ const mockFetchSuspicion = async (suspicion) => {
     method: "put",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({
-      currentNodeId: suspicion.room,
+      newNodeId: suspicion.room,
       tiles: [suspicion.room],
       isUsingSecretPassage: false,
     }),

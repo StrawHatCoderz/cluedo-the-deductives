@@ -71,7 +71,7 @@ export class Game {
       hand: this.#findPlayer(playerId)?.hand,
       pawns: this.#getAllPawns(),
       activePlayer: this.#activePlayer?.getPlayerData(),
-      canRoll: this.isRollAllowed(playerId),
+      canRoll: this.#isRollAllowed(playerId),
       secretPassageId: this.#getSecretPassageId(playerId),
       canSuspect: this.canSuspect(),
     };
@@ -131,6 +131,7 @@ export class Game {
 
   getRolledNumber(randomFn = Math.random, ceilFn = Math.ceil) {
     if (!this.#turn) throw new Error("Invalid player turn");
+    this.setUsedSecretPassage();
     return this.#turn.rollDice(randomFn, ceilFn);
   }
 
@@ -139,9 +140,9 @@ export class Game {
     this.#deck.distributeCards(players);
   }
 
-  isRollAllowed(playerId) {
+  #isRollAllowed(playerId) {
     return playerId === this.#activePlayer?.getPlayerData().id &&
-      !(this.#turn?.getIsDiceRolled() || this.getHasUsedSecretPassage());
+      !(this.#turn?.getIsDiceRolled() || this.#getHasUsedSecretPassage());
   }
 
   getSuspectCombination() {
@@ -160,8 +161,10 @@ export class Game {
     return this.#turn?.getDiceValue();
   }
 
-  toggleIsOccupied(nodeId) {
-    this.#board.toggleIsOccupied(nodeId);
+  #toggleIsOccupied(nodeId) {
+    if (nodeId.includes("-")) {
+      this.#board.toggleIsOccupied(nodeId);
+    }
   }
 
   getReachableNodes(position, steps) {
@@ -200,7 +203,7 @@ export class Game {
     return { isCorrect, murderCombination };
   }
 
-  getHasUsedSecretPassage() {
+  #getHasUsedSecretPassage() {
     return this.#turn?.getUsedSecretPassage();
   }
 
@@ -214,11 +217,43 @@ export class Game {
 
     if (
       room in secretPassages &&
-      this.isRollAllowed(playerId) &&
+      this.#isRollAllowed(playerId) &&
       this.#turn?.canSuspect() &&
       !this.#turn?.getUsedSecretPassage()
     ) {
       return secretPassages[room];
     }
+  }
+
+  #hasPossibleMove(possibleTiles, tileId) {
+    return possibleTiles.some((tiles) => tileId === tiles);
+  }
+
+  #isValidMove(tileId, possibleTiles) {
+    const currentPlayer = this.getCurrentPlayer()?.getPlayerData();
+
+    return this.#hasPossibleMove(possibleTiles, tileId) &&
+      (this.#getHasUsedSecretPassage() ||
+        !this.#isRollAllowed(currentPlayer.id));
+  }
+
+  movePawn(
+    currentPawn,
+    { newNodeId, isUsingSecretPassage, tiles },
+    oldPosition,
+    tileId,
+    pos,
+  ) {
+    const pawn = this.getPawnInstance(+currentPawn);
+
+    if (isUsingSecretPassage) this.setUsedSecretPassage();
+    if (this.#isValidMove(tileId, tiles)) {
+      pawn.updatePosition(pos);
+      this.#toggleIsOccupied(oldPosition);
+      this.#toggleIsOccupied(newNodeId);
+      return { status: true };
+    }
+
+    return { status: false };
   }
 }

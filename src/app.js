@@ -40,6 +40,7 @@ export const createApp = ({ game, getRandom, roundUp, logger }) => {
 
   app.put("/update-pawn-position/:pawnId", movePawnHandler);
   app.onError((e, c) => {
+    console.log(e);
     return c.json({ error: e.message }, 400);
   });
   return app;

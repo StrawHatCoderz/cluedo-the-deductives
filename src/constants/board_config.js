@@ -5,7 +5,7 @@ export const boardConfig = {
     kitchen: {
       id: "kitchen",
       areas: [{ start: { x: 0, y: 0 }, end: { x: 5, y: 6 } }],
-      doors: [{ x: 4, y: 6 }],
+      doors: [{ x: 4, y: 7 }],
     },
 
     ballroom: {

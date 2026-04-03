@@ -52,7 +52,7 @@ describe("BOARD", () => {
       const res = await app.request(`/update-pawn-position/1`, {
         method: "put",
         body: JSON.stringify({
-          currentNodeId: "tile-7-24",
+          newNodeId: "tile-7-24",
           tiles: ["tile-7-24"],
           isUsingSecretPassage: false,
         }),
@@ -69,7 +69,7 @@ describe("BOARD", () => {
       const res = await app.request(`/update-pawn-position/1`, {
         method: "put",
         body: JSON.stringify({
-          currentNodeId: "tile-7-24",
+          newNodeId: "tile-7-24",
           tiles: ["tile-7-24"],
           isUsingSecretPassage: false,
         }),
@@ -102,7 +102,7 @@ describe("BOARD", () => {
         req: {
           json() {
             return {
-              currentNodeId: "tile-1-1",
+              newNodeId: "tile-1-1",
               tiles: ["tile-0-1", "tile-0-2"],
             };
           },
@@ -120,6 +120,63 @@ describe("BOARD", () => {
     const smallBoard = Board.create({
       ...board,
     });
-    assertEquals(smallBoard.getReachableNodes("kitchen", 1), ["tile-4-6"]);
+    assertEquals(smallBoard.getReachableNodes("kitchen", 1), ["tile-4-7"]);
+  });
+
+  describe("secret passage", () => {
+    it(" => should set secret passage", async () => {
+      await app.request("/start-game", { method: "post" });
+      await app.request("/update-state", { method: "post" });
+      await app.request("/roll", { method: "post" });
+      const res = await app.request(`/update-pawn-position/1`, {
+        method: "put",
+        body: JSON.stringify({
+          newNodeId: "tile-7-24",
+          tiles: ["tile-7-24"],
+          isUsingSecretPassage: true,
+        }),
+      });
+      const body = await res.json();
+
+      assertEquals(res.status, 200);
+      assertEquals(body, { status: true });
+    });
+  });
+
+  describe("movement", () => {
+    it(" => shouldn't move: starting position", async () => {
+      await app.request("/start-game", { method: "post" });
+      await app.request("/update-state", { method: "post" });
+      await app.request("/roll", { method: "post" });
+      const res = await app.request(`/update-pawn-position/1`, {
+        method: "put",
+        body: JSON.stringify({
+          newNodeId: "tile-4-16",
+          tiles: ["tile-4-16"],
+          isUsingSecretPassage: false,
+        }),
+      });
+      const body = await res.json();
+
+      assertEquals(res.status, 200);
+      assertEquals(body, { status: true });
+    });
+    it(" => shouldn't move: starting position", async () => {
+      await app.request("/start-game", { method: "post" });
+      await app.request("/update-state", { method: "post" });
+      await app.request("/roll", { method: "post" });
+      const res = await app.request(`/update-pawn-position/1`, {
+        method: "put",
+        body: JSON.stringify({
+          newNodeId: "tile-0-17",
+          tiles: ["tile-0-17"],
+          isUsingSecretPassage: false,
+        }),
+      });
+      const body = await res.json();
+
+      assertEquals(res.status, 200);
+      assertEquals(body, { status: true });
+    });
   });
 });

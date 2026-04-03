@@ -69,7 +69,7 @@ describe("BOARD", () => {
       const smallBoard = Board.create({
         ...board,
       });
-      assertEquals(smallBoard.getReachableNodes("kitchen", 1), ["tile-4-6"]);
+      assertEquals(smallBoard.getReachableNodes("kitchen", 1), ["tile-4-7"]);
     });
   });
 });

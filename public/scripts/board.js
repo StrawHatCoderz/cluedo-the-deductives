@@ -16,12 +16,12 @@ const getHighlightPath = () => {
 
 const handleMovePlayer = async (e, tiles, pawnId) => {
   e.preventDefault();
-  const currentNodeId = e.target.id;
+  const newNodeId = e.target.id;
 
   await fetch(`/update-pawn-position/${pawnId}`, {
     method: "put",
     headers: { "content-type": "application/json" },
-    body: JSON.stringify({ currentNodeId, tiles, isUsingSecretPassage: false }),
+    body: JSON.stringify({ newNodeId, tiles, isUsingSecretPassage: false }),
   });
   globalThis.window.location.reload();
   localStorage.clear();
@@ -104,7 +104,7 @@ const handleSecretPassageClick = async (
     method: "put",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({
-      currentNodeId: secretPassage,
+      newNodeId: secretPassage,
       tiles: [secretPassage],
       isUsingSecretPassage: true,
     }),
@@ -113,26 +113,39 @@ const handleSecretPassageClick = async (
   localStorage.clear();
 };
 
-const secretPassageListener = (scrtPsgElement, secretPassage, pawnId) => {
-  if (scrtPsgElement._handler) {
-    scrtPsgElement.removeEventListener("click", scrtPsgElement._handler);
-  }
+const clearAllSecretPassages = () => {
+  const elements = document.querySelectorAll('[data-secret-passage="true"]');
+
+  elements.forEach((el) => {
+    if (el._handler) {
+      el.removeEventListener("click", el._handler);
+      el._handler = null;
+    }
+
+    el.classList.remove("highlight");
+    delete el.dataset.secretPassage;
+  });
+};
+
+const secretPassageHandler = (secretPassage, pawnId) => {
+  clearAllSecretPassages();
+  if (!secretPassage) return;
+
+  const scrtPsgElement = document
+    .querySelector(`rect[data-to="${secretPassage}"]`);
+  const room = document.querySelector(`#${secretPassage}`);
+
+  scrtPsgElement.classList.add("highlight");
+  scrtPsgElement.dataset.secretPassage = "true";
+
+  room.classList.add("highlight");
+  room.dataset.secretPassage = "true";
 
   const handler = async (e) =>
     await handleSecretPassageClick(e, secretPassage, pawnId);
 
   scrtPsgElement._handler = handler;
   scrtPsgElement.addEventListener("click", handler, { once: true });
-};
-
-const secretPassageHandler = (secretPassage, pawnId) => {
-  const scrtPsgElement = document
-    .querySelector(`rect[data-to="${secretPassage}"]`);
-  const room = document.querySelector(`#${secretPassage}`);
-  scrtPsgElement.classList.add("highlight");
-  room.classList.add("highlight");
-
-  secretPassageListener(scrtPsgElement, secretPassage, pawnId);
 };
 
 export const renderActions = (boardConfig) => {
@@ -147,12 +160,12 @@ export const renderActions = (boardConfig) => {
 
   diceListener(dice, boardConfig.currentPlayer.pawn.id);
   passBtnListener(passBtn);
-  if (boardConfig.secretPassageId) {
-    secretPassageHandler(
-      boardConfig.secretPassageId,
-      boardConfig.currentPlayer.pawn.id,
-    );
-  }
+
+  secretPassageHandler(
+    boardConfig.secretPassageId,
+    boardConfig.currentPlayer.pawn.id,
+  );
+
   const path = getHighlightPath();
   if (path.length) {
     passBtn.setAttribute("disabled", "");

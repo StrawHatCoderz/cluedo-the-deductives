@@ -1,9 +1,4 @@
-import {
-  getPosition,
-  isValidMove,
-  parseNode,
-  toggleIsOccupied,
-} from "../utils/game.js";
+import { getPosition, parseNode } from "../utils/game.js";
 
 export const serveRollDice = (c, randomFn, ceilFn) => {
   const game = c.get("game");
@@ -24,20 +19,19 @@ export const serveGetReachableNodes = (c) => {
 
 export const movePawnHandler = async (c) => {
   const game = c.get("game");
-  const { currentNodeId, tiles, isUsingSecretPassage } = await c.req.json();
+  const payload = await c.req.json();
 
-  const [nodeId, pos] = parseNode(currentNodeId);
+  const [nodeId, pos] = parseNode(payload.newNodeId);
   const currentPawn = await c.req.param("pawnId");
   const pawn = game.getPawnInstance(+currentPawn);
+  const oldPosition = getPosition(pawn?.getPawnData());
+  const { status } = game.movePawn(
+    currentPawn,
+    payload,
+    oldPosition,
+    nodeId,
+    pos,
+  );
 
-  if (isUsingSecretPassage) game.setUsedSecretPassage();
-  if (isValidMove(nodeId, tiles, game)) {
-    const oldPosition = getPosition(pawn?.getPawnData());
-    pawn.updatePosition(pos);
-    toggleIsOccupied(oldPosition, game);
-    toggleIsOccupied(currentNodeId, game);
-    return c.json({ status: true });
-  }
-
-  return c.json({ status: false }, 400);
+  return c.json({ status }, status ? 200 : 400);
 };

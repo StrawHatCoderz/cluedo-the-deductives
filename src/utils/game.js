@@ -23,26 +23,10 @@ export const createGameInstance = () => {
   return game;
 };
 
-export const toggleIsOccupied = (nodeId, game) => {
-  if (nodeId.includes("-")) {
-    game.toggleIsOccupied(nodeId);
-  }
-};
-
 export const getPosition = (pawn) => {
   const { x, y, room } = pawn.position;
   const position = room ? room : `tile-${x}-${y}`;
   return position;
-};
-
-const hasPossibleMove = (possibleTiles, tileId) =>
-  possibleTiles.some((tiles) => tileId === tiles);
-
-export const isValidMove = (tileId, possibleTiles, game) => {
-  const currentPlayer = game.getCurrentPlayer()?.getPlayerData();
-
-  return hasPossibleMove(possibleTiles, tileId) &&
-    (game.getHasUsedSecretPassage() || !game.isRollAllowed(currentPlayer.id));
 };
 
 export const parseNode = (node) => {
