@@ -2,7 +2,7 @@ import { assertEquals } from "@std/assert/equals";
 import { beforeEach, describe, it } from "@std/testing/bdd";
 import { createApp } from "../../src/app.js";
 import { boardConfig } from "../../src/constants/board_config.js";
-import { movePawnHandler } from "../../src/handlers/board.js";
+import { movePawnHandler } from "../../src/handlers/board_handler.js";
 import { Board } from "../../src/models/board.js";
 import { Player } from "../../src/models/player.js";
 import { createGameInstance } from "../../src/utils/game.js";

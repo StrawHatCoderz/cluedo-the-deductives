@@ -4,14 +4,14 @@ import {
   movePawnHandler,
   serveGetReachableNodes,
   serveRollDice,
-} from "./handlers/board.js";
+} from "./handlers/board_handler.js";
 import {
   getGameState,
   handleAccusation,
   startGame,
   updateGameState,
   updateTurn,
-} from "./handlers/game.js";
+} from "./handlers/game_handler.js";
 import { addMockPlayer } from "./middleware/mock_player.js";
 
 export const createApp = ({ game, getRandom, roundUp, logger }) => {
