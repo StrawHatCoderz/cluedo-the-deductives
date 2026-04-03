@@ -4,12 +4,22 @@ export class Turn {
   #diceValue;
   #hasSuspected;
   #suspectCombination;
+  #usedSecretPsg;
 
   constructor(player) {
     this.#player = player;
     this.#isDiceRolled = false;
     this.#diceValue = [];
     this.#hasSuspected = false;
+    this.#usedSecretPsg = false;
+  }
+
+  setUsedSecretPassage() {
+    this.#usedSecretPsg = true;
+  }
+
+  getUsedSecretPassage() {
+    return this.#usedSecretPsg;
   }
 
   getIsDiceRolled() {

@@ -35,8 +35,14 @@ export const getPosition = (pawn) => {
   return position;
 };
 
-export const isValidTurn = (tileId, possibleTurns) => {
-  return possibleTurns.some((turn) => tileId === turn);
+const hasPossibleMove = (possibleTiles, tileId) =>
+  possibleTiles.some((tiles) => tileId === tiles);
+
+export const isValidMove = (tileId, possibleTiles, game) => {
+  const currentPlayer = game.getCurrentPlayer()?.getPlayerData();
+
+  return hasPossibleMove(possibleTiles, tileId) &&
+    (game.getHasUsedSecretPassage() || !game.isRollAllowed(currentPlayer.id));
 };
 
 export const parseNode = (node) => {

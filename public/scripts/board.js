@@ -21,7 +21,7 @@ const handleMovePlayer = async (e, tiles, pawnId) => {
   await fetch(`/update-pawn-position/${pawnId}`, {
     method: "put",
     headers: { "content-type": "application/json" },
-    body: JSON.stringify({ currentNodeId, tiles }),
+    body: JSON.stringify({ currentNodeId, tiles, isUsingSecretPassage: false }),
   });
   globalThis.window.location.reload();
   localStorage.clear();
@@ -94,16 +94,51 @@ const passBtnListener = (passBtn) => {
   passBtn.addEventListener("click", handler, { once: true });
 };
 
-const secretPassageListener = (secretPassage) => {
-  const scrtPsg = document.querySelector(`rect[data-to="${secretPassage}"]`);
+const handleSecretPassageClick = async (
+  e,
+  secretPassage,
+  pawnId,
+) => {
+  e.preventDefault();
+  await fetch(`/update-pawn-position/${pawnId}`, {
+    method: "put",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      currentNodeId: secretPassage,
+      tiles: [secretPassage],
+      isUsingSecretPassage: true,
+    }),
+  });
+  globalThis.window.location.reload();
+  localStorage.clear();
+};
+
+const secretPassageListener = (scrtPsgElement, secretPassage, pawnId) => {
+  if (scrtPsgElement._handler) {
+    scrtPsgElement.removeEventListener("click", scrtPsgElement._handler);
+  }
+
+  const handler = async (e) =>
+    await handleSecretPassageClick(e, secretPassage, pawnId);
+
+  scrtPsgElement._handler = handler;
+  scrtPsgElement.addEventListener("click", handler, { once: true });
+};
+
+const secretPassageHandler = (secretPassage, pawnId) => {
+  const scrtPsgElement = document
+    .querySelector(`rect[data-to="${secretPassage}"]`);
   const room = document.querySelector(`#${secretPassage}`);
-  scrtPsg.classList.add("highlight");
+  scrtPsgElement.classList.add("highlight");
   room.classList.add("highlight");
+
+  secretPassageListener(scrtPsgElement, secretPassage, pawnId);
 };
 
 export const renderActions = (boardConfig) => {
   const dice = document.querySelector("#dice-button");
   const passBtn = document.querySelector("#pass-button");
+  const accuseBtn = document.querySelector("#accuse-button");
   const attributeFn = !boardConfig.canRoll ? "setAttribute" : "removeAttribute";
   dice[attributeFn]("disabled", "");
   if (boardConfig.canRoll) {
@@ -113,11 +148,15 @@ export const renderActions = (boardConfig) => {
   diceListener(dice, boardConfig.currentPlayer.pawn.id);
   passBtnListener(passBtn);
   if (boardConfig.secretPassageId) {
-    secretPassageListener(boardConfig.secretPassageId);
+    secretPassageHandler(
+      boardConfig.secretPassageId,
+      boardConfig.currentPlayer.pawn.id,
+    );
   }
   const path = getHighlightPath();
   if (path.length) {
     passBtn.setAttribute("disabled", "");
+    accuseBtn.setAttribute("disabled", "");
     highlightTiles(path);
     movePlayer(path, boardConfig.currentPlayer.pawn.id);
   }

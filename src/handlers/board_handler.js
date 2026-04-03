@@ -1,6 +1,6 @@
 import {
   getPosition,
-  isValidTurn,
+  isValidMove,
   parseNode,
   toggleIsOccupied,
 } from "../utils/game.js";
@@ -24,12 +24,13 @@ export const serveGetReachableNodes = (c) => {
 
 export const movePawnHandler = async (c) => {
   const game = c.get("game");
-  const { currentNodeId, tiles } = await c.req.json();
+  const { currentNodeId, tiles, isUsingSecretPassage } = await c.req.json();
   const [nodeId, pos] = parseNode(currentNodeId);
   const currentPawn = await c.req.param("pawnId");
   const pawn = game.getPawnInstance(+currentPawn);
 
-  if (isValidTurn(nodeId, tiles) && !game.getState().canRoll) {
+  if (isUsingSecretPassage) game.setUsedSecretPassage();
+  if (isValidMove(nodeId, tiles, game)) {
     const oldPosition = getPosition(pawn?.getPawnData());
     pawn.updatePosition(pos);
     toggleIsOccupied(oldPosition, game);

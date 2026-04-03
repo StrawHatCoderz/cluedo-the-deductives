@@ -71,7 +71,7 @@ export class Game {
       hand: this.#findPlayer(playerId)?.hand,
       pawns: this.#getAllPawns(),
       activePlayer: this.#activePlayer?.getPlayerData(),
-      canRoll: this.#isRollAllowed(playerId),
+      canRoll: this.isRollAllowed(playerId),
       secretPassageId: this.#getSecretPassageId(playerId),
       canSuspect: this.canSuspect(),
     };
@@ -139,9 +139,9 @@ export class Game {
     this.#deck.distributeCards(players);
   }
 
-  #isRollAllowed(playerId) {
+  isRollAllowed(playerId) {
     return playerId === this.#activePlayer?.getPlayerData().id &&
-      !this.#turn?.getIsDiceRolled();
+      !(this.#turn?.getIsDiceRolled() || this.getHasUsedSecretPassage());
   }
 
   getSuspectCombination() {
@@ -191,14 +191,23 @@ export class Game {
     return { isCorrect, murderCombination };
   }
 
+  getHasUsedSecretPassage() {
+    return this.#turn?.getUsedSecretPassage();
+  }
+
+  setUsedSecretPassage() {
+    this.#turn?.setUsedSecretPassage();
+  }
+
   #getSecretPassageId(playerId) {
     const room = this.#activePlayer?.getPlayerData().pawn.position.room;
     const secretPassages = this.#board.getSecretPassages();
 
     if (
       room in secretPassages &&
-      this.#isRollAllowed(playerId) &&
-      this.#turn?.canSuspect()
+      this.isRollAllowed(playerId) &&
+      this.#turn?.canSuspect() &&
+      !this.#turn?.getUsedSecretPassage()
     ) {
       return secretPassages[room];
     }

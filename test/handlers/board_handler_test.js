@@ -54,6 +54,7 @@ describe("BOARD", () => {
         body: JSON.stringify({
           currentNodeId: "tile-7-24",
           tiles: ["tile-7-24"],
+          isUsingSecretPassage: false,
         }),
       });
       const body = await res.json();
@@ -70,6 +71,7 @@ describe("BOARD", () => {
         body: JSON.stringify({
           currentNodeId: "tile-7-24",
           tiles: ["tile-7-24"],
+          isUsingSecretPassage: false,
         }),
       });
       const body = await res.json();
