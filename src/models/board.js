@@ -4,11 +4,13 @@ export class Board {
   #config;
   #graph;
   #secretPassages;
+  #startingPositionsIds;
 
   constructor(boardConfig) {
     this.#config = boardConfig;
     this.#secretPassages = boardConfig.secretPassages;
     this.#graph = {};
+    this.#startingPositionsIds = [];
   }
 
   #getTileId(x, y) {
@@ -21,10 +23,6 @@ export class Board {
 
   #getBoundaryRanges() {
     return this.#config.walls;
-  }
-
-  #getStartingPositions() {
-    return Object.values(this.#config.startingPositions);
   }
 
   #getAdjacent({ x, y }) {
@@ -50,10 +48,7 @@ export class Board {
   }
 
   #createTile(x, y) {
-    const startingPositions = this.#getStartingPositions().map(({ x, y }) =>
-      this.#getTileId(x, y)
-    );
-
+    const startingPositions = this.#startingPositionsIds;
     const id = this.#getTileId(x, y);
 
     this.#graph[id] = {
@@ -110,6 +105,10 @@ export class Board {
   }
 
   #build() {
+    this.#startingPositionsIds = Object.values(
+      this.#config.startingPositions,
+    ).map(({ x, y }) => this.#getTileId(x, y));
+
     this.#buildRooms(Object.values(this.#config.rooms));
     this.#buildTiles(this.#config.size.height, this.#config.size.width);
     this.#addAdjacents();
@@ -121,23 +120,23 @@ export class Board {
     return board;
   }
 
-  getBoardState() {
+  getGraph() {
     return this.#graph;
   }
 
   getReachableNodes(from, steps, start = from, visited = [], res = new Set()) {
-    const board = this.getBoardState();
+    const graph = this.getGraph();
 
-    if (board[from]?.isOccupied && start !== from) return [];
+    if (graph[from]?.isOccupied && start !== from) return [];
 
-    if ((start !== from && board[from]?.type === "room") || steps === 0) {
+    if ((start !== from && graph[from]?.type === "room") || steps === 0) {
       res.add(from);
       return Array.from(res);
     }
 
-    const unVisitedTiles = board[from].adj
+    const unVisitedTiles = graph[from].adj
       .filter((tile) => !visited.includes(tile))
-      .filter((tile) => !board[tile]?.isOccupied);
+      .filter((tile) => !graph[tile]?.isOccupied);
 
     for (const tile of unVisitedTiles) {
       this.getReachableNodes(tile, steps - 1, start, [...visited, from], res);
