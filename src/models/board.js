@@ -146,7 +146,9 @@ export class Board {
   }
 
   toggleIsOccupied(nodeId) {
-    this.#graph[nodeId].isOccupied = !this.#graph[nodeId].isOccupied;
+    if (!this.#startingPositionsIds.includes(nodeId)) {
+      this.#graph[nodeId].isOccupied = !this.#graph[nodeId].isOccupied;
+    }
   }
 
   getSecretPassages() {
