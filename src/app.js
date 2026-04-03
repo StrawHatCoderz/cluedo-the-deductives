@@ -35,8 +35,6 @@ export const createApp = ({ game, getRandom, roundUp, logger }) => {
   app.post("/roll", (c) => serveRollDice(c, getRandom, roundUp));
   app.post("/accuse", handleAccusation);
   app.post("/start-game", addMockPlayer, startGame);
-  app.post("/update-state", updateGameState);
-  app.post("/pass", updateTurn);
 
   app.put("/update-pawn-position/:pawnId", movePawnHandler);
   app.onError((e, c) => {

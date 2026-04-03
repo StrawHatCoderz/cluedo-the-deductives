@@ -10,7 +10,6 @@ const main = async () => {
   const boardConfig = await fetchGameConfig("/game-state");
   const accuseBtn = document.querySelector("#accuse-button");
 
-  renderBoard(boardConfig);
   accuseBtnListener(accuseBtn);
 
   const alreadyShown = sessionStorage.getItem("gameStartedPopup");
@@ -25,6 +24,7 @@ const main = async () => {
   setInterval(() => {
     fetchGameConfig("/game-state")
       .then((boardConfig) => {
+        renderBoard(boardConfig);
         renderPlayers(boardConfig);
         renderPlayerCards(boardConfig.currentPlayer.hand, playerCardsContainer);
         renderActions(boardConfig);

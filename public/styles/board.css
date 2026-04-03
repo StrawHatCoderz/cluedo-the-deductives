@@ -386,7 +386,15 @@ path,
 .highlight {
   stroke: red;
   stroke-width: 1;
-  animation: pulse 1s infinite ease-in-out;
+  animation: pulse 0.5s infinite ease-in-out;
+}
+
+.highlight-room {
+  opacity: 0.6;
+  stroke: var(--tile-highlight);
+  stroke-width: 3;
+  animation: pulse 0.5s infinite ease-in-out;
+  cursor: pointer;
 }
 
 @keyframes pulse {

@@ -3,16 +3,11 @@ import { toSentenceCase } from "./utils.js";
 const initializeRoomState = (roomId) => {
   const slots = document.querySelectorAll(`#${roomId}-group .room-slot`);
   const available = Array.from({ length: slots.length }, (_, i) => i).reverse();
-
-  return {
-    occupied: {},
-    available,
-  };
+  return { occupied: {}, available };
 };
 
 const renderPawnInRoom = (pawnId, roomId, roomState) => {
   const { occupied, available } = roomState;
-
   if (available.length === 0) return;
 
   const freeIndex = available.pop();
@@ -34,9 +29,9 @@ const renderPawnOnTile = (pawnId, x, y) => {
     tile.dataset.occupiedBy = pawnId;
   }
 };
+
 export const placeCharacters = (boardConfig) => {
   const roomRegistry = {};
-
   for (const { char, pos } of boardConfig.pawns) {
     if (pos.room) {
       roomRegistry[pos.room] = roomRegistry[pos.room] ||
@@ -48,10 +43,15 @@ export const placeCharacters = (boardConfig) => {
   }
 };
 
-const setupRoomSlots = () => {
-  const allSlots = document.querySelectorAll(".room-slot");
-  allSlots.forEach((slot) => {
+const clearAllPawns = () => {
+  document.querySelectorAll(".room-slot").forEach((slot) => {
     slot.setAttribute("fill", "transparent");
+    delete slot.dataset.occupiedBy;
+  });
+
+  document.querySelectorAll("rect[data-occupied-by]").forEach((tile) => {
+    tile.style.fill = "";
+    delete tile.dataset.occupiedBy;
   });
 };
 
@@ -73,20 +73,13 @@ const previewSecretPassage = (p, tooltip) => {
 
 const setupSecretPassageEvents = (tooltip) => {
   const passages = document.querySelectorAll(".secret-passage");
-
   passages.forEach((p) => {
-    p.addEventListener("mouseenter", (_e) => {
-      previewSecretPassage(p, tooltip);
-    });
-    p.addEventListener("mouseleave", () => {
-      hideSecretPassage(tooltip);
-    });
+    p.addEventListener("mouseenter", (_e) => previewSecretPassage(p, tooltip));
+    p.addEventListener("mouseleave", () => hideSecretPassage(tooltip));
   });
 };
 
-const hideWeapon = (tooltip) => {
-  tooltip.classList.add("hidden");
-};
+const hideWeapon = (tooltip) => tooltip.classList.add("hidden");
 
 const moveWeapon = (tooltip, e) => {
   tooltip.style.left = e.pageX + 10 + "px";
@@ -94,26 +87,16 @@ const moveWeapon = (tooltip, e) => {
 };
 
 const previewWeapon = (e, tooltip) => {
-  const name = e.target.dataset.name;
-  tooltip.textContent = name;
+  tooltip.textContent = e.target.dataset.name;
   tooltip.classList.remove("hidden");
 };
 
 const setupWeaponsEvents = (tooltip) => {
   const weapons = document.querySelectorAll(".weapon");
-
   weapons.forEach((weapon) => {
-    weapon.addEventListener("mouseenter", (e) => {
-      previewWeapon(e, tooltip);
-    });
-
-    weapon.addEventListener("mousemove", (e) => {
-      moveWeapon(tooltip, e);
-    });
-
-    weapon.addEventListener("mouseleave", () => {
-      hideWeapon(tooltip);
-    });
+    weapon.addEventListener("mouseenter", (e) => previewWeapon(e, tooltip));
+    weapon.addEventListener("mousemove", (e) => moveWeapon(tooltip, e));
+    weapon.addEventListener("mouseleave", () => hideWeapon(tooltip));
   });
 };
 
@@ -122,7 +105,8 @@ export const renderBoard = (boardConfig) => {
 
   setupSecretPassageEvents(tooltip);
   setupWeaponsEvents(tooltip);
-  setupRoomSlots();
+
+  clearAllPawns();
 
   placeCharacters(boardConfig);
 };

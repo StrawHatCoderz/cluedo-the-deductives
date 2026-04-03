@@ -4,6 +4,8 @@ import { createApp } from "../../src/app.js";
 import { ROOMS, SUSPECTS, WEAPONS } from "../../src/constants/game_config.js";
 import { createGameInstance } from "../../src/utils/game.js";
 
+const silentLogger = () => (_, next) => next();
+
 describe("game handler", () => {
   let app;
   let game;
@@ -15,7 +17,7 @@ describe("game handler", () => {
       game,
       getRandom: () => 1,
       roundUp: (x) => x,
-      logger: () => (_, next) => next(),
+      logger: silentLogger,
     });
     playerId = 1;
   });
@@ -54,12 +56,14 @@ describe("game handler", () => {
 
   describe("POST /pass", () => {
     it("=> should update the player turn", async () => {
-      await app.request("/start-game", { method: "post" });
-      await app.request("/update-state", { method: "post" });
+      const game = { updateTurn: () => ({ isEliminated: false }) };
+      const app = createApp({ game, logger: silentLogger });
+
       const res = await app.request("/pass", { method: "post" });
       const body = await res.json();
+
       assertEquals(res.status, 200);
-      assertEquals(body.currentPlayer.isEliminated, false);
+      assertEquals(body, { currentPlayer: { isEliminated: false } });
     });
   });
 
