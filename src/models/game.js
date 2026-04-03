@@ -28,6 +28,10 @@ export class Game {
     this.#turnNum = 0;
   }
 
+  changeCurrentState() {
+    this.#gameState = this.#states.shift();
+  }
+
   start() {
     const totalPlayers = Object.keys(this.#players).length;
 
@@ -75,10 +79,6 @@ export class Game {
       secretPassageId: this.#getSecretPassageId(playerId),
       canSuspect: this.canSuspect(),
     };
-  }
-
-  changeCurrentState() {
-    this.#gameState = this.#states.shift();
   }
 
   #setCurrentPlayer() {
@@ -182,10 +182,16 @@ export class Game {
     this.#activePlayer.setWon();
   }
 
+  #eliminatePlayer() {
+    this.#activePlayer.eliminate();
+    this.updateTurn();
+  }
+
   accuse({ suspect, weapon, room }) {
     if (!(suspect && weapon && room)) {
       throw new Error("Invalid Accusation Combination");
     }
+
     const murderCombination = this.#deck.getMurderCombination();
     const playerCombination = { suspect, weapon, room };
 
@@ -194,10 +200,10 @@ export class Game {
       playerCombination,
     );
 
-    this.updateTurn();
-
     if (isCorrect) {
       this.#finishGame();
+    } else {
+      this.#eliminatePlayer();
     }
 
     return { isCorrect, murderCombination };

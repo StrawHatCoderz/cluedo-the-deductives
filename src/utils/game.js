@@ -1,3 +1,4 @@
+import { shuffle } from "@std/random";
 import { boardConfig } from "../constants/board_config.js";
 import { PAWNS, ROOMS, SUSPECTS, WEAPONS } from "../constants/game_config.js";
 import { Board } from "../models/board.js";
@@ -11,14 +12,17 @@ const createPawns = () =>
       new Pawn(index + 1, name, position, color),
   );
 
-export const createGameInstance = () => {
+export const createGameInstance = (shuffleFn = shuffle) => {
   const board = Board.create(boardConfig);
   const pawns = createPawns();
-  const deck = new DeckManager({
-    suspects: SUSPECTS,
-    weapons: WEAPONS,
-    rooms: ROOMS,
-  });
+  const deck = new DeckManager(
+    {
+      suspects: SUSPECTS,
+      weapons: WEAPONS,
+      rooms: ROOMS,
+    },
+    shuffleFn,
+  );
   const game = new Game(1, board, pawns, deck);
   return game;
 };

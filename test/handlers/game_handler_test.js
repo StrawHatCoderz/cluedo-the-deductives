@@ -1,8 +1,8 @@
 import { assertEquals } from "@std/assert";
 import { beforeEach, describe, it } from "@std/testing/bdd";
 import { createApp } from "../../src/app.js";
-import { createGameInstance } from "../../src/utils/game.js";
 import { ROOMS, SUSPECTS, WEAPONS } from "../../src/constants/game_config.js";
+import { createGameInstance } from "../../src/utils/game.js";
 
 describe("game handler", () => {
   let app;
@@ -10,7 +10,7 @@ describe("game handler", () => {
   let playerId;
 
   beforeEach(() => {
-    game = createGameInstance();
+    game = createGameInstance((list) => list);
     app = createApp({
       game,
       getRandom: () => 1,
@@ -91,6 +91,26 @@ describe("game handler", () => {
           room: ROOMS[0],
         }),
       });
+
+      const body = await res.json();
+
+      assertEquals(res.status, 200);
+      assertEquals(body.isCorrect, true);
+    });
+
+    it("=> should eliminate for wrong murder combination", async () => {
+      await app.request("/start-game", { method: "post" });
+      await app.request("/update-state", { method: "post" });
+
+      const res = await app.request("/accuse", {
+        method: "post",
+        body: JSON.stringify({
+          suspect: SUSPECTS[0],
+          weapon: WEAPONS[1],
+          room: ROOMS[0],
+        }),
+      });
+
       const body = await res.json();
       assertEquals(res.status, 200);
       assertEquals(body.isCorrect, false);
