@@ -1,8 +1,13 @@
 import { isCurrentPlayer } from "./utils.js";
 
 const createPlayer = (node, player, currentPlayerId) => {
+  const playerNode = node.querySelector(".player");
   if (isCurrentPlayer(player.id, currentPlayerId)) {
-    node.querySelector(".player").setAttribute("id", "current-player");
+    playerNode.setAttribute("id", "current-player");
+  }
+
+  if (player.isEliminated) {
+    playerNode.classList.add("eliminated-player");
   }
 
   const icon = node.querySelector(".player-icon");
@@ -16,8 +21,9 @@ const createPlayer = (node, player, currentPlayerId) => {
 };
 
 export const renderPlayers = (boardConfig) => {
-  const allPlayerContainer = document
-    .querySelector("#players-details-container");
+  const allPlayerContainer = document.querySelector(
+    "#players-details-container",
+  );
   const playerTemplate = document.getElementById("player-template");
 
   allPlayerContainer.innerHTML = "";

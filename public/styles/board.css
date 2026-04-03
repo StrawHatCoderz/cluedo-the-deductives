@@ -194,6 +194,11 @@ path,
   background: gold;
 }
 
+.eliminated-player {
+  background: rgb(153, 153, 153);
+  opacity: 0.5;
+}
+
 .player-icon {
   width: 40px;
   height: 40px;

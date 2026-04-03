@@ -15,7 +15,7 @@ const createPawns = () =>
 export const createGameInstance = (shuffleFn = shuffle) => {
   const board = Board.create(boardConfig);
   const pawns = createPawns();
-  const shuffledPawns = shuffleFn(createPawns());
+  const shuffledPawns = shuffleFn([...pawns]);
   const deck = new DeckManager(
     {
       suspects: SUSPECTS,
