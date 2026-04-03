@@ -1,0 +1,114 @@
+diff --git a/public/scripts/suspicion.js b/public/scripts/suspicion.js
+index 84cbc03..b2419ae 100644
+--- a/public/scripts/suspicion.js
++++ b/public/scripts/suspicion.js
+@@ -57,13 +57,24 @@ const showResult = (data, result) => {
+   closeBtn.style.display = "inline-block";
+ };
+ 
+-const mockFetchSuspicion = (suspicion) => {
++const mockFetchSuspicion = async (suspicion) => {
+   const body = JSON.stringify(suspicion);
+-  fetch("/add-suspicion", {
++  await fetch("/add-suspicion", {
+     method: "POST",
+     body,
+     headers: { "content-type": "application/json" },
+   });
++
++  await fetch(`/update-pawn-position/${suspicion.suspectId}`, {
++    method: "put",
++    headers: { "content-type": "application/json" },
++    body: JSON.stringify({
++      currentNodeId: suspicion.room,
++      tiles: [suspicion.room],
++      isUsingSecretPassage: false,
++    }),
++  });
++
+   return new Promise((resolve) => {
+     setTimeout(() => {
+       const isDisproved = Math.random() > 0.5;
+@@ -74,6 +85,9 @@ const mockFetchSuspicion = (suspicion) => {
+         card: isDisproved ? suspicion.weapon : null,
+       });
+     }, 2000);
++    setTimeout(() => {
++      globalThis.window.location.reload();
++    }, 3000);
+   });
+ };
+ 
+@@ -82,6 +96,7 @@ const submitSuspicion = async () => {
+     suspect: SUSPICION_STATE.selectedSuspect,
+     weapon: SUSPICION_STATE.selectedWeapon,
+     room: SUSPICION_STATE.currentRoom,
++    suspectId: SUSPICION_STATE.suspectId,
+   };
+ 
+   showModal(suspicion);
+@@ -138,10 +153,11 @@ const onPawnSelect = (e, suspects) => {
+ 
+   const suspect = pawnElement.dataset.occupiedBy;
+   removePawnHighlight();
+-  const { name } = suspects
++  const { id, name } = suspects
+     .find(({ char }) => char === suspect);
+-  SUSPICION_STATE.selectedSuspect = name;
+ 
++  SUSPICION_STATE.selectedSuspect = name;
++  SUSPICION_STATE.suspectId = id;
+   showWeaponPopup(e.pageX, e.pageY);
+ };
+ 
+diff --git a/src/app.js b/src/app.js
+index fdef661..8a02879 100644
+--- a/src/app.js
++++ b/src/app.js
+@@ -40,6 +40,7 @@ export const createApp = ({ game, getRandom, roundUp, logger }) => {
+ 
+   app.put("/update-pawn-position/:pawnId", movePawnHandler);
+   app.onError((e, c) => {
++    console.log(e);
+     return c.json({ error: e.message }, 400);
+   });
+   return app;
+diff --git a/src/handlers/board_handler.js b/src/handlers/board_handler.js
+index 7703a14..f5e91c7 100644
+--- a/src/handlers/board_handler.js
++++ b/src/handlers/board_handler.js
+@@ -25,6 +25,7 @@ export const serveGetReachableNodes = (c) => {
+ export const movePawnHandler = async (c) => {
+   const game = c.get("game");
+   const { currentNodeId, tiles, isUsingSecretPassage } = await c.req.json();
++
+   const [nodeId, pos] = parseNode(currentNodeId);
+   const currentPawn = await c.req.param("pawnId");
+   const pawn = game.getPawnInstance(+currentPawn);
+diff --git a/src/models/turn.js b/src/models/turn.js
+index ca64539..96c3a2a 100644
+--- a/src/models/turn.js
++++ b/src/models/turn.js
+@@ -46,6 +46,7 @@ export class Turn {
+   addSuspectCombination(suspectCombination) {
+     this.#suspectCombination = suspectCombination;
+     this.#hasSuspected = true;
++    this.#isDiceRolled = true;
+   }
+ 
+   getSuspectCombination() {
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# Committer: Nitesh Chaurasiya <niteshchaurasiya@Niteshs-MacBook-Pro.local>
+#
+# On branch main
+# Your branch is up to date with 'origin/main'.
+#
+# Changes to be committed:
+#	modified:   public/scripts/suspicion.js
+#	modified:   src/app.js
+#	modified:   src/handlers/board_handler.js
+#	modified:   src/models/turn.js
+#
