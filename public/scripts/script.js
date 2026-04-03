@@ -28,7 +28,7 @@ const main = async () => {
         renderActions(boardConfig);
         suspicionBtnListener(boardConfig);
       });
-  }, 5000);
+  }, 1000);
 };
 
 globalThis.window.onload = main;

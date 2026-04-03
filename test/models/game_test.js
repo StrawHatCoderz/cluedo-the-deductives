@@ -17,7 +17,11 @@ describe("GAME", () => {
 
     game = new Game(
       1,
-      {},
+      {
+        getSecretPassages() {
+          return { study: "kitchen" };
+        },
+      },
       [scarlet, colonel, plum],
       new DeckManager(
         {
@@ -250,6 +254,7 @@ describe("GAME", () => {
         weapon: WEAPONS[0],
         room: ROOMS[0],
       };
+
       const { isCorrect, murderCombination } = game.accuse(
         accusingCombination,
       );
@@ -288,6 +293,45 @@ describe("GAME", () => {
         Error,
         "Invalid Accusation Combination",
       );
+    });
+  });
+
+  describe("secret passage", () => {
+    it(" => should give secret passage id", () => {
+      const scarlet = new Pawn(1, "Scarlet", { room: "study" }, "red");
+      const colonel = new Pawn(2, "Colonel", "0_9", "yellow");
+      const plum = new Pawn(3, "plum", "0_9", "yellow");
+
+      game = new Game(
+        1,
+        {
+          getSecretPassages() {
+            return { study: "kitchen" };
+          },
+        },
+        [scarlet, colonel, plum],
+        new DeckManager(
+          {
+            suspects: SUSPECTS,
+            weapons: WEAPONS,
+            rooms: ROOMS,
+          },
+          (list) => [...list],
+        ),
+        (list) => [...list],
+      );
+
+      const p1 = new Player(1, "A", false);
+      const p2 = new Player(2, "B", false);
+      const p3 = new Player(3, "C", false);
+
+      game.addPlayer(p1);
+      game.addPlayer(p2);
+      game.addPlayer(p3);
+
+      game.start();
+      game.changeCurrentState();
+      assertEquals(game.getState().secretPassageId, "kitchen");
     });
   });
 });

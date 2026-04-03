@@ -15,28 +15,27 @@ export const serveGetReachableNodes = (c) => {
   const game = c.get("game");
   const activePlayer = game.getState().activePlayer;
   const pawn = activePlayer?.pawn;
-
   const position = getPosition(pawn);
-
   const steps = game.getDiceValue();
   const reachableNodes = game.getReachableNodes(position, steps);
-  toggleIsOccupied(position, game);
+
   return c.json({ reachableNodes });
 };
 
 export const movePawnHandler = async (c) => {
   const game = c.get("game");
-  const { currentNodeId, turns } = await c.req.json();
+  const { currentNodeId, tiles } = await c.req.json();
   const [nodeId, pos] = parseNode(currentNodeId);
-  const activePlayer = game.getState().activePlayer;
-  const currentPawn = activePlayer?.pawn?.id;
-  const pawn = game.getPawnInstance(currentPawn);
+  const currentPawn = await c.req.param("pawnId");
+  const pawn = game.getPawnInstance(+currentPawn);
 
-  if (isValidTurn(nodeId, turns)) {
+  if (isValidTurn(nodeId, tiles) && !game.getState().canRoll) {
+    const oldPosition = getPosition(pawn?.getPawnData());
     pawn.updatePosition(pos);
+    toggleIsOccupied(oldPosition, game);
     toggleIsOccupied(currentNodeId, game);
     return c.json({ status: true });
   }
 
-  return c.json({ status: false });
+  return c.json({ status: false }, 400);
 };

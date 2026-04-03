@@ -48,17 +48,34 @@ describe("BOARD", () => {
     it(" => should update pawn position", async () => {
       await app.request("/start-game", { method: "post" });
       await app.request("/update-state", { method: "post" });
-      const res = await app.request("/update-pawn-position", {
-        method: "post",
+      await app.request("/roll", { method: "post" });
+      const res = await app.request(`/update-pawn-position/1`, {
+        method: "put",
         body: JSON.stringify({
           currentNodeId: "tile-7-24",
-          turns: ["tile-7-24"],
+          tiles: ["tile-7-24"],
         }),
       });
       const body = await res.json();
 
       assertEquals(res.status, 200);
       assertEquals(body, { status: true });
+    });
+
+    it(" => should not update pawn position if did not roll dice", async () => {
+      await app.request("/start-game", { method: "post" });
+      await app.request("/update-state", { method: "post" });
+      const res = await app.request(`/update-pawn-position/1`, {
+        method: "put",
+        body: JSON.stringify({
+          currentNodeId: "tile-7-24",
+          tiles: ["tile-7-24"],
+        }),
+      });
+      const body = await res.json();
+
+      assertEquals(res.status, 400);
+      assertEquals(body, { status: false });
     });
   });
 
@@ -84,8 +101,11 @@ describe("BOARD", () => {
           json() {
             return {
               currentNodeId: "tile-1-1",
-              turns: ["tile-0-1", "tile-0-2"],
+              tiles: ["tile-0-1", "tile-0-2"],
             };
+          },
+          param() {
+            return "1";
           },
         },
       };

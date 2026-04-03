@@ -64,7 +64,6 @@ export class Game {
 
   getState() {
     const playerId = this.#activePlayer?.getPlayerData().id;
-    const canSuspect = this.#turn?.canSuspect();
 
     return {
       state: this.#gameState,
@@ -73,7 +72,8 @@ export class Game {
       pawns: this.#getAllPawns(),
       activePlayer: this.#activePlayer?.getPlayerData(),
       canRoll: this.#isRollAllowed(playerId),
-      canSuspect,
+      canSuspect: this.#turn?.canSuspect(),
+      secretPassageId: this.#getSecretPassageId(playerId),
     };
   }
 
@@ -184,5 +184,18 @@ export class Game {
       playerCombination,
     );
     return { isCorrect, murderCombination };
+  }
+
+  #getSecretPassageId(playerId) {
+    const room = this.#activePlayer?.getPlayerData().pawn.position.room;
+    const secretPassages = this.#board.getSecretPassages();
+
+    if (
+      room in secretPassages &&
+      this.#isRollAllowed(playerId) &&
+      this.#turn?.canSuspect()
+    ) {
+      return secretPassages[room];
+    }
   }
 }

@@ -23,17 +23,17 @@ export const createApp = ({ game, getRandom, roundUp, logger }) => {
     await next();
   });
 
-  app.post("/start-game", addMockPlayer, startGame);
   app.get("/game-state", getGameState);
-  app.post("/roll", (c) => serveRollDice(c, getRandom, roundUp));
   app.get("/get-reachable-nodes", serveGetReachableNodes);
-  app.post("/update-state", updateGameState);
-  app.post("/update-pawn-position", movePawnHandler);
-  app.post("/pass", updateTurn);
-  app.post("/accuse", handleAccusation);
-
   app.get("*", serveStatic({ root: "./public" }));
 
+  app.post("/roll", (c) => serveRollDice(c, getRandom, roundUp));
+  app.post("/accuse", handleAccusation);
+  app.post("/start-game", addMockPlayer, startGame);
+  app.post("/update-state", updateGameState);
+  app.post("/pass", updateTurn);
+
+  app.put("/update-pawn-position/:pawnId", movePawnHandler);
   app.onError((e, c) => {
     return c.json({ error: e.message }, 400);
   });

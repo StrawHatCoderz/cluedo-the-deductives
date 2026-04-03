@@ -14,21 +14,29 @@ const getHighlightPath = () => {
   return JSON.parse(reachableNodes);
 };
 
-const movePlayer = (tiles) => {
+const handleMovePlayer = async (e, tiles, pawnId) => {
+  e.preventDefault();
+  const currentNodeId = e.target.id;
+
+  await fetch(`/update-pawn-position/${pawnId}`, {
+    method: "put",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ currentNodeId, tiles }),
+  });
+  globalThis.window.location.reload();
+  localStorage.clear();
+};
+
+const movePlayer = (tiles, pawnId) => {
   tiles.map((turn) => {
     const tile = document.querySelector(`#${turn}`);
-    tile.addEventListener("click", async (e) => {
-      e.preventDefault();
-      const currentNodeId = e.target.id;
+    if (tile._handler) {
+      tile.removeEventListener("click", tile._handler);
+    }
+    const handler = async (e) => await handleMovePlayer(e, tiles, pawnId);
 
-      await fetch("/update-pawn-position", {
-        method: "post",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ currentNodeId, turns: tiles }),
-      });
-      globalThis.window.location.reload();
-      localStorage.clear();
-    });
+    tile._handler = handler;
+    tile.addEventListener("click", handler, { once: true });
   });
 };
 
@@ -40,7 +48,7 @@ const fetchRollDice = () =>
   fetch("/roll", { method: "POST" })
     .then((response) => response.json());
 
-const handleDiceClick = async (event, dice) => {
+const handleDiceClick = async (event, dice, pawnId) => {
   event.preventDefault();
   dice.setAttribute("disabled", true);
 
@@ -50,15 +58,15 @@ const handleDiceClick = async (event, dice) => {
   const { reachableNodes } = await fetchReachableNodes();
   localStorage.setItem("reachableNodes", JSON.stringify(reachableNodes));
   highlightTiles(reachableNodes);
-  movePlayer(reachableNodes);
+  movePlayer(reachableNodes, pawnId);
 };
 
-const diceListener = (dice) => {
+const diceListener = (dice, pawnId) => {
   if (dice._handler) {
     dice.removeEventListener("click", dice._handler);
   }
 
-  const handler = async (e) => await handleDiceClick(e, dice);
+  const handler = async (e) => await handleDiceClick(e, dice, pawnId);
 
   dice._handler = handler;
   dice.addEventListener("click", handler, { once: true });
@@ -86,20 +94,32 @@ const passBtnListener = (passBtn) => {
   passBtn.addEventListener("click", handler, { once: true });
 };
 
+const secretPassageListener = (secretPassage) => {
+  const scrtPsg = document.querySelector(`rect[data-to="${secretPassage}"]`);
+  const room = document.querySelector(`#${secretPassage}`);
+  scrtPsg.classList.add("highlight");
+  room.classList.add("highlight");
+};
+
 export const renderActions = (boardConfig) => {
   const dice = document.querySelector("#dice-button");
   const passBtn = document.querySelector("#pass-button");
   const attributeFn = !boardConfig.canRoll ? "setAttribute" : "removeAttribute";
   dice[attributeFn]("disabled", "");
+  if (boardConfig.canRoll) {
+    localStorage.clear();
+  }
 
-  diceListener(dice);
+  diceListener(dice, boardConfig.currentPlayer.pawn.id);
   passBtnListener(passBtn);
-
+  if (boardConfig.secretPassageId) {
+    secretPassageListener(boardConfig.secretPassageId);
+  }
   const path = getHighlightPath();
   if (path.length) {
     passBtn.setAttribute("disabled", "");
     highlightTiles(path);
-    movePlayer(path);
+    movePlayer(path, boardConfig.currentPlayer.pawn.id);
   }
 };
 

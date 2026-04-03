@@ -147,12 +147,12 @@ const highlightPawns = (pawns, suspects) => {
   });
 };
 
-const startSuspicion = ({ location }, suspects) => {
+const startSuspicion = ({ position }, suspects) => {
   if (SUSPICION_STATE.hasMadeSuspicion) {
     return removePawnHighlight();
   }
 
-  SUSPICION_STATE.currentRoom = location.room;
+  SUSPICION_STATE.currentRoom = position.room;
   const pawns = document.querySelectorAll("[data-occupied-by]");
   highlightPawns(pawns, suspects);
 };
@@ -163,7 +163,7 @@ document.getElementById("close-modal").addEventListener("click", () => {
 
 export const suspicionBtnListener = ({ canSuspect, currentPlayer, pawns }) => {
   if (canSuspect) {
-    startSuspicion(currentPlayer, pawns);
+    startSuspicion(currentPlayer.pawn, pawns);
   } else {
     removePawnHighlight();
   }

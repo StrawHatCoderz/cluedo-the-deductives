@@ -4,9 +4,11 @@ export class Board {
   #config;
   #tiles;
   #graph;
+  #secretPassages;
 
   constructor(boardConfig) {
     this.#config = boardConfig;
+    this.#secretPassages = boardConfig.secretPassages;
     this.#graph = {};
     this.buildBoard();
   }
@@ -130,7 +132,8 @@ export class Board {
     }
 
     const unVisitedTiles = board[from].adj
-      .filter((tile) => !visited.includes(tile));
+      .filter((tile) => !visited.includes(tile))
+      .filter((tile) => !board[tile]?.isOccupied);
 
     for (const tile of unVisitedTiles) {
       this.getReachableNodes(tile, steps - 1, start, [...visited, from], res);
@@ -141,5 +144,9 @@ export class Board {
 
   toggleIsOccupied(nodeId) {
     this.#graph[nodeId].isOccupied = !this.#graph[nodeId].isOccupied;
+  }
+
+  getSecretPassages() {
+    return this.#secretPassages;
   }
 }
