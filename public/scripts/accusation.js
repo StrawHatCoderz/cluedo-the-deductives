@@ -33,13 +33,22 @@ const renderOptions = (optionsToRender) => {
 const displayMurderCombination = (combination) => {
   const envelope = document.querySelector("#envelop");
 
-  const cards = Object.values(combination).map((name) => {
+  const cards = Object.values(combination).map((card) => {
     const cardClone = getTemplateClone("card-template");
-
-    createCard(cardClone, name, "envelop-card");
+    const matchingClass = card.isMatching ? "correct" : "incorrect";
+    createCard(cardClone, card.name, ["envelop-card", matchingClass]);
     return cardClone;
   });
   envelope.append(...cards);
+};
+
+const matchCards = (accusingCombination, murderCombination) => {
+  const murderCards = Object.values(murderCombination);
+
+  return Object.values(accusingCombination).map((card) => ({
+    name: card,
+    isMatching: murderCards.includes(card),
+  }));
 };
 
 const handleAccusationSubmission = async (combination) => {
@@ -49,7 +58,9 @@ const handleAccusationSubmission = async (combination) => {
     body: combination,
   });
 
-  displayMurderCombination(res.murderCombination);
+  const matchingCards = matchCards(combination, res.murderCombination);
+
+  displayMurderCombination(matchingCards);
 };
 
 const closePopup = (popup) => {
@@ -66,17 +77,20 @@ const attachSubmitAccusationListener = () => {
     e.preventDefault();
     const formdata = new FormData(form);
     const accusationDetails = Object.fromEntries(formdata.entries());
-    const { suspects: suspect, weapons: weapon, rooms: room } =
-      accusationDetails;
+    const {
+      suspects: suspect,
+      weapons: weapon,
+      rooms: room,
+    } = accusationDetails;
 
     if (Object.keys(accusationDetails).length === 3) {
       await handleAccusationSubmission({ suspect, weapon, room });
+      closePopup(accusationBackGround);
     } else {
       displayPopup("Incomplete combination");
     }
 
     form.reset();
-    closePopup(accusationBackGround);
   });
 };
 

@@ -1,7 +1,7 @@
-export const createCard = (node, card, cardStyles = "player-card") => {
+export const createCard = (node, card, cardStyles = ["player-card"]) => {
   const cardName = node.querySelector(".card-name");
   cardName.textContent = card;
-  cardName.classList.add(cardStyles);
+  cardName.classList.add(...cardStyles);
 };
 
 export const renderPlayerCards = (playerHand, handContainer) => {

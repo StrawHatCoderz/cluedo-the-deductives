@@ -170,9 +170,7 @@ export class Game {
 
   #isMatchingCombination(murderCombination, playerCombination) {
     return Object.keys(murderCombination).every(
-      (key) =>
-        murderCombination[key].toLowerCase() ===
-          playerCombination[key].toLowerCase(),
+      (key) => murderCombination[key] === playerCombination[key],
     );
   }
 
