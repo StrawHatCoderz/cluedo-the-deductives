@@ -29,7 +29,7 @@ export const createApp = ({ game, getRandom, roundUp, logger }) => {
   app.post("/update-state", updateGameState);
   app.post("/update-pawn-position", movePawnHandler);
   app.post("/pass", updateTurn);
-  app.post("/save-suspicion", addSuspicion);
+  app.post("/add-suspicion", addSuspicion);
   app.get("*", serveStatic({ root: "./public" }));
 
   app.post("/roll", (c) => serveRollDice(c, getRandom, roundUp));

@@ -8,9 +8,9 @@ describe("game handler", () => {
   let app;
   let game;
   let playerId;
+
   beforeEach(() => {
     game = createGameInstance();
-
     app = createApp({
       game,
       getRandom: () => 1,
@@ -94,6 +94,27 @@ describe("game handler", () => {
       const body = await res.json();
       assertEquals(res.status, 200);
       assertEquals(body.isCorrect, false);
+    });
+  });
+
+  describe("POST /add-suspicion", () => {
+    it("=> should return false if the player is not in the room", async () => {
+      await app.request("/start-game", { method: "post" });
+
+      const res = await app.request("/add-suspicion", {
+        method: "post",
+        body: JSON.stringify({
+          suspect: SUSPECTS[0],
+          weapon: WEAPONS[0],
+          room: ROOMS[0],
+        }),
+        Headers: { "text-content": "application/json" },
+      });
+
+      const body = await res.json();
+
+      assertEquals(res.status, 200);
+      assertEquals(body.status, false);
     });
   });
 });

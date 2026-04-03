@@ -59,7 +59,7 @@ const showResult = (data, result) => {
 
 const mockFetchSuspicion = (suspicion) => {
   const body = JSON.stringify(suspicion);
-  fetch("/save-suspicion", {
+  fetch("/add-suspicion", {
     method: "POST",
     body,
     headers: { "content-type": "application/json" },
@@ -127,7 +127,8 @@ export const removePawnHighlight = () => {
 
   pawns.forEach((p) => {
     p.classList.remove("highlight-suspect");
-    p.removeEventListener("click", onPawnSelect);
+    p.removeEventListener("click", p.clickListener);
+    delete p.clickListener;
   });
 };
 
@@ -149,15 +150,13 @@ const highlightPawns = (pawns, suspects) => {
     if (!pawn.dataset.occupiedBy) return;
 
     pawn.classList.add("highlight-suspect");
-    pawn.addEventListener("click", (e) => onPawnSelect(e, suspects));
+    const handler = (e) => onPawnSelect(e, suspects);
+    pawn.clickListener = handler;
+    pawn.addEventListener("click", handler);
   });
 };
 
 const startSuspicion = ({ position }, suspects) => {
-  if (SUSPICION_STATE.hasMadeSuspicion) {
-    return removePawnHighlight();
-  }
-
   SUSPICION_STATE.currentRoom = position.room;
   const pawns = document.querySelectorAll("[data-occupied-by]");
   highlightPawns(pawns, suspects);
