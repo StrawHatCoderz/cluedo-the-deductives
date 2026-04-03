@@ -276,6 +276,24 @@ describe("GAME", () => {
       });
     });
 
+    it(" => should finish the game if there is only one player", () => {
+      const accusingCombination = {
+        suspect: SUSPECTS[1],
+        weapon: WEAPONS[0],
+        room: ROOMS[0],
+      };
+
+      game.accuse(accusingCombination);
+      const { isCorrect, murderCombination } = game.accuse(accusingCombination);
+
+      assertEquals(isCorrect, false);
+      assertEquals(murderCombination, {
+        ...accusingCombination,
+        suspect: SUSPECTS[0],
+      });
+      assertEquals(game.getState().state, "finished");
+    });
+
     it(" => should fail for invalid combination", () => {
       const accusingCombination = {
         weapon: WEAPONS[0],

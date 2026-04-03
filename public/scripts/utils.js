@@ -25,6 +25,7 @@ const parsePlayersData = (players) => {
     name: player.name,
     pawn: toId(player.pawn.name),
     isEliminated: player.isEliminated,
+    isWon: player.isWon,
   }));
 };
 

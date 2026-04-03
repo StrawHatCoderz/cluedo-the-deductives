@@ -11,6 +11,7 @@
   background-color: rgba(0, 0, 0, 0.2);
   backdrop-filter: blur(8px);
 }
+
 #popup-content {
   display: flex;
   justify-content: center;
@@ -53,7 +54,7 @@ legend {
 label {
   width: 100%;
   display: inline-block;
-  font-size: 16px;
+  font-size: 20px;
   padding: 1em;
   text-align: center;
   border: 1px solid gray;
@@ -65,14 +66,14 @@ input {
 
 input[type="radio"]:checked + label {
   color: white;
-  background-color: blue;
+  background-color: rgb(53, 52, 52);
   font-weight: bold;
 }
 
 #envelop {
   width: 400px;
   height: 600px;
-  background-color: black;
+  background-color: rgb(53, 52, 52);
   border-radius: 20px;
   display: flex;
   justify-content: center;

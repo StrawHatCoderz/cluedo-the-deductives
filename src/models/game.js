@@ -95,10 +95,6 @@ export class Game {
     );
   }
 
-  #getTurnOrder() {
-    return this.#turnOrder;
-  }
-
   addPlayer(player) {
     if (!(player instanceof Player)) {
       throw new Error("Invalid player");
@@ -110,7 +106,7 @@ export class Game {
   }
 
   #getAllPlayers() {
-    return Object.values(this.#players).map((player) => {
+    return this.#turnOrder?.map((player) => {
       const { _hand, ...publicData } = player.getPlayerData();
       return publicData;
     });
@@ -118,10 +114,6 @@ export class Game {
 
   #getAllPawns() {
     return this.#pawns.map((pawn) => pawn?.getPawnData());
-  }
-
-  getBoard() {
-    return this.#board;
   }
 
   getPawnInstance(id) {

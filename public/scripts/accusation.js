@@ -66,7 +66,7 @@ const handleAccusationSubmission = async (combination) => {
   if (res.isCorrect) {
     displayPopup("Congratulation, You Won!");
     setTimeout(() => {
-      globalThis.window.location.href = "/";
+      globalThis.window.location.href = "/pages/victory.html";
     }, 3000);
   } else {
     displayPopup("The combination is wrong. You are eliminated");
