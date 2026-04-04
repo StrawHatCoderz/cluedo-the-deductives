@@ -174,8 +174,11 @@ export const removePawnHighlight = () => {
 
   pawns.forEach((p) => {
     p.classList.remove("highlight-suspect");
+    console.log(p.clickListener, "1");
     p.removeEventListener("click", p.clickListener);
+    console.log(p.clickListener, "2");
     delete p.clickListener;
+    console.log(p.clickListener);
   });
 };
 
@@ -196,6 +199,10 @@ const onPawnSelect = (e, suspects) => {
 const highlightPawns = (pawns, suspects) => {
   pawns.forEach((pawn) => {
     if (!pawn.dataset.occupiedBy) return;
+
+    if (pawn.clickListener) {
+      pawn.removeEventListener("click", pawn.clickListener);
+    }
 
     pawn.classList.add("highlight-suspect");
     const handler = (e) => onPawnSelect(e, suspects);
@@ -222,7 +229,7 @@ export const suspicionBtnListener = ({ canSuspect, currentPlayer, pawns }) => {
   }
 };
 
-function addWeaponEl(cardTemp, weapon, selectedLabel, row) {
+const addWeaponEl = (cardTemp, weapon, selectedLabel, row) => {
   const cardClone = cardTemp.content.cloneNode(true);
   const card = cardClone.querySelector(".weapon-item");
   const img = cardClone.querySelector(".weapon-img");
@@ -238,4 +245,4 @@ function addWeaponEl(cardTemp, weapon, selectedLabel, row) {
     () => selectWeapon(card, selectedLabel, weapon),
   );
   row.appendChild(cardClone);
-}
+};

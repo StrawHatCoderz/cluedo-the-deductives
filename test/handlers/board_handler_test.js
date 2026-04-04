@@ -29,7 +29,7 @@ describe("BOARD", () => {
       const body = await res.json();
 
       assertEquals(res.status, 200);
-      assertEquals(body.diceValue, 12);
+      assertEquals(body.diceValues, [6, 6]);
     });
   });
   describe("GET /get-reachable-nodes", () => {

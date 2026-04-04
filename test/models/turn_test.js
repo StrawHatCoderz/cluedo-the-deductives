@@ -19,17 +19,12 @@ describe("Turn Management", () => {
     it(" => should genarate a dice value", () => {
       const diceValue = turn.rollDice(() => 1, (x) => x);
       turn.canSuspect();
-      assertEquals(diceValue, 12);
+      assertEquals(diceValue, [6, 6]);
     });
 
     it(" => should throw error if the player try to roll again", () => {
       turn.rollDice(() => 1, (x) => x);
       assertThrows(() => turn.rollDice(() => 1, (x) => x));
-    });
-
-    it(" => should correctly sum two dice values", () => {
-      const diceValue = turn.rollDice(() => 0.5, Math.ceil);
-      assertEquals(diceValue, 6);
     });
   });
 

@@ -1,3 +1,10 @@
+import { renderActions } from "./board.js";
+import { renderBoard } from "./render_board.js";
+import { renderPlayers } from "./render_player.js";
+import { renderPlayerCards } from "./render_player_cards.js";
+import { removePawnHighlight, suspicionBtnListener } from "./suspicion.js";
+import { handleRedirectBasedOnGameState } from "./victory.js";
+
 export const isCurrentPlayer = (playerId, currentPlayerId) =>
   playerId === currentPlayerId;
 
@@ -87,4 +94,51 @@ export const sendRequest = async ({ method, body, url }) => {
     }
     : { method };
   return await fetch(url, requestConfig).then((data) => data.json());
+};
+
+export const getHighlightPath = () => {
+  const reachableNodes = localStorage.getItem("reachableNodes") ?? "[]";
+  return JSON.parse(reachableNodes);
+};
+
+const disableButtons = () => {
+  const accuseBtn = document.querySelector("#accuse-button");
+  const passBtn = document.querySelector("#pass-button");
+  const path = getHighlightPath();
+
+  if (path.length) {
+    passBtn.setAttribute("disabled", "");
+    accuseBtn.setAttribute("disabled", "");
+    removePawnHighlight();
+  } else {
+    accuseBtn.removeAttribute("disabled");
+  }
+};
+
+export const polling = (playerCardsContainer) => {
+  let prevState = null;
+
+  setInterval(async () => {
+    const newState = await fetchGameConfig("/game-state");
+    disableButtons();
+    if (JSON.stringify(newState) !== JSON.stringify(prevState)) {
+      handleRedirectBasedOnGameState(newState);
+      renderBoard(newState);
+      renderPlayers(newState);
+      renderPlayerCards(newState.currentPlayer.hand, playerCardsContainer);
+      renderActions(newState);
+      suspicionBtnListener(newState);
+      prevState = newState;
+    }
+  }, 300);
+};
+
+export const displayInitialMessage = async () => {
+  const boardConfig = await fetchGameConfig("/game-state");
+  const alreadyShown = sessionStorage.getItem("gameStartedPopup");
+
+  if (boardConfig.state === "running" && !alreadyShown) {
+    displayPopup("Game has started!");
+    sessionStorage.setItem("gameStartedPopup", "true");
+  }
 };

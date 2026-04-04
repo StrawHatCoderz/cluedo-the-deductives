@@ -1,8 +1,6 @@
 import { fetchGameConfig } from "./utils.js";
 
 export const handleRedirectBasedOnGameState = (boardConfig) => {
-  console.log(boardConfig.state);
-
   if (boardConfig.state === "finished") {
     globalThis.window.location.href = "/pages/victory.html";
   }

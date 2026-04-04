@@ -1,5 +1,6 @@
 import { displayAccusationPopup } from "./accusation.js";
-import { displayPopup, toId } from "./utils.js";
+import { displayPopup, getHighlightPath, toId } from "./utils.js";
+import { showDiceAnimation } from "./dice_animation.js";
 
 const removePlayerIcon = (pawn) => {
   const pawnId = toId(pawn.name);
@@ -58,11 +59,6 @@ const clearHighlights = () => {
   });
 };
 
-const getHighlightPath = () => {
-  const reachableNodes = localStorage.getItem("reachableNodes") ?? "[]";
-  return JSON.parse(reachableNodes);
-};
-
 const handleMovePlayer = async (e, tiles, pawn) => {
   e.preventDefault();
   const newNodeId = e.target.id;
@@ -94,6 +90,7 @@ const movePlayer = (tiles, pawn) => {
     tile.addEventListener("click", handler, { once: true });
   });
 };
+
 const fetchReachableNodes = () =>
   fetch("/get-reachable-nodes")
     .then((response) => response.json());
@@ -106,13 +103,15 @@ const handleDiceClick = async (event, dice, pawn) => {
   event.preventDefault();
   dice.setAttribute("disabled", true);
 
-  const { diceValue } = await fetchRollDice();
-  displayPopup(`dice value is ${diceValue}`);
+  const { diceValues } = await fetchRollDice();
 
-  const { reachableNodes } = await fetchReachableNodes();
-  localStorage.setItem("reachableNodes", JSON.stringify(reachableNodes));
-  highlightTiles(reachableNodes);
-  movePlayer(reachableNodes, pawn);
+  showDiceAnimation(diceValues, async () => {
+    displayPopup(`dice value is ${diceValues[0] + diceValues[1]}`);
+    const { reachableNodes } = await fetchReachableNodes();
+    localStorage.setItem("reachableNodes", JSON.stringify(reachableNodes));
+    highlightTiles(reachableNodes);
+    movePlayer(reachableNodes, pawn);
+  });
 };
 
 const diceListener = (dice, pawn) => {
@@ -218,18 +217,16 @@ const renderDice = (boardConfig) => {
   diceListener(dice, boardConfig.currentPlayer.pawn);
 };
 
-const renderPassBtn = (path) => {
+const renderPassBtn = () => {
   const passBtn = document.querySelector("#pass-button");
   passBtnListener(passBtn);
-  if (path.length) passBtn.setAttribute("disabled", "");
 };
 
 export const renderActions = (boardConfig) => {
-  const accuseBtn = document.querySelector("#accuse-button");
   const path = getHighlightPath();
 
   renderDice(boardConfig);
-  renderPassBtn(path);
+  renderPassBtn();
   secretPassageHandler(
     boardConfig.secretPassageId,
     boardConfig.currentPlayer.pawn,
@@ -237,12 +234,9 @@ export const renderActions = (boardConfig) => {
 
   if (boardConfig.canRoll) localStorage.clear();
   if (path.length) {
-    accuseBtn.setAttribute("disabled", "");
     highlightTiles(path);
     movePlayer(path, boardConfig.currentPlayer.pawn, boardConfig);
   }
-
-  if (!path.length) accuseBtn.removeAttribute("disabled");
 };
 
 export const accuseBtnListener = (accuseBtn) => {

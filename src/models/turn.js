@@ -35,7 +35,7 @@ export class Turn {
     this.#isDiceRolled = true;
     this.#diceValue.push(ceilFn(randomGenerator() * 6));
     this.#diceValue.push(ceilFn(randomGenerator() * 6));
-    return this.getDiceValue();
+    return this.#diceValue;
   }
 
   canSuspect() {
