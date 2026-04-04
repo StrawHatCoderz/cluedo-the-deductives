@@ -7,6 +7,7 @@ const createDeck = (deckId, count) => {
     const card = document.createElement("div");
     card.className = "deck-card";
     card.style.transform = `translate(${i * 1.5}px, ${-i * 1.5}px)`;
+    card.textContent = "Cluedo";
     deck.appendChild(card);
   });
 };
@@ -61,6 +62,7 @@ const createFlyingCard = (pos) => {
   const el = document.createElement("div");
   el.className = "card";
   el.style.left = `${pos.x}px`;
+  el.textContent = "Cluedo";
   el.style.top = `${pos.y}px`;
   el.style.transform = "translate(-50%, -50%) scale(0.9)";
   getElement("table").appendChild(el);
@@ -82,6 +84,7 @@ const placeInEnvelope = (flying, top, deckIndex, envelope, total, cb) => {
 
       const card = document.createElement("div");
       card.className = "deck-card";
+      card.textContent = "Cluedo";
       Object.assign(card.style, {
         left: `${deckIndex * 10 + 20}px`,
         bottom: `${deckIndex * 5}px`,
@@ -187,7 +190,7 @@ const init = async () => {
     .then((x) => x.players.length);
 
   dealToEnvelope(() => collectAndDeal(totalPlayers));
-  setTimeout(redirect, 7);
+  setTimeout(redirect, 7000);
 };
 
 globalThis.onload = init;
