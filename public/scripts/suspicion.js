@@ -16,9 +16,8 @@ const WEAPONS = {
 
 const weaponPopup = document.getElementById("weapon-popup");
 
-const modal = document.getElementById("suspicion-modal");
-
 const showModal = (data) => {
+  const modal = document.getElementById("suspicion-modal");
   const modalContent = modal.querySelector(".modal-content");
   const suspicionTemp = document.querySelector("#suspicion-model-temp");
   const suspicionClone = suspicionTemp.content.cloneNode(true);
@@ -36,6 +35,7 @@ const showModal = (data) => {
   document.getElementById("close-modal").addEventListener("click", () => {
     modal.classList.add("hidden");
   });
+
   modal.classList.remove("hidden");
 };
 
@@ -125,6 +125,24 @@ const selectWeapon = (card, selectedLabel, weapon) => {
   }
 };
 
+const addWeaponEl = (cardTemp, weapon, selectedLabel, row) => {
+  const cardClone = cardTemp.content.cloneNode(true);
+  const card = cardClone.querySelector(".weapon-item");
+  const img = cardClone.querySelector(".weapon-img");
+  const name = cardClone.querySelector(".weapon-name");
+
+  card.dataset.weapon = weapon;
+  img.src = WEAPONS[weapon];
+  img.alt = weapon;
+  name.textContent = weapon;
+
+  card.addEventListener(
+    "click",
+    () => selectWeapon(card, selectedLabel, weapon),
+  );
+  row.appendChild(cardClone);
+};
+
 let selectedWeaponEl = null;
 
 const showWeaponPopup = (x, y) => {
@@ -138,8 +156,8 @@ const showWeaponPopup = (x, y) => {
   weaponPopup.innerHTML = "";
   weaponPopup.appendChild(clone);
 
-  document.getElementById("weapon-popup-room").textContent =
-    SUSPICION_STATE.currentRoom;
+  document.getElementById("weapon-popup-room").textContent = SUSPICION_STATE
+    .currentRoom.split("_").join(" ");
 
   document.getElementById("weapon-popup-suspect").textContent =
     SUSPICION_STATE.selectedSuspect;
@@ -210,15 +228,11 @@ const highlightPawns = (pawns, suspects) => {
 };
 
 const startSuspicion = ({ position }, suspects) => {
-  SUSPICION_STATE.currentRoom = position.room.split("_").join(" ");
+  SUSPICION_STATE.currentRoom = position.room;
 
   const pawns = document.querySelectorAll("[data-occupied-by]");
   highlightPawns(pawns, suspects);
 };
-
-document.getElementById("close-modal")?.addEventListener("click", () => {
-  modal.classList.add("hidden");
-});
 
 export const suspicionBtnListener = ({ canSuspect, currentPlayer, pawns }) => {
   if (canSuspect) {
@@ -226,22 +240,4 @@ export const suspicionBtnListener = ({ canSuspect, currentPlayer, pawns }) => {
   } else {
     removePawnHighlight();
   }
-};
-
-const addWeaponEl = (cardTemp, weapon, selectedLabel, row) => {
-  const cardClone = cardTemp.content.cloneNode(true);
-  const card = cardClone.querySelector(".weapon-item");
-  const img = cardClone.querySelector(".weapon-img");
-  const name = cardClone.querySelector(".weapon-name");
-
-  card.dataset.weapon = weapon;
-  img.src = WEAPONS[weapon];
-  img.alt = weapon;
-  name.textContent = weapon;
-
-  card.addEventListener(
-    "click",
-    () => selectWeapon(card, selectedLabel, weapon),
-  );
-  row.appendChild(cardClone);
 };
