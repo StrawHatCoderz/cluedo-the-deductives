@@ -67,19 +67,25 @@ export const fetchGameConfig = async (url) => {
   };
 };
 
-export const displayPopup = (message) => {
-  const messageContainer = document.querySelector(".popup");
-  const p = messageContainer.querySelector("p");
+const DOT_COLORS = {
+  success: '#1D9E75',
+  error:   '#E24B4A',
+  info:    '#378ADD',
+  default: '#888780',
+};
 
+export const displayPopup = (message, type = 'default') => {
+  const popup = document.querySelector('.popup');
+  const dot   = popup.querySelector('.popup-dot');
+  const p     = popup.querySelector('p');
+
+  dot.style.background = DOT_COLORS[type] ?? DOT_COLORS.default;
   p.textContent = message;
-
-  messageContainer.style.visibility = "visible";
-  messageContainer.style.opacity = "1";
+  popup.classList.add('visible');
 
   setTimeout(() => {
-    messageContainer.style.visibility = "hidden";
-    messageContainer.style.opacity = "0";
-    p.textContent = "";
+    popup.classList.remove('visible');
+    setTimeout(() => { p.textContent = ''; }, 200);
   }, 2000);
 };
 
@@ -138,7 +144,7 @@ export const displayInitialMessage = async () => {
   const alreadyShown = sessionStorage.getItem("gameStartedPopup");
 
   if (boardConfig.state === "running" && !alreadyShown) {
-    displayPopup("Game has started!");
+    displayPopup("Game has started!", 'info');
     sessionStorage.setItem("gameStartedPopup", "true");
   }
 };

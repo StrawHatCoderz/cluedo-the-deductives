@@ -344,22 +344,45 @@ path,
 
 .popup {
   position: fixed;
-  bottom: 50%;
-  right: 50%;
-  transform: translate(50%, 50%);
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-40%);
   z-index: 100;
   visibility: hidden;
   opacity: 0;
-  transition: opacity 0.3s ease;
-  background-color: var(--bg-surface);
-  padding: 8px 16px;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  background: var(--bg-surface);
+  padding: 14px 28px;
   border: 1px solid var(--frame);
-  border-radius: 2px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 220px;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06),
+    0 0 0 1px rgba(0, 0, 0, 0.05);
+}
+
+.popup.visible {
+  visibility: visible;
+  opacity: 1;
+  transform: translateX(-50%) translateY(-50%);
+}
+
+.popup-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: var(--color-neutral, #888);
 }
 
 .popup p {
+  margin: 0;
   font-family: var(--font-display);
-  font-size: 24px;
+  font-size: 15px;
 }
 
 .tooltip {

@@ -64,12 +64,12 @@ const handleAccusationSubmission = async (combination) => {
   displayMurderCombination(matchingCards);
 
   if (res.isCorrect) {
-    displayPopup("Congratulation, You Won!");
+    displayPopup("Congratulation, You Won!", 'success');
     setTimeout(() => {
       globalThis.window.location.href = "/pages/victory.html";
     }, 3000);
   } else {
-    displayPopup("The combination is wrong. You are eliminated");
+    displayPopup("The combination is wrong. You are eliminated", 'error');
   }
 };
 
@@ -97,7 +97,7 @@ const attachSubmitAccusationListener = () => {
       await handleAccusationSubmission({ suspect, weapon, room });
       closePopup(accusationBackGround);
     } else {
-      displayPopup("Incomplete combination");
+      displayPopup("Incomplete combination", 'error');
     }
 
     form.reset();

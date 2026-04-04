@@ -106,7 +106,7 @@ const handleDiceClick = async (event, dice, pawn) => {
   const { diceValues } = await fetchRollDice();
 
   showDiceAnimation(diceValues, async () => {
-    displayPopup(`dice value is ${diceValues[0] + diceValues[1]}`);
+    displayPopup(`dice value is ${diceValues[0] + diceValues[1]}`, 'info');
     const { reachableNodes } = await fetchReachableNodes();
     localStorage.setItem("reachableNodes", JSON.stringify(reachableNodes));
     highlightTiles(reachableNodes);
@@ -131,7 +131,7 @@ const handlePass = async (event) => {
 
   if (res.status === 200) {
     const { currentPlayer } = await res.json();
-    displayPopup(`${currentPlayer.name} turns!`);
+    displayPopup(`${currentPlayer.name} turns!`, 'info');
     localStorage.clear();
   }
 };
