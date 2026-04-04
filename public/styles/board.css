@@ -17,8 +17,9 @@
   --font-display: "Cinzel", serif;
   --font-body: "Crimson Pro", serif;
 
-  --tile: #4a7a5c;
-  --tile-border: #1e3428;
+  --tile: #a67c52;
+  --tile-border: #5d3a1a;
+  --tile-hover: #cdaa7d;
   --tile-highlight: #f0d94a;
 
   --room-base: #d8c79c;
@@ -73,7 +74,7 @@ svg {
 }
 
 .tiles rect:hover {
-  fill: #5a9470;
+  fill: var(--tile-hover);
 }
 
 path,
@@ -438,13 +439,14 @@ path.room.highlight-room {
   animation: roomGlow 1s ease-in-out infinite alternate;
 }
 
-/* .highlight-room {
+.highlight-room {
   opacity: 0.6;
   stroke: var(--tile-highlight);
   stroke-width: 3;
   animation: pulse 1s infinite ease-in-out;
   cursor: pointer;
-} */
+  animation: roomGlow 1s ease-in-out infinite alternate;
+}
 
 @keyframes pulse {
   0% {
