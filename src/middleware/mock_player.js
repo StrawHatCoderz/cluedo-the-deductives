@@ -7,6 +7,8 @@ export const addMockPlayer = async (c, next) => {
     { id: 1, name: "Thor", isHost: true },
     { id: 2, name: "Hulk", isHost: false },
     { id: 3, name: "Loki", isHost: false },
+    { id: 4, name: "Tony", isHost: false },
+    { id: 5, name: "Steve", isHost: false },
   ];
 
   playersData.forEach(({ id, name, isHost }) => {

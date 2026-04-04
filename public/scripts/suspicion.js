@@ -60,7 +60,6 @@ const createWeaponCard = (weapon, selectedLabel, suspectBtn) => {
   cardClone.querySelector(".weapon-img").alt = weapon;
   cardClone.querySelector(".weapon-name").textContent = weapon;
   card.dataset.weapon = weapon;
-
   card.addEventListener(
     "click",
     () => selectWeapon(card, selectedLabel, weapon, suspectBtn),

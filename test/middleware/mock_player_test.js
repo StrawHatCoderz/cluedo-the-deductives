@@ -11,6 +11,6 @@ describe("add mock player", () => {
     const app = createApp({ game, logger: () => (_, next) => next() });
     await app.request("/start-game", { method: "post" });
     const players = game.getState(playerId).players;
-    assertEquals(players.length, 3);
+    assertEquals(players.length, 5);
   });
 });
