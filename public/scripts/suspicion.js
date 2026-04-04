@@ -29,6 +29,7 @@ const showModal = (data) => {
     data.weapon;
   suspicionClone.querySelector("#card-room .card-value").textContent =
     data.room;
+
   modalContent.innerHTML =
     suspicionClone.querySelector("#suspicion-container").innerHTML;
 
@@ -38,7 +39,7 @@ const showModal = (data) => {
   modal.classList.remove("hidden");
 };
 
-const showResult = (data, result) => { ///===========
+const showResult = (data, result) => {
   const statusEl = document.getElementById("suspicion-status");
   const closeBtn = document.getElementById("close-modal");
 
@@ -58,6 +59,7 @@ const showResult = (data, result) => { ///===========
 
 const mockFetchSuspicion = async (suspicion) => {
   const body = JSON.stringify(suspicion);
+  removePawnHighlight();
   await fetch("/suspect", {
     method: "POST",
     body,
@@ -174,11 +176,8 @@ export const removePawnHighlight = () => {
 
   pawns.forEach((p) => {
     p.classList.remove("highlight-suspect");
-    console.log(p.clickListener, "1");
     p.removeEventListener("click", p.clickListener);
-    console.log(p.clickListener, "2");
     delete p.clickListener;
-    console.log(p.clickListener);
   });
 };
 
@@ -187,7 +186,6 @@ const onPawnSelect = (e, suspects) => {
   if (!pawnElement) return;
 
   const suspect = pawnElement.dataset.occupiedBy;
-  removePawnHighlight();
   const { id, name } = suspects
     .find(({ char }) => char === suspect);
 
@@ -212,12 +210,13 @@ const highlightPawns = (pawns, suspects) => {
 };
 
 const startSuspicion = ({ position }, suspects) => {
-  SUSPICION_STATE.currentRoom = position.room;
+  SUSPICION_STATE.currentRoom = position.room.split("_").join(" ");
+
   const pawns = document.querySelectorAll("[data-occupied-by]");
   highlightPawns(pawns, suspects);
 };
 
-document.getElementById("close-modal").addEventListener("click", () => {
+document.getElementById("close-modal")?.addEventListener("click", () => {
   modal.classList.add("hidden");
 });
 

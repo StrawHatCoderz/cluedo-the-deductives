@@ -11,13 +11,14 @@
 
 .weapon-popup {
   position: fixed;
-  background: #f5f0e8;
-  border: 1.5px solid #ccc;
+  background: antiquewhite;
   border-radius: 12px;
   padding: 14px 16px 12px;
   z-index: 20;
   width: auto;
-  box-shadow: 0 2px 5px gold;
+  box-shadow:
+    rgba(0, 0, 0, 0.25) 0px 14px 28px,
+    rgba(0, 0, 0, 0.22) 0px 10px 10px;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -34,7 +35,6 @@
   font-weight: 700;
   color: #666;
   text-align: right;
-  /* font-style: italic; */
   text-transform: capitalize;
   font-family: system-ui;
 }
@@ -82,13 +82,8 @@
 }
 
 .weapon-item.weapon-selected {
-  border-color: gold;
+  border-color: black;
   box-shadow: 0 0 0 4px gold;
-}
-
-.weapon-item.weapon-selected .weapon-dot {
-  background: silver;
-  border-color: gold;
 }
 
 .weapon-popup-actions {
@@ -145,7 +140,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: wheat;
+  background: antiquewhite;
   border: 1px solid silver;
   color: white;
   padding: 20px;

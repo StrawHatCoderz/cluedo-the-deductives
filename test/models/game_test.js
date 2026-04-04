@@ -130,7 +130,7 @@ describe("GAME", () => {
 
       game.updateTurn();
 
-      assertEquals(game.getRolledNumber(randomGenerator), [6,6]);
+      assertEquals(game.getRolledNumber(randomGenerator), [6, 6]);
     });
 
     it("should throw if rollDice before turn init", () => {
