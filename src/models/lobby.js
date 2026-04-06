@@ -35,6 +35,8 @@ export class Lobby {
     if (this.#players.length >= this.#maxPlayer) {
       throw new Error("MaxPlayer reached");
     }
+
+    if (this.#state !== "waiting") throw new Error("Game already started");
     const character = this.#pawns.pop();
     this.#players.push({ id, name, isHost, character });
   }
