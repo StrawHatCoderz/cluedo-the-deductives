@@ -23,7 +23,7 @@ label {
   border: none;
 }
 
-#createBtn {
+#hostBtn {
   background-color: darkred;
   color: white;
   padding: 10px 15px;
@@ -33,7 +33,7 @@ label {
   border-radius: 5px;
 }
 
-#createBtn:hover {
+#hostBtn:hover {
   background-color: red;
 }
 
