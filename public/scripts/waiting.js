@@ -56,10 +56,19 @@ const setupLobbyStatus = (isHost, playersCount) => {
   lobbyStatusContainer.textContent = message;
 };
 
-const assignStartBtn = (isHost, hostActions) => {
+const handleGameStart = () => {
+  globalThis.window.location = "/pages/setup.html";
+};
+
+const assignStartBtn = (isHost, playerCount, hostActions) => {
   const lobbyInfo = document.getElementById("lobby-info");
 
   const startBtn = hostActions.querySelector("#lobby-start-btn");
+  startBtn.addEventListener("click", handleGameStart);
+  if (playerCount >= 3) {
+    startBtn.removeAttribute("disabled");
+    startBtn.setAttribute("enabled", true);
+  }
   if (isHost) {
     lobbyInfo.appendChild(startBtn);
   }
@@ -83,7 +92,7 @@ const setupWaitingPage = () => {
 
   profilesContainer.append(...profiles);
   setupLobbyStatus(lobby.isHost, totalPlayers);
-  assignStartBtn(lobby.isHost, hostActions);
+  assignStartBtn(lobby.isHost, totalPlayers, hostActions);
 };
 
 globalThis.window.onload = setupWaitingPage;
