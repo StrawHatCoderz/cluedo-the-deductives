@@ -1,9 +1,7 @@
 import { assertEquals } from "@std/assert/equals";
 import { beforeEach, describe, it } from "@std/testing/bdd";
-import { boardConfig } from "../src/constants/board_config.js";
-import { Board } from "../src/models/board.js";
-import { createGameInstance } from "../src/utils/game.js";
 import { createApp } from "../src/app.js";
+import { boardConfig } from "../src/constants/board_config.js";
 import {
   PAWNS,
   ROOMS,
@@ -11,18 +9,21 @@ import {
   WEAPONS,
 } from "../src/constants/game_config.js";
 import { LobbyController } from "../src/controllers/lobby_controller.js";
+import { Board } from "../src/models/board.js";
 import { Lobby } from "../src/models/lobby.js";
+import { createGameInstance } from "../src/utils/game.js";
 
 const silentLogger = () => (_, next) => next();
 
 describe("APP TEST", () => {
   let app;
   let game;
+  let lobbyController;
   beforeEach(() => {
     game = createGameInstance((list) => list);
     const pawns = PAWNS.map(({ name, color }) => ({ name, color }));
     const createLobby = (id) => new Lobby(id, 6, 3, pawns);
-    const lobbyController = new LobbyController(createLobby);
+    lobbyController = new LobbyController(createLobby);
     app = createApp({
       game,
       getRandom: () => 1,
@@ -283,18 +284,18 @@ describe("APP TEST", () => {
 
   describe("LOBBY", () => {
     describe("POST /lobby/create", () => {
-      it("=> should not create a lobby if username is not provided", async () => {
+      it("=> should not create a lobby if name is not provided", async () => {
         const res = await app.request("/lobby/create", { method: "post" });
         const body = await res.json();
         assertEquals(body.success, false);
         assertEquals(body.data, {});
-        assertEquals(body.error, "Invalid Username");
+        assertEquals(body.error, "Invalid name");
         assertEquals(res.status, 400);
       });
 
-      it("=> should create a lobby if username is provided", async () => {
+      it("=> should create a lobby if name is provided", async () => {
         const formData = new FormData();
-        formData.append("username", "loki");
+        formData.append("name", "loki");
         const res = await app
           .request("/lobby/create", {
             method: "post",
@@ -309,18 +310,18 @@ describe("APP TEST", () => {
     });
 
     describe("POST /lobby/join", () => {
-      it("=> should not join a lobby if username is not provided", async () => {
+      it("=> should not join a lobby if name is not provided", async () => {
         const res = await app.request("/lobby/join", {
           method: "post",
           headers: {
             "content-type": "application/json",
           },
-          body: JSON.stringify({ username: "" }),
+          body: JSON.stringify({ name: "" }),
         });
         const body = await res.json();
         assertEquals(body.success, false);
         assertEquals(body.data, {});
-        assertEquals(body.error, "Invalid Username");
+        assertEquals(body.error, "Invalid name");
         assertEquals(res.status, 400);
       });
 
@@ -330,7 +331,7 @@ describe("APP TEST", () => {
           headers: {
             "content-type": "application/json",
           },
-          body: JSON.stringify({ username: "loki", roomId: "" }),
+          body: JSON.stringify({ name: "loki", roomId: "" }),
         });
 
         const body = await res.json();
@@ -342,7 +343,7 @@ describe("APP TEST", () => {
 
       it("=> should not join a lobby if  roomId is provided bit roomId is invalid", async () => {
         const formData = new FormData();
-        formData.append("username", "loki");
+        formData.append("name", "loki");
         await app
           .request("/lobby/create", {
             method: "post",
@@ -354,7 +355,7 @@ describe("APP TEST", () => {
           headers: {
             "content-type": "application/json",
           },
-          body: JSON.stringify({ username: "loki", roomId: "2" }),
+          body: JSON.stringify({ name: "loki", roomId: "2" }),
         });
 
         const body = await res.json();
@@ -364,9 +365,9 @@ describe("APP TEST", () => {
         assertEquals(res.status, 400);
       });
 
-      it("=> should join a lobby if username and roomId is provided and roomId is valid", async () => {
+      it("=> should join a lobby if name and roomId is provided and roomId is valid", async () => {
         const formData = new FormData();
-        formData.append("username", "loki");
+        formData.append("name", "loki");
         await app
           .request("/lobby/create", {
             method: "post",
@@ -378,7 +379,7 @@ describe("APP TEST", () => {
           headers: {
             "content-type": "application/json",
           },
-          body: JSON.stringify({ username: "loki", roomId: "1" }),
+          body: JSON.stringify({ name: "loki", roomId: "1" }),
         });
 
         const body = await res.json();
@@ -386,6 +387,23 @@ describe("APP TEST", () => {
         assertEquals(body.success, true);
         assertEquals(body.data, { lobbyId: 1, playerId: 2 });
         assertEquals(res.status, 200);
+      });
+    });
+
+    describe("GET /lobby", () => {
+      it(" => should return the state of lobby after creating new lobby", async () => {
+        const { playerId, lobbyId } = lobbyController.hostLobby("tony");
+
+        const res = await app.request("/lobby", {
+          headers: {
+            Cookie: `lobbyId=${lobbyId}; playerId=${playerId}`,
+          },
+        });
+        const { data, success } = await res.json();
+
+        assertEquals(success, true);
+        assertEquals(data.players.length, 1);
+        assertEquals(data.players[0].name, "tony");
       });
     });
   });

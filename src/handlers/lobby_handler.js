@@ -1,17 +1,17 @@
-import { setCookie } from "hono/cookie";
+import { getCookie, setCookie } from "hono/cookie";
 
 export const createLobby = async (c) => {
   try {
-    const { username } = await c.req.parseBody();
+    const { name } = await c.req.parseBody();
 
-    if (!username) {
+    if (!name) {
       return c.json(
-        { success: false, data: {}, error: "Invalid Username" },
+        { success: false, data: {}, error: "Invalid name" },
         400,
       );
     }
     const lobbyController = c.get("lobbyController");
-    const { playerId, lobbyId } = lobbyController.hostLobby(username);
+    const { playerId, lobbyId } = lobbyController.hostLobby(name);
     setCookie(c, "lobbyId", lobbyId);
     setCookie(c, "playerId", playerId);
     return c.json({ success: true, data: { playerId, lobbyId } }, 201);
@@ -22,10 +22,10 @@ export const createLobby = async (c) => {
 
 export const joinLobby = (c) => {
   try {
-    const { username, roomId } = c.get("body");
-    if (!username) {
+    const { name, roomId } = c.get("body");
+    if (!name) {
       return c
-        .json({ success: false, data: {}, error: "Invalid Username" }, 400);
+        .json({ success: false, data: {}, error: "Invalid name" }, 400);
     }
 
     if (!roomId) {
@@ -33,11 +33,22 @@ export const joinLobby = (c) => {
         .json({ success: false, data: {}, error: "Invalid RoomId" }, 400);
     }
     const lobbyController = c.get("lobbyController");
-    const { playerId, lobbyId } = lobbyController.joinLobby(username, roomId);
+    const { playerId, lobbyId } = lobbyController.joinLobby(name, roomId);
     setCookie(c, "lobbyId", lobbyId);
     setCookie(c, "playerId", playerId);
     return c.json({ success: true, data: { playerId, lobbyId } }, 200);
   } catch (e) {
     return c.json({ success: false, data: {}, error: e.message }, 400);
   }
+};
+
+export const serveLobbyState = (c) => {
+  const lobbyController = c.get("lobbyController");
+  const lobbyId = getCookie(c, "lobbyId");
+  const playerId = getCookie(c, "playerId");
+
+  return c.json({
+    success: true,
+    data: lobbyController.getLobbyState(parseInt(lobbyId), parseInt(playerId)),
+  });
 };

@@ -14,24 +14,29 @@ export class LobbyController {
     this.#lobbies = {};
   }
 
-  hostLobby(username) {
+  hostLobby(name) {
     const lobby = this.#createLobby(++this.#currentLobbyId);
     const id = lobby.getState().id;
     this.#lobbies[id] = lobby;
     const isHost = true;
-    lobby.addPlayer(++this.#currentPlayerId, username, isHost);
+    lobby.addPlayer(++this.#currentPlayerId, name, isHost);
     return { lobbyId: this.#currentLobbyId, playerId: this.#currentPlayerId };
   }
 
-  joinLobby(username, roomId) {
+  joinLobby(name, roomId) {
     const lobby = this.#lobbies[roomId];
     if (!lobby) throw new Error("RoomId is invalid");
     const isHost = false;
-    lobby.addPlayer(++this.#currentPlayerId, username, isHost);
+    lobby.addPlayer(++this.#currentPlayerId, name, isHost);
     return { lobbyId: this.#currentLobbyId, playerId: this.#currentPlayerId };
   }
 
-  getLobbyState(lobbyId) {
-    return this.#lobbies[lobbyId].getState();
+  getLobbyState(lobbyId, playerId) {
+    const lobby = this.#lobbies[lobbyId];
+
+    return {
+      ...lobby.getState(),
+      isHost: lobby.isHost(parseInt(playerId)),
+    };
   }
 }

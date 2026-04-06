@@ -20,14 +20,14 @@ const handleHost = async (e, form) => {
 
 const handleJoin = (e, form) => {
   e.preventDefault();
-  const username = new FormData(form).get("username");
+  const name = new FormData(form).get("name");
 
-  if (!username) {
+  if (!name) {
     const alertPopup = document.querySelector("#alert-toast");
-    displayAlertToast(alertPopup, "Invalid Username");
+    displayAlertToast(alertPopup, "Invalid name");
     return;
   }
-  localStorage.setItem("username", username);
+  localStorage.setItem("name", name);
   globalThis.window.location.href = "/pages/join.html";
 };
 

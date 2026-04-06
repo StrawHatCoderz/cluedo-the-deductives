@@ -15,6 +15,10 @@ export class Lobby {
     this.#state = "waiting";
   }
 
+  #findPlayer(playerId) {
+    return this.#players.find((player) => player.id === playerId);
+  }
+
   getState() {
     return {
       id: this.#id,
@@ -23,11 +27,15 @@ export class Lobby {
     };
   }
 
-  addPlayer(id, username, isHost) {
+  isHost(playerId) {
+    return this.#findPlayer(playerId)?.isHost;
+  }
+
+  addPlayer(id, name, isHost) {
     if (this.#players.length >= this.#maxPlayer) {
       throw new Error("MaxPlayer reached");
     }
     const character = this.#pawns.pop();
-    this.#players.push({ id, username, isHost, character });
+    this.#players.push({ id, name, isHost, character });
   }
 }

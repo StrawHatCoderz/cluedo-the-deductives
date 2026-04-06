@@ -1,15 +1,4 @@
-const fetchLobbyState = (_url) => {
-  return {
-    id: 3412134,
-    status: "waiting",
-    isHost: true,
-    players: [
-      { id: 1324, name: "tony", pawn: "Mrs Scarlet", isHost: true },
-      { id: 1325, name: "steve", pawn: "Mr Green", isHost: false },
-      { id: 1326, name: "banner", pawn: "Prof Plum", isHost: false },
-    ],
-  };
-};
+import { fetchLobbyState } from "./utils.js";
 
 const handleCopyLobbyId = (_e, lobbyId) => {
   const copyToast = document.getElementById("copy-toast");
@@ -40,11 +29,21 @@ const setupPlayerProfiles = (profileData, profileContainer) => {
   }
 
   const pawnName = profileContainer.querySelector(".pawn-name");
-  pawnName.textContent = profileData.pawn;
+  pawnName.textContent = profileData.character.name;
 
   const playerName = profileContainer.querySelector(".player-name");
 
   playerName.textContent = profileData.name;
+};
+
+const setupProfiles = (lobby, profilesTemplate, profilesContainer) => {
+  const profiles = lobby.players.map((player) => {
+    const profileContainer = profilesTemplate.content.cloneNode(true);
+    setupPlayerProfiles(player, profileContainer);
+    return profileContainer;
+  });
+
+  profilesContainer.replaceChildren(...profiles);
 };
 
 const setupLobbyStatus = (isHost, playersCount) => {
@@ -60,39 +59,42 @@ const handleGameStart = () => {
   globalThis.window.location = "/pages/setup.html";
 };
 
-const assignStartBtn = (isHost, playerCount, hostActions) => {
-  const lobbyInfo = document.getElementById("lobby-info");
+const assignStartBtn = (isHost, playersCount, hostActions) => {
+  const lobbyInfo = document.getElementById("lobby-status-actions");
 
   const startBtn = hostActions.querySelector("#lobby-start-btn");
+
   startBtn.addEventListener("click", handleGameStart);
-  if (playerCount >= 3) {
+  const isWaiting = playersCount < 3;
+
+  if (isWaiting) {
     startBtn.removeAttribute("disabled");
     startBtn.setAttribute("enabled", true);
   }
+
   if (isHost) {
-    lobbyInfo.appendChild(startBtn);
+    lobbyInfo.replaceChildren(startBtn);
   }
 };
 
-const setupWaitingPage = () => {
-  const lobby = fetchLobbyState("/lobby");
+const setupWaitingPage = async () => {
+  const lobby = await fetchLobbyState("/lobby");
+
   const hostActionsTemplate = document.getElementById("host-actions");
   const profilesTemplate = document.getElementById("player-profile-template");
   const profilesContainer = document.querySelector(".profile-container");
-  const totalPlayers = lobby.players.length;
   const hostActions = hostActionsTemplate.content.cloneNode(true);
 
+  const totalPlayers = lobby.players.length;
+
   setupLobbyId(lobby.id, lobby.isHost, hostActions);
-
-  const profiles = lobby.players.map((player) => {
-    const profileContainer = profilesTemplate.content.cloneNode(true);
-    setupPlayerProfiles(player, profileContainer);
-    return profileContainer;
-  });
-
-  profilesContainer.append(...profiles);
-  setupLobbyStatus(lobby.isHost, totalPlayers);
-  assignStartBtn(lobby.isHost, totalPlayers, hostActions);
+  setInterval(async () => {
+    const lobby = await fetchLobbyState("/lobby");
+    const hostActions = hostActionsTemplate.content.cloneNode(true);
+    setupProfiles(lobby, profilesTemplate, profilesContainer);
+    setupLobbyStatus(lobby.isHost, totalPlayers);
+    assignStartBtn(lobby.isHost, totalPlayers, hostActions);
+  }, 100);
 };
 
 globalThis.window.onload = setupWaitingPage;

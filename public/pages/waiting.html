@@ -1,45 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Waiting</title>
-    <script type="module" src="/scripts/waiting.js"></script>
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=content_copy"
-    />
-    <link rel="stylesheet" href="/styles/waiting.css">
-  </head>
 
-  <body>
-    <p id="copy-toast">Copied to clipboard</p>
-    <main id="waiting-page">
-      <div id="lobby-id-container">
-        <p id="lobby-id"></p>
-      </div>
-      <div class="profile-container"></div>
-      <div id="lobby-info">
-        <p id="lobby-status"></p>
-      </div>
-    </main>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Waiting</title>
+  <script type="module" src="/scripts/waiting.js"></script>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=content_copy" />
+  <link rel="stylesheet" href="/styles/waiting.css">
+</head>
 
-    <template id="player-profile-template">
-      <div class="player-profile">
-        <p class="player-role"></p>
-        <div class="profile-image"></div>
-        <p class="pawn-name"></p>
-        <p class="player-name"></p>
+<body>
+  <p id="copy-toast">Copied to clipboard</p>
+  <main id="waiting-page">
+    <div id="lobby-id-container">
+      <p id="lobby-id"></p>
+    </div>
+    <div class="profile-container"></div>
+    <div id="lobby-info">
+      <p id="lobby-status"></p>
+      <div id="lobby-status-actions">
+        
       </div>
-    </template>
+    </div>
+  </main>
 
-    <template id="host-actions">
-      <button id="copy-lobby-id-btn">
-        <span class="material-symbols-outlined">
-          content_copy
-        </span>
-      </button>
-      <button id="lobby-start-btn" disabled>Start</button>
-    </template>
-  </body>
+  <template id="player-profile-template">
+    <div class="player-profile">
+      <p class="player-role"></p>
+      <div class="profile-image"></div>
+      <p class="pawn-name"></p>
+      <p class="player-name"></p>
+    </div>
+  </template>
+
+  <template id="host-actions">
+    <button id="copy-lobby-id-btn">
+      <span class="material-symbols-outlined">
+        content_copy
+      </span>
+    </button>
+    <button id="lobby-start-btn" disabled>Start</button>
+  </template>
+</body>
+
 </html>

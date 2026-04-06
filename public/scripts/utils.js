@@ -49,8 +49,21 @@ const parsePawnsData = (pawns) => {
   }));
 };
 
+export const sendRequest = async ({ method, body, url }) => {
+  const requestConfig = method === "post"
+    ? {
+      method,
+      body: JSON.stringify(body),
+      headers: {
+        "content-type": "application/json",
+      },
+    }
+    : { method };
+  return await fetch(url, requestConfig).then((data) => data.json());
+};
+
 export const fetchGameConfig = async (url) => {
-  const gameContext = await fetch(url).then((data) => data.json());
+  const gameContext = await sendRequest({ url });
 
   return {
     state: gameContext.state,
@@ -65,6 +78,11 @@ export const fetchGameConfig = async (url) => {
     canSuspect: gameContext.canSuspect,
     secretPassageId: gameContext.secretPassageId,
   };
+};
+
+export const fetchLobbyState = async (url) => {
+  const { data } = await sendRequest({ url });
+  return data;
 };
 
 const DOT_COLORS = {
@@ -89,19 +107,6 @@ export const displayPopup = (message, type = "default") => {
       p.textContent = "";
     }, 200);
   }, 2000);
-};
-
-export const sendRequest = async ({ method, body, url }) => {
-  const requestConfig = method === "post"
-    ? {
-      method,
-      body: JSON.stringify(body),
-      headers: {
-        "content-type": "application/json",
-      },
-    }
-    : { method };
-  return await fetch(url, requestConfig).then((data) => data.json());
 };
 
 export const getHighlightPath = () => {

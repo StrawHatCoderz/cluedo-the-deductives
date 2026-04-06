@@ -1,7 +1,7 @@
 import { assertEquals, assertThrows } from "@std/assert";
 import { beforeEach, describe, it } from "@std/testing/bdd";
-import { Lobby } from "../../src/models/lobby.js";
 import { PAWNS } from "../../src/constants/game_config.js";
+import { Lobby } from "../../src/models/lobby.js";
 
 describe("LOBBY", () => {
   let lobby;
@@ -18,21 +18,48 @@ describe("LOBBY", () => {
       const state = lobby.getState();
       assertEquals(state, { id, players: [], state: "waiting" });
     });
+
+    it("=> should give current lobby state: one player", () => {
+      lobby.addPlayer(2, "tony", true);
+      const state = lobby.getState();
+      assertEquals(state, {
+        id,
+        players: [{
+          id: 2,
+          name: "tony",
+          character: { color: "violet", name: "professor plum" },
+          isHost: true,
+        }],
+        state: "waiting",
+      });
+    });
+
+    it("=> should give current lobby state: two players", () => {
+      lobby.addPlayer(2, "tony", true);
+      lobby.addPlayer(3, "steve", false);
+
+      const state = lobby.getState();
+
+      assertEquals(state.id, id);
+      assertEquals(state.players.length, 2);
+      assertEquals(state.state, "waiting");
+    });
   });
 
   describe("add player", () => {
     it("=> should add player into lobby and assign character", () => {
-      lobby.addPlayer(1, "username", true);
+      lobby.addPlayer(1, "name", true);
       const state = lobby.getState();
+
       assertEquals(state.players, [
         {
           character: {
-            color: "violet",
-            name: "professor plum",
+            color: "white",
+            name: "mrs white",
           },
           id: 1,
           isHost: true,
-          username: "username",
+          name: "name",
         },
       ]);
     });

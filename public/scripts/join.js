@@ -13,8 +13,8 @@ const hostJoin = (body) =>
 const handleJoin = async (e, form) => {
   e.preventDefault();
   const roomId = new FormData(form).get("room");
-  const username = localStorage.getItem("username");
-  const { success, error } = await hostJoin({ roomId, username });
+  const name = localStorage.getItem("name");
+  const { success, error } = await hostJoin({ roomId, name });
 
   if (success) {
     localStorage.clear();

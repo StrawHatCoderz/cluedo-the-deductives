@@ -14,8 +14,12 @@ import {
   updateTurn,
 } from "./handlers/game_handler.js";
 
+import {
+  createLobby,
+  joinLobby,
+  serveLobbyState,
+} from "./handlers/lobby_handler.js";
 import { addMockPlayer } from "./middleware/mock_player.js";
-import { createLobby, joinLobby } from "./handlers/lobby_handler.js";
 import { parseBody } from "./middleware/parse_body.js";
 
 export const createApp = (
@@ -32,6 +36,7 @@ export const createApp = (
 
   app.get("/game-state", getGameState);
   app.get("/get-reachable-nodes", serveGetReachableNodes);
+  app.get("/lobby", serveLobbyState);
   app.get("*", serveStatic({ root: "./public" }));
 
   app.post("/update-state", updateGameState);
