@@ -1,4 +1,4 @@
-import { assert, assertEquals, assertThrows } from "@std/assert";
+import { assertEquals, assertThrows } from "@std/assert";
 import { expect, fn } from "@std/expect";
 import { describe, it } from "@std/testing/bdd";
 import { LobbyController } from "../../src/controllers/lobby_controller.js";
@@ -6,11 +6,13 @@ import { LobbyController } from "../../src/controllers/lobby_controller.js";
 describe("LOBBY", () => {
   describe("create lobby controller", () => {
     it(" => should throw error if createLobby fn is not provided", () => {
-      assertThrows(() => new LobbyController());
+      assertThrows(() => LobbyController.createInstance());
     });
 
     it(" => should create lobby controller if createLobby fn is provided", () => {
-      assert(() => new LobbyController(createLobby));
+      expect(() => LobbyController.createInstance(() => {}))
+        .not
+        .toThrow();
     });
   });
 
@@ -21,8 +23,9 @@ describe("LOBBY", () => {
         addPlayer: fn(),
         isHost: fn(() => true),
       };
-      const lobbyController = new LobbyController(() => lobby);
-      lobbyController.hostLobby("name");
+
+      const lobbyController = LobbyController.createInstance(() => lobby);
+      lobbyController.hostLobby("loki");
       const state = lobbyController.getLobbyState(1);
 
       assertEquals(state, { id: 1, isHost: true });
@@ -34,12 +37,10 @@ describe("LOBBY", () => {
     it("=> should create a lobby and add the player as host", () => {
       const players = [];
       const lobby = {
-        addPlayer: fn((id, name) =>
-          players.push({ id, name, isHost: true })
-        ),
+        addPlayer: fn((id, name) => players.push({ id, name, isHost: true })),
         getState: fn(() => ({ id: 1 })),
       };
-      const lobbyController = new LobbyController(() => lobby);
+      const lobbyController = LobbyController.createInstance(() => lobby);
       const { playerId, lobbyId } = lobbyController.hostLobby("name");
       assertEquals(players[0].name, "name");
       assertEquals(playerId, 1);
@@ -51,12 +52,10 @@ describe("LOBBY", () => {
     it("=> should join a lobby and add the player", () => {
       const players = [];
       const lobby = {
-        addPlayer: fn((id, name, isHost) =>
-          players.push({ id, name, isHost })
-        ),
+        addPlayer: fn((id, name, isHost) => players.push({ id, name, isHost })),
         getState: fn(() => ({ id: 1 })),
       };
-      const lobbyController = new LobbyController(() => lobby);
+      const lobbyController = LobbyController.createInstance(() => lobby);
       lobbyController.hostLobby("loki");
       const { playerId, lobbyId } = lobbyController.joinLobby("thor", 1);
       assertEquals(players, [
@@ -78,12 +77,10 @@ describe("LOBBY", () => {
     it("=> should not join a lobby if lobby does not exists", () => {
       const players = [];
       const lobby = {
-        addPlayer: fn((id, name, isHost) =>
-          players.push({ id, name, isHost })
-        ),
+        addPlayer: fn((id, name, isHost) => players.push({ id, name, isHost })),
         getState: fn(() => ({ id: 1 })),
       };
-      const lobbyController = new LobbyController(() => lobby);
+      const lobbyController = LobbyController.createInstance(() => lobby);
       assertThrows(() => lobbyController.joinLobby("thor", 1));
     });
   });

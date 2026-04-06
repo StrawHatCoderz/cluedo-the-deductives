@@ -5,13 +5,18 @@ export class LobbyController {
   #currentPlayerId;
 
   constructor(createLobby) {
-    if (typeof createLobby !== "function") {
-      throw new Error("createLobby is not a function");
-    }
     this.#createLobby = createLobby;
     this.#currentLobbyId = 0;
     this.#currentPlayerId = 0;
     this.#lobbies = {};
+  }
+
+  static createInstance(createLobby) {
+    if (typeof createLobby !== "function") {
+      throw new Error("createLobby is not a function");
+    }
+
+    return new LobbyController(createLobby);
   }
 
   hostLobby(name) {

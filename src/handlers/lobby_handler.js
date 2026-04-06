@@ -5,11 +5,9 @@ export const createLobby = async (c) => {
     const { name } = await c.req.parseBody();
 
     if (!name) {
-      return c.json(
-        { success: false, data: {}, error: "Invalid name" },
-        400,
-      );
+      throw new Error("Invalid name");
     }
+
     const lobbyController = c.get("lobbyController");
     const { playerId, lobbyId } = lobbyController.hostLobby(name);
     setCookie(c, "lobbyId", lobbyId);
@@ -24,13 +22,11 @@ export const joinLobby = (c) => {
   try {
     const { name, roomId } = c.get("body");
     if (!name) {
-      return c
-        .json({ success: false, data: {}, error: "Invalid name" }, 400);
+      throw new Error("Invalid name");
     }
 
     if (!roomId) {
-      return c
-        .json({ success: false, data: {}, error: "Invalid RoomId" }, 400);
+      throw new Error("Invalid RoomId");
     }
     const lobbyController = c.get("lobbyController");
     const { playerId, lobbyId } = lobbyController.joinLobby(name, roomId);

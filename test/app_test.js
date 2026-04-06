@@ -23,7 +23,7 @@ describe("APP TEST", () => {
     game = createGameInstance((list) => list);
     const pawns = PAWNS.map(({ name, color }) => ({ name, color }));
     const createLobby = (id) => new Lobby(id, 6, 3, pawns);
-    lobbyController = new LobbyController(createLobby);
+    lobbyController = LobbyController.createInstance(createLobby);
     app = createApp({
       game,
       getRandom: () => 1,
@@ -46,6 +46,7 @@ describe("APP TEST", () => {
         assertEquals(body.diceValues, [6, 6]);
       });
     });
+
     describe("GET /get-reachable-nodes", () => {
       it(" => should get dice value and reachable positions", async () => {
         await app.request("/start-game", { method: "post" });
@@ -93,13 +94,14 @@ describe("APP TEST", () => {
         assertEquals(res.status, 400);
         assertEquals(body, { status: false });
       });
-    });
-    it(" => should give all possible reachable positions: from a room(board config)", () => {
-      const board = boardConfig;
-      const smallBoard = Board.create({
-        ...board,
+
+      it(" => should give all possible reachable positions: from a room(board config)", () => {
+        const board = boardConfig;
+        const smallBoard = Board.create({
+          ...board,
+        });
+        assertEquals(smallBoard.getReachableNodes("kitchen", 1), ["tile-4-7"]);
       });
-      assertEquals(smallBoard.getReachableNodes("kitchen", 1), ["tile-4-7"]);
     });
 
     describe("secret passage", () => {
@@ -302,7 +304,11 @@ describe("APP TEST", () => {
             body: formData,
           });
         const body = await res.json();
-
+        const cookies = res.headers.getSetCookie();
+        assertEquals(cookies, [
+          "lobbyId=1; Path=/",
+          "playerId=1; Path=/",
+        ]);
         assertEquals(body.success, true);
         assertEquals(body.data, { lobbyId: 1, playerId: 1 });
         assertEquals(res.status, 201);
@@ -365,14 +371,8 @@ describe("APP TEST", () => {
         assertEquals(res.status, 400);
       });
 
-      it("=> should join a lobby if name and roomId is provided and roomId is valid", async () => {
-        const formData = new FormData();
-        formData.append("name", "loki");
-        await app
-          .request("/lobby/create", {
-            method: "post",
-            body: formData,
-          });
+      it("=> should join a lobby if username and roomId is provided and roomId is valid", async () => {
+        lobbyController.hostLobby("loki");
 
         const res = await app.request("/lobby/join", {
           method: "post",
@@ -383,7 +383,11 @@ describe("APP TEST", () => {
         });
 
         const body = await res.json();
-
+        const cookies = res.headers.getSetCookie();
+        assertEquals(cookies, [
+          "lobbyId=1; Path=/",
+          "playerId=2; Path=/",
+        ]);
         assertEquals(body.success, true);
         assertEquals(body.data, { lobbyId: 1, playerId: 2 });
         assertEquals(res.status, 200);

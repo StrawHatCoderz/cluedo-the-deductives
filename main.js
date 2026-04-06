@@ -10,7 +10,7 @@ const main = () => {
   const game = createGameInstance();
   const pawns = PAWNS.map(({ name, color }) => ({ name, color }));
   const createLobby = (id) => new Lobby(id, 6, 3, pawns);
-  const lobbyController = new LobbyController(createLobby);
+  const lobbyController = LobbyController.createInstance(createLobby);
   const app = createApp({
     game,
     getRandom: Math.random,
