@@ -22,6 +22,7 @@ export class Lobby {
       players: this.#players,
     };
   }
+
   addPlayer(id, username, isHost) {
     const character = this.#pawns.pop();
     this.#players.push({ id, username, isHost, character });
