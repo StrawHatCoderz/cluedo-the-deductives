@@ -1,4 +1,4 @@
-import { fetchLobbyState } from "./utils.js";
+import { fetchLobbyState, sendRequest } from "./utils.js";
 
 const handleCopyLobbyId = (_e, lobbyId) => {
   const copyToast = document.getElementById("copy-toast");
@@ -55,7 +55,8 @@ const setupLobbyStatus = (isHost, playersCount) => {
   lobbyStatusContainer.textContent = message;
 };
 
-const handleGameStart = () => {
+const handleGameStart = async () => {
+  const response = await sendRequest({ url: "/start-game", method: "post" });
   globalThis.window.location = "/pages/setup.html";
 };
 
