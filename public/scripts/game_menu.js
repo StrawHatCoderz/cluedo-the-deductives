@@ -10,6 +10,10 @@ globalThis.window.onload = () => {
     e.preventDefault();
     const formData = new FormData(form);
     const { success, error } = await hostLobby(formData);
-    if (!success) alert(error);
+    if (success) {
+      globalThis.window.location.href = "/pages/waiting.html";
+      return;
+    }
+    alert(error);
   });
 };
