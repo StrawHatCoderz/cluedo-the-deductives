@@ -23,6 +23,14 @@ export class LobbyController {
     return { lobbyId: this.#currentLobbyId, playerId: this.#currentPlayerId };
   }
 
+  joinLobby(username, roomId) {
+    const lobby = this.#lobbies[roomId];
+    if (!lobby) throw new Error("RoomId is invalid");
+    const isHost = false;
+    lobby.addPlayer(++this.#currentPlayerId, username, isHost);
+    return { lobbyId: this.#currentLobbyId, playerId: this.#currentPlayerId };
+  }
+
   getLobbyState(lobbyId) {
     return this.#lobbies[lobbyId].getState();
   }

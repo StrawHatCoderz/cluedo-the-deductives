@@ -15,7 +15,8 @@ import {
 } from "./handlers/game_handler.js";
 
 import { addMockPlayer } from "./middleware/mock_player.js";
-import { createLobby } from "./handlers/lobby_handler.js";
+import { createLobby, joinLobby } from "./handlers/lobby_handler.js";
+import { parseBody } from "./middleware/parse_body.js";
 
 export const createApp = (
   { game, lobbyController, getRandom, roundUp, logger },
@@ -40,6 +41,7 @@ export const createApp = (
   app.post("/accuse", handleAccusation);
   app.post("/start-game", addMockPlayer, startGame);
   app.post("/lobby/create", createLobby);
+  app.post("/lobby/join", parseBody, joinLobby);
 
   app.put("/update-pawn-position/:pawnId", movePawnHandler);
   app.onError((e, c) => {

@@ -1,0 +1,42 @@
+#form {
+  background: rgba(0, 0, 0, 0.85);
+  padding: 30px;
+  border-radius: 10px;
+  text-align: center;
+  width: 300px;
+  margin: 100px auto;
+  box-shadow: 0 0 15px rgb(96, 93, 93);
+}
+
+label {
+  display: block;
+  margin-bottom: 10px;
+  color: white;
+  font-size: 18px;
+}
+
+#room {
+  width: 90%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  border: none;
+}
+
+#joinBtn {
+  background-color: darkred;
+  color: white;
+  padding: 10px 15px;
+  border: 1px solid white;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+#joinBtn:hover {
+  background-color: red;
+}
+
+body {
+  background: linear-gradient(135deg, #1a1a1a, #3b0000);
+  font-family: Arial, sans-serif;
+}

@@ -45,4 +45,45 @@ describe("LOBBY", () => {
       assertEquals(lobbyId, 1);
     });
   });
+
+  describe("joinLobby", () => {
+    it("=> should join a lobby and add the player", () => {
+      const players = [];
+      const lobby = {
+        addPlayer: fn((id, username, isHost) =>
+          players.push({ id, username, isHost })
+        ),
+        getState: fn(() => ({ id: 1 })),
+      };
+      const lobbyController = new LobbyController(() => lobby);
+      lobbyController.hostLobby("loki");
+      const { playerId, lobbyId } = lobbyController.joinLobby("thor", 1);
+      assertEquals(players, [
+        {
+          id: 1,
+          isHost: true,
+          username: "loki",
+        },
+        {
+          id: 2,
+          isHost: false,
+          username: "thor",
+        },
+      ]);
+      assertEquals(playerId, 2);
+      assertEquals(lobbyId, 1);
+    });
+
+    it("=> should not join a lobby if lobby does not exists", () => {
+      const players = [];
+      const lobby = {
+        addPlayer: fn((id, username, isHost) =>
+          players.push({ id, username, isHost })
+        ),
+        getState: fn(() => ({ id: 1 })),
+      };
+      const lobbyController = new LobbyController(() => lobby);
+      assertThrows(() => lobbyController.joinLobby("thor", 1));
+    });
+  });
 });

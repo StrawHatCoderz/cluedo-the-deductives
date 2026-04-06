@@ -307,5 +307,86 @@ describe("APP TEST", () => {
         assertEquals(res.status, 201);
       });
     });
+
+    describe("POST /lobby/join", () => {
+      it("=> should not join a lobby if username is not provided", async () => {
+        const res = await app.request("/lobby/join", {
+          method: "post",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify({ username: "" }),
+        });
+        const body = await res.json();
+        assertEquals(body.success, false);
+        assertEquals(body.data, {});
+        assertEquals(body.error, "Invalid Username");
+        assertEquals(res.status, 400);
+      });
+
+      it("=> should not join a lobby if roomId is not provided", async () => {
+        const res = await app.request("/lobby/join", {
+          method: "post",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify({ username: "loki", roomId: "" }),
+        });
+
+        const body = await res.json();
+        assertEquals(body.success, false);
+        assertEquals(body.data, {});
+        assertEquals(body.error, "Invalid RoomId");
+        assertEquals(res.status, 400);
+      });
+
+      it("=> should not join a lobby if  roomId is provided bit roomId is invalid", async () => {
+        const formData = new FormData();
+        formData.append("username", "loki");
+        await app
+          .request("/lobby/create", {
+            method: "post",
+            body: formData,
+          });
+
+        const res = await app.request("/lobby/join", {
+          method: "post",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify({ username: "loki", roomId: "2" }),
+        });
+
+        const body = await res.json();
+
+        assertEquals(body.success, false);
+        assertEquals(body.error, "RoomId is invalid");
+        assertEquals(res.status, 400);
+      });
+
+      it("=> should join a lobby if username and roomId is provided and roomId is valid", async () => {
+        const formData = new FormData();
+        formData.append("username", "loki");
+        await app
+          .request("/lobby/create", {
+            method: "post",
+            body: formData,
+          });
+
+        const res = await app.request("/lobby/join", {
+          method: "post",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify({ username: "loki", roomId: "1" }),
+        });
+
+        const body = await res.json();
+
+        assertEquals(body.success, true);
+        assertEquals(body.data, { lobbyId: 1, playerId: 2 });
+        assertEquals(res.status, 200);
+      });
+    });
   });
 });
