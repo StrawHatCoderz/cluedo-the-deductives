@@ -29,7 +29,7 @@ export const boardConfig = {
       doors: [{ x: 18, y: 5 }],
     },
 
-    dining: {
+    dining_room: {
       id: "dining_room",
       areas: [
         { start: { x: 0, y: 9 }, end: { x: 4, y: 9 } },
@@ -65,7 +65,7 @@ export const boardConfig = {
       doors: [{ x: 16, y: 16 }],
     },
 
-    billiard: {
+    billiard_room: {
       id: "billiard_room",
       areas: [{ start: { x: 18, y: 8 }, end: { x: 23, y: 12 } }],
       doors: [{ x: 17, y: 9 }],

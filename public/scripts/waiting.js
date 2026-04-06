@@ -2,7 +2,7 @@ const fetchLobbyState = (_url) => {
   return {
     id: 3412134,
     status: "waiting",
-    isHost: false,
+    isHost: true,
     players: [
       { id: 1324, name: "tony", pawn: "Mrs Scarlet", isHost: true },
       { id: 1325, name: "steve", pawn: "Mr Green", isHost: false },
@@ -23,16 +23,15 @@ const setupLobbyId = (lobbyId, isHost, hostActions) => {
 };
 
 const setupPlayerProfiles = (profileData, profileContainer) => {
-  console.log(profileData);
-
   const playerRole = profileContainer.querySelector(".player-role");
-  playerRole.textContent = profileData.isHost ? "Host" : "";
+  if (profileData.isHost) {
+    playerRole.classList.add("host");
+  }
 
   const pawnName = profileContainer.querySelector(".pawn-name");
   pawnName.textContent = profileData.pawn;
 
   const playerName = profileContainer.querySelector(".player-name");
-  console.log(playerName);
 
   playerName.textContent = profileData.name;
 };
@@ -44,6 +43,15 @@ const setupLobbyStatus = (isHost, playersCount) => {
     : "Waiting For Host To Join";
 
   lobbyStatusContainer.textContent = message;
+};
+
+const assignStartBtn = (isHost, hostActions) => {
+  const lobbyInfo = document.getElementById("lobby-info");
+
+  const startBtn = hostActions.querySelector("#lobby-start-btn");
+  if (isHost) {
+    lobbyInfo.appendChild(startBtn);
+  }
 };
 
 const setupWaitingPage = () => {
@@ -64,6 +72,7 @@ const setupWaitingPage = () => {
 
   profilesContainer.append(...profiles);
   setupLobbyStatus(lobby.isHost, totalPlayers);
+  assignStartBtn(lobby.isHost, hostActions);
 };
 
 globalThis.window.onload = setupWaitingPage;

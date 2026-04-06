@@ -1,0 +1,214 @@
+@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap");
+
+:root {
+  --gold: #b38a3a;
+  --gold-light: #d4a94a;
+  --gold-dim: #8c6b2a;
+
+  --text-primary: #f5f1e8;
+  --text-secondary: #d2cbbd;
+  --text-muted: #a8a18f;
+
+  --font-display: "Cinzel", serif;
+  --font-body: "Crimson Pro", serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+  font-family: var(--font-body);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)),
+    url("../images/home_page_dark1.avif");
+  background-size: cover;
+  background-position: center;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(
+    circle at center,
+    transparent 35%,
+    rgba(0, 0, 0, 0.7)
+  );
+  pointer-events: none;
+}
+
+#waiting-page {
+  width: min(35%, 50%);
+  padding: 32px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+
+  background: rgba(18, 16, 12, 0.55);
+  backdrop-filter: blur(10px);
+
+  border: 1px solid rgba(179, 138, 58, 0.25);
+  border-radius: 12px;
+
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.45);
+}
+
+#lobby-id-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 10px 18px;
+
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(179, 138, 58, 0.25);
+  border-radius: 6px;
+}
+
+#lobby-id {
+  font-family: var(--font-display);
+  font-size: 22px;
+  letter-spacing: 0.18em;
+  color: var(--text-primary);
+}
+
+#copy-lobby-id-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 6px;
+  border-radius: 4px;
+
+  border: 1px solid rgba(179, 138, 58, 0.3);
+  background: transparent;
+
+  color: var(--text-primary);
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+#copy-lobby-id-btn:hover {
+  background: rgba(179, 138, 58, 0.25);
+}
+
+.profile-container {
+  width: 100%;
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.player-profile {
+  padding: 18px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+
+  text-align: center;
+
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(6px);
+
+  border: 1px solid rgba(179, 138, 58, 0.2);
+  border-radius: 10px;
+
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+
+  transition: transform 0.2s ease;
+}
+
+.player-profile:hover {
+  transform: translateY(-5px);
+}
+
+.player-profile .host::before {
+  content: "HOST";
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  font-size: 16px;
+  letter-spacing: 0.2em;
+
+  background: var(--gold);
+  color: #000;
+
+  padding: 2px 8px;
+  border-radius: 3px;
+}
+
+.profile-image {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(179, 138, 58, 0.35);
+}
+
+.pawn-name {
+  font-family: var(--font-display);
+  font-size: 14px;
+  letter-spacing: 0.1em;
+  color: var(--text-primary);
+}
+
+.player-name {
+  font-size: 20px;
+  color: var(--text-secondary);
+}
+
+#lobby-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+#lobby-status {
+  font-style: italic;
+  color: var(--text-muted);
+}
+
+#lobby-start-btn {
+  font-family: var(--font-display);
+  font-size: 13px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+
+  padding: 12px 32px;
+
+  border-radius: 5px;
+  border: 1px solid rgba(179, 138, 58, 0.45);
+
+  background: linear-gradient(to bottom, #6b1d12, #2e0c09);
+  color: var(--text-primary);
+
+  cursor: pointer;
+
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
+
+  transition: all 0.2s ease;
+}
+
+#lobby-start-btn:hover {
+  background: var(--gold-dim);
+  transform: translateY(-2px);
+}
