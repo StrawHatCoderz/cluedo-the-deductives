@@ -11,6 +11,16 @@ const fetchLobbyState = (_url) => {
   };
 };
 
+const handleCopyLobbyId = (_e, lobbyId) => {
+  const copyToast = document.getElementById("copy-toast");
+  navigator.clipboard.writeText(lobbyId);
+
+  copyToast.classList.add("toast");
+  setTimeout(() => {
+    copyToast.classList.remove("toast");
+  }, 2000);
+};
+
 const setupLobbyId = (lobbyId, isHost, hostActions) => {
   const lobbyIdContainer = document.getElementById("lobby-id-container");
   const lobbyIdText = lobbyIdContainer.querySelector("#lobby-id");
@@ -18,6 +28,7 @@ const setupLobbyId = (lobbyId, isHost, hostActions) => {
   lobbyIdText.textContent = lobbyId;
   if (isHost) {
     const copyButton = hostActions.querySelector("#copy-lobby-id-btn");
+    copyButton.addEventListener("click", (e) => handleCopyLobbyId(e, lobbyId));
     lobbyIdContainer.appendChild(copyButton);
   }
 };
