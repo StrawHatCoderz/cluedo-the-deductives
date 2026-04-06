@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script type="module" src="../scripts/disprove.js"></script>
+    <link rel="stylesheet" href="../styles/suspicion.css" />
+    <title>Disproval</title>
+  </head>
+  <body>
+    <template id="disprove-model">
+      <div id="disproval-container">
+        <form action="/" method="get">
+          <h2>Disprove</h2>
+          <p class="modal-room-label"></p>
+          <div class="suspicion-cards">
+            <div class="card" id="dis-suspect">
+              <input type="radio" name="disprove" id="suspect" />
+              <label class="sus-card" for="suspect"></label>
+            </div>
+            <div class="card" id="dis-weapon">
+              <input type="radio" name="disprove" id="weapon" />
+              <label class="sus-card" for="weapon"></label>
+            </div>
+            <div class="card" id="dis-room">
+              <input type="radio" name="disprove" id="room" />
+              <label class="sus-card" for="room"></label>
+            </div>
+          </div>
+          <button type="submit">Confirm</button>
+        </form>
+      </div>
+    </template>
+  </body>
+</html>

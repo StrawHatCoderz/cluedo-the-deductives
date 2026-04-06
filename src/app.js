@@ -7,6 +7,8 @@ import {
 } from "./handlers/board_handler.js";
 import {
   addSuspicion,
+  confirmDisprove,
+  getDisprovedCard,
   getGameState,
   handleAccusation,
   startGame,
@@ -22,9 +24,13 @@ import {
 import { addMockPlayer } from "./middleware/mock_player.js";
 import { parseBody } from "./middleware/parse_body.js";
 
-export const createApp = (
-  { game, lobbyController, getRandom, roundUp, logger },
-) => {
+export const createApp = ({
+  game,
+  lobbyController,
+  getRandom,
+  roundUp,
+  logger,
+}) => {
   const app = new Hono();
   app.use(logger());
 
@@ -34,6 +40,7 @@ export const createApp = (
     await next();
   });
 
+  app.get("/get-disproved-card", getDisprovedCard);
   app.get("/game-state", getGameState);
   app.get("/get-reachable-nodes", serveGetReachableNodes);
   app.get("/lobby", serveLobbyState);
@@ -47,6 +54,7 @@ export const createApp = (
   app.post("/start-game", addMockPlayer, startGame);
   app.post("/lobby/create", createLobby);
   app.post("/lobby/join", parseBody, joinLobby);
+  app.post("/disprove", confirmDisprove);
 
   app.put("/update-pawn-position/:pawnId", movePawnHandler);
   app.onError((e, c) => {

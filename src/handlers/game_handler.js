@@ -29,9 +29,7 @@ export const updateTurn = (c) => {
 export const handleAccusation = async (c) => {
   const accusationDetails = await c.req.json();
   const game = c.get("game");
-  const { isCorrect, murderCombination } = game.accuse(
-    accusationDetails,
-  );
+  const { isCorrect, murderCombination } = game.accuse(accusationDetails);
 
   return c.json({ isCorrect, murderCombination });
 };
@@ -44,4 +42,17 @@ export const addSuspicion = async (c) => {
     return c.json({ status: true });
   }
   return c.json({ status: false });
+};
+
+export const confirmDisprove = async (c) => {
+  const { disprove } = await c.req.parseBody();
+  const game = c.get("game");
+  game.addDisprovedCard(disprove);
+  return c.json({ success: true });
+};
+
+export const getDisprovedCard = (c) => {
+  const game = c.get("game");
+  const card = game.getDisprovedCard();
+  return c.json({ data: card });
 };

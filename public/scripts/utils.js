@@ -141,6 +141,7 @@ export const polling = (playerCardsContainer) => {
       renderPlayerCards(newState.currentPlayer.hand, playerCardsContainer);
       renderActions(newState);
       suspicionBtnListener(newState);
+      disproveASuspicion(newState);
       prevState = newState;
     }
   }, 300);

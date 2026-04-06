@@ -155,6 +155,7 @@ export class Game {
     return this.#turn?.getHasSuspected()
       ? {
         canDisproved: this.#turn.getCanDisproved(),
+        hasDisproved: this.#turn.getHasDisproved(),
         suspicionCombo: this.getSuspectCombination(),
         disprovablePlayer: this.#turn.getDisprovablePlayer(),
       }
@@ -164,6 +165,14 @@ export class Game {
   addSuspicion(suspectCombination) {
     this.#turn.addSuspectCombination(suspectCombination);
     this.#turn.disproveASuspicion(this.#turnOrder, this.#activePlayer);
+  }
+
+  addDisprovedCard(card) {
+    this.#turn.updateDisprovedCard(card);
+  }
+
+  getDisprovedCard() {
+    return this.#turn.getDisprovedCard();
   }
 
   #toggleIsOccupied(nodeId) {

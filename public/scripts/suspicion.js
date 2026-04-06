@@ -151,7 +151,7 @@ const getHighlightId = (result, data) => {
   return "card-weapon";
 };
 
-const showResult = (data, result) => {
+export const showResult = (data, result) => {
   const statusEl = getEl("suspicion-status");
 
   if (!result.disproved) {

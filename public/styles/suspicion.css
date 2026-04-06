@@ -203,6 +203,14 @@
   text-align: center;
 }
 
+input[type="radio"] {
+  display: none;
+}
+
+.card > input:checked + label {
+  background-color: grey;
+}
+
 .card-label {
   color: white;
   font-weight: 400;

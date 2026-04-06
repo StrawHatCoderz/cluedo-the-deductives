@@ -7,6 +7,8 @@ export class Turn {
   #usedSecretPsg;
   #disprovablePlayer;
   #canDisproved;
+  #hasDisproved;
+  #disprovedCard;
 
   constructor(player) {
     this.#player = player;
@@ -16,10 +18,16 @@ export class Turn {
     this.#usedSecretPsg = false;
     this.#disprovablePlayer = null;
     this.#canDisproved = false;
+    this.#hasDisproved = false;
+    this.#disprovedCard;
   }
 
   setUsedSecretPassage() {
     this.#usedSecretPsg = true;
+  }
+
+  getDisprovedCard() {
+    return this.#disprovedCard;
   }
 
   getUsedSecretPassage() {
@@ -32,6 +40,12 @@ export class Turn {
 
   getDiceValue() {
     return this.#diceValue.reduce((sum, value) => sum + value);
+  }
+
+  updateDisprovedCard(card) {
+    this.#disprovedCard = card;
+    this.#hasDisproved = true;
+    return this.#disprovedCard;
   }
 
   rollDice(randomGenerator, ceilFn) {
@@ -75,6 +89,10 @@ export class Turn {
 
   getCanDisproved() {
     return this.#canDisproved;
+  }
+
+  getHasDisproved() {
+    return this.#hasDisproved;
   }
 
   getHasSuspected() {
