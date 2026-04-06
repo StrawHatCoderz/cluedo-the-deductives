@@ -1,10 +1,10 @@
 const WEAPONS = {
-  "DAGGER": "https://cdn-icons-png.flaticon.com/128/3863/3863317.png",
-  "ROPE": "https://cdn-icons-png.flaticon.com/128/3539/3539196.png",
-  "REVOLVER": "https://cdn-icons-png.flaticon.com/128/1320/1320476.png",
-  "SPANNER": "https://cdn-icons-png.flaticon.com/128/5233/5233077.png",
-  "LEAD PIPING": "https://cdn-icons-png.flaticon.com/128/5672/5672227.png",
-  "CANDLESTICK": "https://cdn-icons-png.flaticon.com/128/17080/17080905.png",
+  "dagger": "https://cdn-icons-png.flaticon.com/128/3863/3863317.png",
+  "rope": "https://cdn-icons-png.flaticon.com/128/3539/3539196.png",
+  "revolver": "https://cdn-icons-png.flaticon.com/128/1320/1320476.png",
+  "spanner": "https://cdn-icons-png.flaticon.com/128/5233/5233077.png",
+  "lead piping": "https://cdn-icons-png.flaticon.com/128/5672/5672227.png",
+  "candlestick": "https://cdn-icons-png.flaticon.com/128/17080/17080905.png",
 };
 
 const createSuspicionState = () => ({
@@ -163,7 +163,7 @@ const showResult = (data, result) => {
   statusEl.textContent = `${result.by} revealed the card`;
 };
 
-const postSuspicion = (suspicion) =>
+const saveSuspicion = (suspicion) =>
   fetch("/suspect", {
     method: "POST",
     body: JSON.stringify(suspicion),
@@ -193,14 +193,14 @@ const waitForDisproval = (suspicion) =>
     }, 2000);
   });
 
-const mockFetchSuspicion = async (suspicion) => {
+const mockFetchSuspicion = async (suspicion) => { // sends req to server
   removePawnHighlight();
-  await postSuspicion(suspicion);
   await moveSuspectPawn(suspicion);
+  await saveSuspicion(suspicion);
   return waitForDisproval(suspicion);
 };
 
-const buildSuspicion = () => ({
+const getSuspicion = () => ({
   suspect: state.selectedSuspect,
   weapon: state.selectedWeapon,
   room: state.currentRoom,
@@ -208,7 +208,7 @@ const buildSuspicion = () => ({
 });
 
 const submitSuspicion = async () => {
-  const suspicion = buildSuspicion();
+  const suspicion = getSuspicion();
   showModal(suspicion);
   const result = await mockFetchSuspicion(suspicion);
   showResult(suspicion, result);

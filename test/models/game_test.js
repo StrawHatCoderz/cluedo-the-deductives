@@ -348,4 +348,23 @@ describe("GAME", () => {
       assertEquals(game.getState().secretPassageId, "kitchen");
     });
   });
+
+  describe("disproveASuspicion", () => {
+    it("should get the disprovable player", () => {
+      const player1 = new Player(1, "hulk", false);
+      const player2 = new Player(2, "loki", true);
+      const player3 = new Player(3, "thor", false);
+      game.addPlayer(player1);
+      game.addPlayer(player2);
+      game.addPlayer(player3);
+      game.start();
+      const combination = {
+        suspect: "scarlet",
+        weapon: "dagger",
+        room: "kitchen",
+      };
+      game.addSuspicion(combination);
+      assertEquals(game.getState().disprovablePlayer, 2);
+    });
+  });
 });

@@ -17,14 +17,25 @@ describe("Turn Management", () => {
 
   describe("roll dice method", () => {
     it(" => should genarate a dice value", () => {
-      const diceValue = turn.rollDice(() => 1, (x) => x);
+      const diceValue = turn.rollDice(
+        () => 1,
+        (x) => x,
+      );
       turn.canSuspect();
       assertEquals(diceValue, [6, 6]);
     });
 
     it(" => should throw error if the player try to roll again", () => {
-      turn.rollDice(() => 1, (x) => x);
-      assertThrows(() => turn.rollDice(() => 1, (x) => x));
+      turn.rollDice(
+        () => 1,
+        (x) => x,
+      );
+      assertThrows(() =>
+        turn.rollDice(
+          () => 1,
+          (x) => x,
+        )
+      );
     });
   });
 

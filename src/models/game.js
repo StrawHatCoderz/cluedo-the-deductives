@@ -37,9 +37,9 @@ export class Game {
       throw new Error("Invalid player count");
     }
 
-    this.#distributeCards();
     this.#setTurnOrder();
-    this.#setCurrentPlayer(0);
+    this.#distributeCards();
+    this.#updateActivePlayer(0);
     this.changeCurrentState();
   }
 
@@ -52,7 +52,7 @@ export class Game {
       throw new Error("Game is not running");
     }
 
-    this.#setCurrentPlayer(this.#turnNum++ % this.#turnOrder.length);
+    this.#updateActivePlayer(this.#turnNum++ % this.#turnOrder.length);
 
     if (this.#activePlayer.getPlayerData().isEliminated) {
       this.updateTurn();
@@ -77,10 +77,11 @@ export class Game {
       canRoll: this.#isRollAllowed(playerId),
       secretPassageId: this.#getSecretPassageId(playerId),
       canSuspect: this.canSuspect(),
+      ...this.#getDisprovalData(),
     };
   }
 
-  #setCurrentPlayer(turnNumber) {
+  #updateActivePlayer(turnNumber) {
     this.#activePlayer = this.#turnOrder[turnNumber];
     this.#turn = new Turn(this.#activePlayer);
   }
@@ -131,7 +132,7 @@ export class Game {
   }
 
   #distributeCards() {
-    const players = Object.values(this.#players);
+    const players = this.#turnOrder;
     this.#deck.distributeCards(players);
   }
 
@@ -150,8 +151,19 @@ export class Game {
     return this.#turn?.canSuspect();
   }
 
+  #getDisprovalData() {
+    return this.#turn?.getHasSuspected()
+      ? {
+        canDisproved: this.#turn.getCanDisproved(),
+        suspicionCombo: this.getSuspectCombination(),
+        disprovablePlayer: this.#turn.getDisprovablePlayer(),
+      }
+      : {};
+  }
+
   addSuspicion(suspectCombination) {
     this.#turn.addSuspectCombination(suspectCombination);
+    this.#turn.disproveASuspicion(this.#turnOrder, this.#activePlayer);
   }
 
   #toggleIsOccupied(nodeId) {
@@ -225,8 +237,10 @@ export class Game {
     const playerHasNotUsedSecretPassage = !this.#turn?.getUsedSecretPassage();
 
     if (
-      isSecretPassage && playerHasNotUsedSecretPassage &&
-      playerCanRollDice && playerCanSuspect
+      isSecretPassage &&
+      playerHasNotUsedSecretPassage &&
+      playerCanRollDice &&
+      playerCanSuspect
     ) {
       return secretPassages[room];
     }
@@ -238,7 +252,6 @@ export class Game {
 
   #isValidMove(tileId, possibleTiles) {
     const currentPlayer = this.getCurrentPlayer()?.getPlayerData();
-
     return (
       this.#hasPossibleMove(possibleTiles, tileId) &&
       (this.#getHasUsedSecretPassage() ||

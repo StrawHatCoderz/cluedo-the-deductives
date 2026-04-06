@@ -5,6 +5,8 @@ export class Turn {
   #hasSuspected;
   #suspectCombination;
   #usedSecretPsg;
+  #disprovablePlayer;
+  #canDisproved;
 
   constructor(player) {
     this.#player = player;
@@ -12,6 +14,8 @@ export class Turn {
     this.#diceValue = [];
     this.#hasSuspected = false;
     this.#usedSecretPsg = false;
+    this.#disprovablePlayer = null;
+    this.#canDisproved = false;
   }
 
   setUsedSecretPassage() {
@@ -51,5 +55,42 @@ export class Turn {
 
   getSuspectCombination() {
     return this.#suspectCombination;
+  }
+
+  #findDisprovablePlayer(order) {
+    return order.find((player) =>
+      Object.values(this.#suspectCombination).some((clue) =>
+        player.getPlayerData().hand.includes(clue)
+      )
+    );
+  }
+
+  #getDisprovalOrder(order, activePlayer) {
+    const activePlayerIndex = order.findIndex((plr) => activePlayer === plr);
+    return [
+      ...order.slice(activePlayerIndex + 1),
+      ...order.slice(0, activePlayerIndex),
+    ];
+  }
+
+  getCanDisproved() {
+    return this.#canDisproved;
+  }
+
+  getHasSuspected() {
+    return this.#hasSuspected;
+  }
+
+  getDisprovablePlayer() {
+    return this.#disprovablePlayer;
+  }
+
+  disproveASuspicion(playersOrder, activePlayer) {
+    const disprovalOrder = this.#getDisprovalOrder(playersOrder, activePlayer);
+    this.#disprovablePlayer = this.#findDisprovablePlayer(disprovalOrder)
+      ?.getPlayerData()?.id;
+    if (this.#disprovablePlayer) {
+      this.#canDisproved = true;
+    }
   }
 }
