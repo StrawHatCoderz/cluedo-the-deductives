@@ -61,13 +61,12 @@ const handleGameStart = () => {
 
 const assignStartBtn = (isHost, playersCount, hostActions) => {
   const lobbyInfo = document.getElementById("lobby-status-actions");
-
   const startBtn = hostActions.querySelector("#lobby-start-btn");
 
   startBtn.addEventListener("click", handleGameStart);
   const isWaiting = playersCount < 3;
 
-  if (isWaiting) {
+  if (!isWaiting) {
     startBtn.removeAttribute("disabled");
     startBtn.setAttribute("enabled", true);
   }
@@ -78,23 +77,23 @@ const assignStartBtn = (isHost, playersCount, hostActions) => {
 };
 
 const setupWaitingPage = async () => {
-  const lobby = await fetchLobbyState("/lobby");
+  const initialLobby = await fetchLobbyState("/lobby");
 
   const hostActionsTemplate = document.getElementById("host-actions");
   const profilesTemplate = document.getElementById("player-profile-template");
   const profilesContainer = document.querySelector(".profile-container");
   const hostActions = hostActionsTemplate.content.cloneNode(true);
 
-  const totalPlayers = lobby.players.length;
-
-  setupLobbyId(lobby.id, lobby.isHost, hostActions);
+  setupLobbyId(initialLobby.id, initialLobby.isHost, hostActions);
   setInterval(async () => {
     const lobby = await fetchLobbyState("/lobby");
     const hostActions = hostActionsTemplate.content.cloneNode(true);
+    const totalPlayers = lobby.players.length;
+
     setupProfiles(lobby, profilesTemplate, profilesContainer);
     setupLobbyStatus(lobby.isHost, totalPlayers);
     assignStartBtn(lobby.isHost, totalPlayers, hostActions);
-  }, 100);
+  }, 500);
 };
 
 globalThis.window.onload = setupWaitingPage;
