@@ -56,7 +56,7 @@ const setupLobbyStatus = (isHost, playersCount) => {
 };
 
 const handleGameStart = async () => {
-  const response = await sendRequest({ url: "/start-game", method: "post" });
+  const _response = await sendRequest({ url: "/start-game", method: "post" });
   globalThis.window.location = "/pages/setup.html";
 };
 
