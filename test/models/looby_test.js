@@ -1,4 +1,4 @@
-import { assertEquals } from "@std/assert";
+import { assertEquals, assertThrows } from "@std/assert";
 import { beforeEach, describe, it } from "@std/testing/bdd";
 import { Lobby } from "../../src/models/lobby.js";
 import { PAWNS } from "../../src/constants/game_config.js";
@@ -35,6 +35,17 @@ describe("LOBBY", () => {
           username: "username",
         },
       ]);
+    });
+
+    it("=> should not add player into lobby if max player reached", () => {
+      lobby.addPlayer(1, "username", true);
+      lobby.addPlayer(2, "username", true);
+      lobby.addPlayer(3, "username", true);
+      lobby.addPlayer(4, "username", true);
+      lobby.addPlayer(5, "username", true);
+      lobby.addPlayer(6, "username", true);
+
+      assertThrows(() => lobby.addPlayer(7, "username", true));
     });
   });
 });

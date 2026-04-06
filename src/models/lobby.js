@@ -24,6 +24,9 @@ export class Lobby {
   }
 
   addPlayer(id, username, isHost) {
+    if (this.#players.length >= this.#maxPlayer) {
+      throw new Error("MaxPlayer reached");
+    }
     const character = this.#pawns.pop();
     this.#players.push({ id, username, isHost, character });
   }

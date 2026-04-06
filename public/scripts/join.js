@@ -1,3 +1,5 @@
+import { displayAlertToast } from "./utils.js";
+
 const hostJoin = (body) =>
   fetch("/lobby/join", {
     method: "post",
@@ -20,7 +22,8 @@ const handleJoin = async (e, form) => {
     return;
   }
 
-  alert(error);
+  const alertPopup = document.querySelector("#alert-toast");
+  displayAlertToast(alertPopup, error);
 };
 
 globalThis.window.onload = () => {

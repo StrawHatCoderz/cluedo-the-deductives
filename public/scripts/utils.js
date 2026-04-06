@@ -150,3 +150,12 @@ export const displayInitialMessage = async () => {
     sessionStorage.setItem("gameStartedPopup", "true");
   }
 };
+
+export const displayAlertToast = (popup, message) => {
+  popup.textContent = message;
+  popup.style.opacity = 1;
+
+  setTimeout(() => {
+    popup.style.opacity = 0;
+  }, 1000);
+};
