@@ -1,67 +1,75 @@
 import { showResult } from "./suspicion.js";
 import { displayPopup } from "./utils.js";
 
-const mockedState = {
-  players: [],
-  currentPlayer: {
-    id: 1,
-    name: "Javed",
-    pawn: {
-      id: 2,
-      name: "ms scarlet",
-    },
-    hand: ["longue", "dagger", "scarlet"],
-  },
-  activePlayer: {
-    id: 1,
-    name: "Hem",
-  },
-  canDisprove: true,
-
-  suspectCombination: {
-    suspect: "mrs white",
-    weapon: "dagger",
-    room: "longue",
-  },
-  disprovablePlayer: 1,
+const sendDisprovedCard = async (e, container) => {
+  e.preventDefault();
+  const data = new FormData(e.target);
+  await fetch("/game/disprove", {
+    body: data,
+    method: "post",
+  });
+  document.querySelector("#disproval-container").remove();
 };
 
-const createDisprovePopUp = ({ currentPlayer, suspectCombination }) => {
+const registerListeners = (container, temp) => {
+  const form = container.querySelector("form");
+  form.addEventListener("submit", (e) => sendDisprovedCard(e, temp));
+};
+
+const createDisprovePopUp = ({ currentPlayer, suspicionCombo }) => {
   const hand = currentPlayer.hand;
+  const combo = {
+    suspect: suspicionCombo.suspect,
+    weapon: suspicionCombo.weapon,
+    room: suspicionCombo.room,
+  };
+
   const disproveTemp = document
     .querySelector("#disprove-model")
     .content.cloneNode(true);
 
-  const disprovableCards = Object.values(suspectCombination).filter((card) =>
-    hand.includes(card)
+  const disprovableCards = Object.values(suspicionCombo).filter((card) =>
+    hand.includes(card),
   );
-  const cards = disproveTemp.querySelectorAll(".card");
-
-  Object.values(suspectCombination).forEach((card, i) => {
+  const cards = disproveTemp.querySelectorAll(".dis-card");
+  Object.values(combo).forEach((card, i) => {
+    console.log(cards[i], "==>");
     cards[i].querySelector("input").value = card;
     cards[i].querySelector("label").textContent = card;
     if (!disprovableCards.includes(card)) {
       cards[i].querySelector("input").setAttribute("disabled", true);
     }
   });
+  registerListeners(disproveTemp);
   document.body.appendChild(disproveTemp);
 };
 
 const showDisproval = async (state) => {
   const res = await fetch("/game/disprove-card");
-  const { data } = await res.json();
+  const data = await res.json();
+  const { name } = state.players.find(
+    ({ id }) => id === state.disprovablePlayer,
+  );
+  data.by = name;
+
   const suspicion = state.suspicionCombo;
   showResult(suspicion, data);
 };
 
-export const disproveASuspicion = (state = mockedState) => {
+export const disproveASuspicion = (state) => {
   if (state.hasDisproved && state.activePlayer?.id === state.currentPlayer.id) {
     showDisproval(state);
+    return;
   }
   if (state.hasDisproved) {
-    displayPopup(`${state.disprovablePlayer} is disproved`);
+    const { name } = state.players.find(
+      ({ id }) => id === state.disprovablePlayer,
+    );
+    displayPopup(`${name} has disproved`);
+    return;
   }
   if (state.currentPlayer.id === state.disprovablePlayer) {
     createDisprovePopUp(state);
+    return;
   }
 };

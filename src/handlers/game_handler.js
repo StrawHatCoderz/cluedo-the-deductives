@@ -45,23 +45,21 @@ export const handleAccusation = async (c) => {
 
 export const addSuspicion = async (c) => {
   const suspicion = await c.req.json();
-  const game = c.get("game");
-  if (game.canSuspect()) {
-    game.addSuspicion(suspicion);
-    return c.json({ status: true });
-  }
-  return c.json({ status: false });
+  const lobbyId = getCookie(c, "lobbyId");
+  const gameController = c.get("gameController");
+  return c.json(gameController.addSuspicion(lobbyId, suspicion));
 };
 
 export const confirmDisprove = async (c) => {
   const { disprove } = await c.req.parseBody();
-  const game = c.get("game");
-  game.addDisprovedCard(disprove);
-  return c.json({ success: true });
+  const gameController = c.get("gameController");
+  const lobbyId = getCookie(c, "lobbyId");
+  console.log(disprove);
+  c.json(gameController.confirmDisproval(lobbyId, disprove), 303);
 };
 
 export const getDisprovedCard = (c) => {
-  const game = c.get("game");
-  const card = game.getDisprovedCard();
-  return c.json({ data: card });
+  const gameController = c.get("gameController");
+  const lobbyId = getCookie(c, "lobbyId");
+  return c.json(gameController.getDisprovedCard(lobbyId));
 };

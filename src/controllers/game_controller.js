@@ -69,4 +69,26 @@ export class GameController {
   updateTurn(gameId) {
     return this.#games[gameId].updateTurn();
   }
+
+  addSuspicion(gameId, suspicion) {
+    const game = this.#games[gameId];
+    if (game.canSuspect()) {
+      game.addSuspicion(suspicion);
+      return { status: true };
+    }
+    return { status: false };
+  }
+
+  confirmDisproval(gameId, disprove) {
+    const game = this.#games[gameId];
+    game.addDisprovedCard(disprove);
+    return { status: true };
+  }
+
+  getDisprovedCard(gameId) {
+    const game = this.#games[gameId];
+    const card = game.getDisprovedCard();
+    console.log("card");
+    return { card };
+  }
 }

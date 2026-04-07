@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/styles/suspicion.css" />
     <link rel="stylesheet" href="/styles/accusation.css" />
     <link rel="stylesheet" href="/styles/dice.css" />
+    <link rel="stylesheet" href="/styles/disprove.css">
     <script type="module" src="/scripts/script.js"></script>
     <script type="module" src="/components/overlay.js"></script>
   </head>
@@ -583,24 +584,37 @@
 
     <template id="disprove-model">
       <div id="disproval-container">
-        <form action="/" method="get">
-          <h2>Disprove</h2>
-          <p class="modal-room-label"></p>
+        <form action="/game/disprove" method="post">
+          <h2>Disprove Suspicion</h2>
+          <p class="modal-room-label">Select a card to challenge the claim</p>
           <div class="suspicion-cards">
-            <div class="card" id="dis-suspect">
-              <input type="radio" name="disprove" id="suspect" />
-              <label class="sus-card" for="suspect"></label>
+            <div class="dis-card" id="dis-suspect">
+              <input
+                type="radio"
+                name="disprove"
+                id="suspect"
+                value="suspect"
+              />
+              <label class="sus-card" for="suspect">
+                <span class="card-title">Suspect</span>
+              </label>
             </div>
-            <div class="card" id="dis-weapon">
-              <input type="radio" name="disprove" id="weapon" />
-              <label class="sus-card" for="weapon"></label>
+            <div class="dis-card" id="dis-weapon">
+              <input type="radio" name="disprove" id="weapon" value="weapon" />
+              <label class="sus-card" for="weapon">
+                <span class="card-title">Weapon</span>
+              </label>
             </div>
-            <div class="card" id="dis-room">
-              <input type="radio" name="disprove" id="room" />
-              <label class="sus-card" for="room"></label>
+
+            <div class="dis-card" id="dis-room">
+              <input type="radio" name="disprove" id="room" value="room" />
+              <label class="sus-card" for="room">
+                <span class="card-title">Room</span>
+              </label>
             </div>
           </div>
-          <button type="submit">Confirm</button>
+
+          <button type="submit">Confirm Selection</button>
         </form>
       </div>
     </template>

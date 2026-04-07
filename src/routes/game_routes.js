@@ -11,4 +11,4 @@ export const gameRoutes = new Hono();
 gameRoutes.get("/", getGameState);
 gameRoutes.post("/start", startGame);
 gameRoutes.get("/disprove-card", getDisprovedCard);
-gameRoutes.post("/game/disprove", confirmDisprove);
+gameRoutes.post("/disprove", confirmDisprove);

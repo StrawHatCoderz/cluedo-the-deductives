@@ -90,6 +90,7 @@ export class Game {
 
     if (shouldShowDicePopup) this.#turn?.markDicePopupShownForPlayer(playerId);
 
+    const data = { ...this.#getDisprovalData() };
     return {
       state: this.#gameState,
       players: this.#getAllPlayers(),
@@ -104,7 +105,7 @@ export class Game {
       canRoll: this.#isRollAllowed(playerId),
       secretPassageId: this.#getSecretPassageId(playerId),
       canSuspect: this.canSuspect(),
-      ...this.#getDisprovalData(),
+      disprovalData: data,
     };
   }
 
@@ -180,11 +181,12 @@ export class Game {
   #getDisprovalData() {
     return this.#turn?.getHasSuspected()
       ? {
-        canDisproved: this.#turn.getCanDisproved(),
-        hasDisproved: this.#turn.getHasDisproved(),
-        suspicionCombo: this.getSuspectCombination(),
-        disprovablePlayer: this.#turn.getDisprovablePlayer(),
-      }
+          hasSuspected: true,
+          canDisproved: this.#turn.getCanDisproved(),
+          hasDisproved: this.#turn.getHasDisproved(),
+          suspicionCombo: this.getSuspectCombination(),
+          disprovablePlayer: this.#turn.getDisprovablePlayer(),
+        }
       : {};
   }
 
@@ -299,12 +301,7 @@ export class Game {
     return room ? room : `tile-${x}-${y}`;
   }
 
-  movePawn(
-    pawnId,
-    { newNodeId, isUsingSecretPassage, tiles },
-    tileId,
-    pos,
-  ) {
+  movePawn(pawnId, { newNodeId, isUsingSecretPassage, tiles }, tileId, pos) {
     const pawn = this.getPawnInstance(pawnId);
     const pawnPrevPosition = this.parsePawnPosition(pawn.getPawnData());
 

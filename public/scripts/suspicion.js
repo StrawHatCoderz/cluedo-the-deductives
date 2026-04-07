@@ -1,10 +1,10 @@
 const WEAPONS = {
-  "dagger": "https://cdn-icons-png.flaticon.com/128/3863/3863317.png",
-  "rope": "https://cdn-icons-png.flaticon.com/128/3539/3539196.png",
-  "revolver": "https://cdn-icons-png.flaticon.com/128/1320/1320476.png",
-  "spanner": "https://cdn-icons-png.flaticon.com/128/5233/5233077.png",
+  dagger: "https://cdn-icons-png.flaticon.com/128/3863/3863317.png",
+  rope: "https://cdn-icons-png.flaticon.com/128/3539/3539196.png",
+  revolver: "https://cdn-icons-png.flaticon.com/128/1320/1320476.png",
+  spanner: "https://cdn-icons-png.flaticon.com/128/5233/5233077.png",
   "lead piping": "https://cdn-icons-png.flaticon.com/128/5672/5672227.png",
-  "candlestick": "https://cdn-icons-png.flaticon.com/128/17080/17080905.png",
+  candlestick: "https://cdn-icons-png.flaticon.com/128/17080/17080905.png",
 };
 
 const createSuspicionState = () => ({
@@ -52,17 +52,17 @@ const selectWeapon = (card, selectedLabel, weapon, suspectBtn) => {
 };
 
 const createWeaponCard = (weapon, selectedLabel, suspectBtn) => {
-  const cardClone = document.querySelector("#weapon-card-temp").content
-    .cloneNode(true);
+  const cardClone = document
+    .querySelector("#weapon-card-temp")
+    .content.cloneNode(true);
   const card = cardClone.querySelector(".weapon-item");
 
   cardClone.querySelector(".weapon-img").src = WEAPONS[weapon];
   cardClone.querySelector(".weapon-img").alt = weapon;
   cardClone.querySelector(".weapon-name").textContent = weapon;
   card.dataset.weapon = weapon;
-  card.addEventListener(
-    "click",
-    () => selectWeapon(card, selectedLabel, weapon, suspectBtn),
+  card.addEventListener("click", () =>
+    selectWeapon(card, selectedLabel, weapon, suspectBtn),
   );
 
   return cardClone;
@@ -75,9 +75,9 @@ const populateWeaponRow = (row, selectedLabel, suspectBtn) => {
 };
 
 const fillPopupInfo = () => {
-  getEl("weapon-popup-room").textContent = state.currentRoom.split("_").join(
-    " ",
-  );
+  getEl("weapon-popup-room").textContent = state.currentRoom
+    .split("_")
+    .join(" ");
   getEl("weapon-popup-suspect").textContent = state.selectedSuspect;
 };
 
@@ -108,9 +108,9 @@ const showWeaponPopup = (x, y) => {
   state.selectedWeapon = null;
 
   const popup = getEl("weapon-popup");
-  const clone = document.querySelector("#weapon-popup-temp").content.cloneNode(
-    true,
-  );
+  const clone = document
+    .querySelector("#weapon-popup-temp")
+    .content.cloneNode(true);
   popup.innerHTML = "";
   popup.appendChild(clone);
 
@@ -134,8 +134,9 @@ const fillModalCards = (clone, data) => {
 
 const showModal = (data) => {
   const modal = getEl("suspicion-modal");
-  const suspicionClone = document.querySelector("#suspicion-model-temp").content
-    .cloneNode(true);
+  const suspicionClone = document
+    .querySelector("#suspicion-model-temp")
+    .content.cloneNode(true);
 
   fillModalCards(suspicionClone, data);
   modal.querySelector(".modal-content").innerHTML =
@@ -153,12 +154,7 @@ const getHighlightId = (result, data) => {
 
 export const showResult = (data, result) => {
   const statusEl = getEl("suspicion-status");
-
-  if (!result.disproved) {
-    statusEl.textContent = "No one could disprove!";
-    return;
-  }
-
+  
   getEl(getHighlightId(result, data))?.classList.add("card-revealed");
   statusEl.textContent = `${result.by} revealed the card`;
 };
@@ -181,23 +177,11 @@ const moveSuspectPawn = (suspicion) =>
     }),
   });
 
-const waitForDisproval = (suspicion) =>
-  new Promise((resolve) => {
-    setTimeout(() => {
-      const isDisproved = Math.random() > 0.5;
-      resolve({
-        disproved: isDisproved,
-        by: "LOKI",
-        card: isDisproved ? suspicion.weapon : null,
-      });
-    }, 2000);
-  });
-
-const mockFetchSuspicion = async (suspicion) => { // sends req to server
+const mockFetchSuspicion = async (suspicion) => {
+  // sends req to server
   removePawnHighlight();
   await moveSuspectPawn(suspicion);
   await saveSuspicion(suspicion);
-  return waitForDisproval(suspicion);
 };
 
 const getSuspicion = () => ({
@@ -210,8 +194,7 @@ const getSuspicion = () => ({
 const submitSuspicion = async () => {
   const suspicion = getSuspicion();
   showModal(suspicion);
-  const result = await mockFetchSuspicion(suspicion);
-  showResult(suspicion, result);
+  await mockFetchSuspicion(suspicion);
   state.hasMadeSuspicion = true;
 };
 
@@ -227,8 +210,8 @@ const onPawnSelect = (e, suspects) => {
   const pawnEl = e.target.closest("[data-occupied-by]");
   if (!pawnEl) return;
 
-  const { id, name } = suspects.find(({ char }) =>
-    char === pawnEl.dataset.occupiedBy
+  const { id, name } = suspects.find(
+    ({ char }) => char === pawnEl.dataset.occupiedBy,
   );
   state.selectedSuspect = name;
   state.suspectId = id;
@@ -254,9 +237,9 @@ const startSuspicion = ({ position }, suspects) => {
   highlightPawns(document.querySelectorAll("[data-occupied-by]"), suspects);
 };
 
-export const suspicionBtnListener = ({ canSuspect, currentPlayer, pawns }) => {
+export const suspicionBtnListener = ({ canSuspect, activePlayer, pawns }) => {
   if (canSuspect) {
-    startSuspicion(currentPlayer.pawn, pawns);
+    startSuspicion(activePlayer.pawn, pawns);
     return;
   }
   removePawnHighlight();
