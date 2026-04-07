@@ -86,7 +86,6 @@ describe.ignore("APP TEST", () => {
         });
 
         const body = await res.json();
-        console.log(body);
 
         assertEquals(res.status, 200);
         assertEquals(body.diceValues, [6, 6]);

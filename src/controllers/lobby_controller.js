@@ -21,6 +21,7 @@ export class LobbyController {
 
   hostLobby(name) {
     const lobby = this.#createLobby(++this.#currentLobbyId);
+
     const id = lobby.getState().id;
     this.#lobbies[id] = lobby;
     const isHost = true;
@@ -28,12 +29,12 @@ export class LobbyController {
     return { lobbyId: this.#currentLobbyId, playerId: this.#currentPlayerId };
   }
 
-  joinLobby(name, roomId) {
-    const lobby = this.#lobbies[roomId];
+  joinLobby(name, lobbyId) {
+    const lobby = this.#lobbies[lobbyId];
     if (!lobby) throw new Error("RoomId is invalid");
     const isHost = false;
     lobby.addPlayer(++this.#currentPlayerId, name, isHost);
-    return { lobbyId: this.#currentLobbyId, playerId: this.#currentPlayerId };
+    return { lobbyId, playerId: this.#currentPlayerId };
   }
 
   startGame(lobbyId) {

@@ -74,5 +74,47 @@ describe("LOBBY", () => {
 
       assertThrows(() => lobby.addPlayer(7, "username", true));
     });
+
+    it("=> should not add player into lobby if looby is not at waiting state", () => {
+      lobby.addPlayer(1, "username", true);
+      lobby.addPlayer(2, "username", false);
+      lobby.addPlayer(3, "username", false);
+      lobby.updateState();
+      assertThrows(() => lobby.addPlayer(4, "username", true));
+    });
+  });
+
+  describe("is host", () => {
+    it("=> should return true if a player is host", () => {
+      lobby.addPlayer(1, "name", true);
+      const isHost = lobby.isHost(1);
+      assertEquals(isHost, true);
+    });
+
+    it("=> should return false if a player is not host", () => {
+      lobby.addPlayer(1, "name", false);
+      const isHost = lobby.isHost(1);
+      assertEquals(isHost, false);
+    });
+  });
+
+  describe("update state", () => {
+    it("=> should update state if valid player count", () => {
+      lobby.addPlayer(1, "name", true);
+      lobby.addPlayer(2, "name", false);
+      lobby.addPlayer(3, "name", false);
+      lobby.addPlayer(4, "name", false);
+      lobby.addPlayer(5, "name", false);
+      lobby.updateState();
+      const state = lobby.getState();
+
+      assertEquals(state.state, "started");
+    });
+
+    it("=> should not update state if invalid player count", () => {
+      lobby.addPlayer(1, "username", true);
+
+      assertThrows(() => lobby.updateState());
+    });
   });
 });

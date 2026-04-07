@@ -4,6 +4,7 @@ import { Board } from "../models/board.js";
 import { DeckManager } from "../models/deck_manager.js";
 import { Game } from "../models/game.js";
 import { Pawn } from "../models/pawn.js";
+import { Lobby } from "../models/lobby.js";
 
 export const createPawnInstances = (pawns) =>
   pawns.map(
