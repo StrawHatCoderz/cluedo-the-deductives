@@ -13,7 +13,7 @@ const displayWinner = (winner) => {
 };
 
 globalThis.window.onload = async () => {
-  const { players } = await fetchGameConfig("/game-state");
+  const { players } = await fetchGameConfig("/game");
   const winner = players.find((player) => player.isWon);
   displayWinner(winner);
 };

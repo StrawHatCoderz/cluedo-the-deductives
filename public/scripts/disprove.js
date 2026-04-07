@@ -48,7 +48,7 @@ const createDisprovePopUp = ({ currentPlayer, suspectCombination }) => {
 };
 
 const showDisproval = async (state) => {
-  const res = await fetch("/get-disproved-card");
+  const res = await fetch("/game/disprove-card");
   const { data } = await res.json();
   const suspicion = state.suspicionCombo;
   showResult(suspicion, data);

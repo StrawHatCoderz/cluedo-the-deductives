@@ -61,14 +61,14 @@ const setupLobbyStatus = (isHost, playersCount) => {
   lobbyStatusContainer.textContent = message;
 };
 
-const redirectToSetupPage = (state) => {
-  if (state !== "waiting") {
+const redirectToSetupPage = (isStarted) => {
+  if (isStarted) {
     globalThis.window.location = "/pages/setup.html";
   }
 };
 
 const handleGameStart = async () => {
-  const _response = await sendRequest({ url: "/start-game", method: "post" });
+  const _response = await sendRequest({ url: "/game/start", method: "post" });
   globalThis.window.location = "/pages/setup.html";
 };
 
@@ -106,7 +106,7 @@ const setupWaitingPage = async () => {
     setupProfiles(lobby, profilesTemplate, profilesContainer);
     setupLobbyStatus(lobby.isHost, totalPlayers);
     assignStartBtn(lobby.isHost, totalPlayers, hostActions);
-    redirectToSetupPage(lobby.state);
+    redirectToSetupPage(lobby.isStarted);
   }, 500);
 };
 

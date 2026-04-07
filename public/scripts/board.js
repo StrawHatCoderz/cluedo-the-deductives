@@ -63,7 +63,7 @@ const handleMovePlayer = async (e, tiles, pawn) => {
   e.preventDefault();
   const newNodeId = e.target.id;
 
-  await fetch(`/update-pawn-position/${pawn.id}`, {
+  await fetch(`/board/update-pawn-position/${pawn.id}`, {
     method: "put",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({ newNodeId, tiles, isUsingSecretPassage: false }),
@@ -92,11 +92,11 @@ const movePlayer = (tiles, pawn) => {
 };
 
 const fetchReachableNodes = () =>
-  fetch("/get-reachable-nodes")
+  fetch("/board/reachable-nodes")
     .then((response) => response.json());
 
 const fetchRollDice = () =>
-  fetch("/roll", { method: "POST" })
+  fetch("/turn/roll", { method: "POST" })
     .then((response) => response.json());
 
 const handleDiceClick = async (event, dice, pawn) => {
@@ -127,7 +127,7 @@ const diceListener = (dice, pawn) => {
 
 const handlePass = async (event) => {
   event.preventDefault();
-  const res = await fetch("/pass", { method: "post" });
+  const res = await fetch("/turn/pass", { method: "post" });
 
   if (res.status === 200) {
     const { currentPlayer } = await res.json();
@@ -153,7 +153,7 @@ const handleSecretPassageClick = async (
   pawn,
 ) => {
   e.preventDefault();
-  await fetch(`/update-pawn-position/${pawn.id}`, {
+  await fetch(`/board/update-pawn-position/${pawn.id}`, {
     method: "put",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({

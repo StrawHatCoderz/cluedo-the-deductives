@@ -181,7 +181,7 @@ export const polling = (playerCardsContainer) => {
 
   setInterval(async () => {
     const { etag, changed, gameConfig } = await fetchGameConfig(
-      "/game-state",
+      "/game",
       prevEtag,
     );
     prevEtag = etag;
@@ -201,7 +201,7 @@ export const polling = (playerCardsContainer) => {
 };
 
 export const displayInitialMessage = async () => {
-  const { gameConfig } = await fetchGameConfig("/game-state");
+  const { gameConfig } = await fetchGameConfig("/game");
   const alreadyShown = sessionStorage.getItem("gameStartedPopup");
 
   if (gameConfig.state === "running" && !alreadyShown) {

@@ -54,7 +54,7 @@ const matchCards = (accusingCombination, murderCombination) => {
 
 const handleAccusationSubmission = async (combination) => {
   const res = await sendRequest({
-    url: "/accuse",
+    url: "/turn/accuse",
     method: "post",
     body: combination,
   });

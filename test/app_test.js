@@ -71,16 +71,16 @@ describe("APP TEST", () => {
   });
 
   describe("BOARD", () => {
-    describe("POST /roll", () => {
+    describe("POST /turn/roll", () => {
       it(" => should return dice values", async () => {
         const { cookie } = setupLobby();
 
-        await app.request("/start-game", {
+        await app.request("/game/start", {
           method: "POST",
           headers: { Cookie: cookie },
         });
 
-        const res = await app.request("/roll", {
+        const res = await app.request("/turn/roll", {
           method: "POST",
           headers: { Cookie: cookie },
         });
@@ -92,21 +92,21 @@ describe("APP TEST", () => {
       });
     });
 
-    describe("GET /get-reachable-nodes", () => {
+    describe("GET /board/reachable-nodes", () => {
       it(" => should return reachable nodes", async () => {
         const { cookie } = setupLobby();
 
-        await app.request("/start-game", {
+        await app.request("/game/start", {
           method: "POST",
           headers: { Cookie: cookie },
         });
 
-        await app.request("/roll", {
+        await app.request("/turn/roll", {
           method: "POST",
           headers: { Cookie: cookie },
         });
 
-        const res = await app.request("/get-reachable-nodes", {
+        const res = await app.request("/board/reachable-nodes", {
           headers: { Cookie: cookie },
         });
 
@@ -114,21 +114,21 @@ describe("APP TEST", () => {
       });
     });
 
-    describe("POST /update-pawn-position", () => {
+    describe("POST /board/update-pawn-position", () => {
       it(" => should update pawn position", async () => {
         const { cookie } = setupLobby();
 
-        await app.request("/start-game", {
+        await app.request("/game/start", {
           method: "POST",
           headers: { Cookie: cookie },
         });
 
-        await app.request("/roll", {
+        await app.request("/turn/roll", {
           method: "POST",
           headers: { Cookie: cookie },
         });
 
-        const res = await app.request(`/update-pawn-position/1`, {
+        const res = await app.request(`/board/update-pawn-position/1`, {
           method: "PUT",
           headers: {
             Cookie: cookie,
@@ -150,12 +150,12 @@ describe("APP TEST", () => {
       it(" => should fail if dice not rolled", async () => {
         const { cookie } = setupLobby();
 
-        await app.request("/start-game", {
+        await app.request("/game/start", {
           method: "POST",
           headers: { Cookie: cookie },
         });
 
-        const res = await app.request(`/update-pawn-position/1`, {
+        const res = await app.request(`/board/update-pawn-position/1`, {
           method: "PUT",
           headers: {
             Cookie: cookie,
@@ -177,11 +177,11 @@ describe("APP TEST", () => {
   });
 
   describe("GAME HANDLER", () => {
-    describe("POST /start-game", () => {
+    describe("POST /game/start", () => {
       it(" => should start the game", async () => {
         const { cookie } = setupLobby();
 
-        const res = await app.request("/start-game", {
+        const res = await app.request("/game/start", {
           method: "POST",
           headers: { Cookie: cookie },
         });
@@ -190,16 +190,16 @@ describe("APP TEST", () => {
       });
     });
 
-    describe("GET /game-state", () => {
+    describe("GET /game", () => {
       it(" => should return game state", async () => {
         const { cookie } = setupLobby();
 
-        await app.request("/start-game", {
+        await app.request("/game/start", {
           method: "POST",
           headers: { Cookie: cookie },
         });
 
-        const res = await app.request("/game-state", {
+        const res = await app.request("/game", {
           headers: { Cookie: cookie },
         });
 
@@ -211,16 +211,16 @@ describe("APP TEST", () => {
       });
     });
 
-    describe("POST /accuse", () => {
+    describe("POST /turn/accuse", () => {
       it(" => should fail for invalid accusation", async () => {
         const { cookie } = setupLobby();
 
-        await app.request("/start-game", {
+        await app.request("/game/start", {
           method: "POST",
           headers: { Cookie: cookie },
         });
 
-        const res = await app.request("/accuse", {
+        const res = await app.request("/turn/accuse", {
           method: "POST",
           headers: {
             Cookie: cookie,

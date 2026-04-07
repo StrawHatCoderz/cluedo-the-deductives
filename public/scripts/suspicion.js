@@ -164,14 +164,14 @@ export const showResult = (data, result) => {
 };
 
 const saveSuspicion = (suspicion) =>
-  fetch("/suspect", {
+  fetch("/turn/suspect", {
     method: "POST",
     body: JSON.stringify(suspicion),
     headers: { "content-type": "application/json" },
   });
 
 const moveSuspectPawn = (suspicion) =>
-  fetch(`/update-pawn-position/${suspicion.suspectId}`, {
+  fetch(`/board/update-pawn-position/${suspicion.suspectId}`, {
     method: "put",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({
