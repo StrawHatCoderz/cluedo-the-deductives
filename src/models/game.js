@@ -4,25 +4,23 @@ import { Turn } from "./turn.js";
 export class Game {
   #turnNum;
   #turn;
-  #states = ["waiting", "setup", "running", "finished"];
+  #states = ["setup", "running", "finished"];
   #gameState;
   #id;
   #board;
   #pawns;
-  #pawnsToAssign;
   #deck;
   #players;
   #turnOrder;
   #activePlayer;
 
-  constructor(id, board, pawns, deck, shuffledPawns) {
+  constructor(id, board, pawns, deck) {
     this.#gameState = this.#states.shift();
     this.#id = id;
     this.#board = board;
     this.#pawns = pawns;
     this.#deck = deck;
     this.#players = {};
-    this.#pawnsToAssign = shuffledPawns;
     this.#turnNum = 0;
   }
 
@@ -96,12 +94,11 @@ export class Game {
     );
   }
 
-  addPlayer(player) {
+  addPlayer(player, pawn) {
     if (!(player instanceof Player)) {
       throw new Error("Invalid player");
     }
 
-    const pawn = this.#pawnsToAssign.pop();
     player.assignPawn(pawn);
     this.#players[player.getPlayerData().id] = player;
   }
@@ -241,6 +238,7 @@ export class Game {
     const secretPassages = this.#board.getSecretPassages();
 
     const isSecretPassage = room in secretPassages;
+
     const playerCanRollDice = this.#isRollAllowed(playerId);
     const playerCanSuspect = this.#turn?.canSuspect();
     const playerHasNotUsedSecretPassage = !this.#turn?.getUsedSecretPassage();

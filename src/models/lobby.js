@@ -40,4 +40,13 @@ export class Lobby {
     const character = this.#pawns.pop();
     this.#players.push({ id, name, isHost, character });
   }
+
+  updateState() {
+    if (this.#players.length >= 3 && this.#players.length <= 6) {
+      this.#state = "started";
+      return;
+    }
+
+    throw new Error("Invalid Player Count");
+  }
 }

@@ -12,7 +12,6 @@ import {
   getGameState,
   handleAccusation,
   startGame,
-  updateGameState,
   updateTurn,
 } from "./handlers/game_handler.js";
 
@@ -21,12 +20,11 @@ import {
   joinLobby,
   serveLobbyState,
 } from "./handlers/lobby_handler.js";
-import { addMockPlayer } from "./middleware/mock_player.js";
 import { parseBody } from "./middleware/parse_body.js";
 
 export const createApp = ({
-  game,
   lobbyController,
+  gameController,
   getRandom,
   roundUp,
   logger,
@@ -35,7 +33,7 @@ export const createApp = ({
   app.use(logger());
 
   app.use(async (c, next) => {
-    c.set("game", game);
+    c.set("gameController", gameController);
     c.set("lobbyController", lobbyController);
     await next();
   });
@@ -46,12 +44,11 @@ export const createApp = ({
   app.get("/lobby", serveLobbyState);
   app.get("*", serveStatic({ root: "./public" }));
 
-  app.post("/update-state", updateGameState);
   app.post("/pass", updateTurn);
   app.post("/suspect", addSuspicion);
   app.post("/roll", (c) => serveRollDice(c, getRandom, roundUp));
   app.post("/accuse", handleAccusation);
-  app.post("/start-game", addMockPlayer, startGame);
+  app.post("/start-game", startGame);
   app.post("/lobby/create", createLobby);
   app.post("/lobby/join", parseBody, joinLobby);
   app.post("/disprove", confirmDisprove);

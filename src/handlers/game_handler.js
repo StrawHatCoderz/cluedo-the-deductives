@@ -1,23 +1,26 @@
+import { getCookie } from "hono/cookie";
+
 export const startGame = (c) => {
-  const game = c.get("game");
-  game.start();
+  const gameController = c.get("gameController");
+  const lobbyController = c.get("lobbyController");
+  const lobbyId = getCookie(c, "lobbyId");
+  const playerId = getCookie(c, "playerId");
+
+  lobbyController.startGame(lobbyId);
+  const allPlayers = lobbyController.getLobbyState(+lobbyId, +playerId).players;
+
+  gameController.startGame(lobbyId, allPlayers);
+
   return c.redirect("/pages/setup.html", 303);
 };
 
 export const getGameState = (c) => {
-  const game = c.get("game");
-  const gameState = game.getState();
-  return c.json(gameState, 200);
-};
+  const gameController = c.get("gameController");
 
-export const updateGameState = (c) => {
-  const game = c.get("game");
-  game.changeCurrentState();
-  game.updateTurn();
+  const lobbyId = getCookie(c, "lobbyId");
 
-  const currentState = game.getState();
-
-  return c.json({ state: currentState.state }, 200);
+  const gameState = gameController.getGameState(lobbyId);
+  return c.json({ success: true, data: gameState }, 200);
 };
 
 export const updateTurn = (c) => {

@@ -6,11 +6,11 @@ import { LobbyController } from "../../src/controllers/lobby_controller.js";
 describe("LOBBY", () => {
   describe("create lobby controller", () => {
     it(" => should throw error if createLobby fn is not provided", () => {
-      assertThrows(() => LobbyController.createInstance());
+      assertThrows(() => LobbyController.create());
     });
 
     it(" => should create lobby controller if createLobby fn is provided", () => {
-      expect(() => LobbyController.createInstance(() => {}))
+      expect(() => LobbyController.create(() => {}))
         .not
         .toThrow();
     });
@@ -24,7 +24,7 @@ describe("LOBBY", () => {
         isHost: fn(() => true),
       };
 
-      const lobbyController = LobbyController.createInstance(() => lobby);
+      const lobbyController = LobbyController.create(() => lobby);
       lobbyController.hostLobby("loki");
       const state = lobbyController.getLobbyState(1);
 
@@ -40,7 +40,7 @@ describe("LOBBY", () => {
         addPlayer: fn((id, name) => players.push({ id, name, isHost: true })),
         getState: fn(() => ({ id: 1 })),
       };
-      const lobbyController = LobbyController.createInstance(() => lobby);
+      const lobbyController = LobbyController.create(() => lobby);
       const { playerId, lobbyId } = lobbyController.hostLobby("name");
       assertEquals(players[0].name, "name");
       assertEquals(playerId, 1);
@@ -55,7 +55,7 @@ describe("LOBBY", () => {
         addPlayer: fn((id, name, isHost) => players.push({ id, name, isHost })),
         getState: fn(() => ({ id: 1 })),
       };
-      const lobbyController = LobbyController.createInstance(() => lobby);
+      const lobbyController = LobbyController.create(() => lobby);
       lobbyController.hostLobby("loki");
       const { playerId, lobbyId } = lobbyController.joinLobby("thor", 1);
       assertEquals(players, [
@@ -80,7 +80,7 @@ describe("LOBBY", () => {
         addPlayer: fn((id, name, isHost) => players.push({ id, name, isHost })),
         getState: fn(() => ({ id: 1 })),
       };
-      const lobbyController = LobbyController.createInstance(() => lobby);
+      const lobbyController = LobbyController.create(() => lobby);
       assertThrows(() => lobbyController.joinLobby("thor", 1));
     });
   });

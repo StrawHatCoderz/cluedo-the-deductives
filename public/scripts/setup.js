@@ -173,13 +173,8 @@ const collectAndDeal = (totalPlayers) => {
   distributeCards(cards, table, players, start);
 };
 
-const redirect = async () => {
-  const { state } = await fetch("/update-state", { method: "post" })
-    .then((res) => res.json())
-    .catch(() => {});
-  if (state === "running") {
-    globalThis.location.href = "../pages/board.html";
-  }
+const redirect = () => {
+  globalThis.location.href = "../pages/board.html";
 };
 
 const init = async () => {

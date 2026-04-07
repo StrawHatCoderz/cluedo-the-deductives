@@ -1,32 +1,49 @@
 import { shuffle } from "@std/random";
 import { boardConfig } from "../constants/board_config.js";
-import { PAWNS, ROOMS, SUSPECTS, WEAPONS } from "../constants/game_config.js";
 import { Board } from "../models/board.js";
 import { DeckManager } from "../models/deck_manager.js";
 import { Game } from "../models/game.js";
 import { Pawn } from "../models/pawn.js";
 
-const createPawns = () =>
-  PAWNS.map(
+export const createPawnInstances = (pawns) =>
+  pawns.map(
     ({ name, position, color }, index) =>
       new Pawn(index + 1, name, position, color),
   );
 
-export const createGameInstance = (shuffleFn = shuffle) => {
+const getShuffledPawns = (pawns) =>
+  shuffle(pawns.map(({ name, color }) => ({
+    name,
+    color,
+  })));
+
+export const createLobbyInstance = (id, pawns) => {
+  const playersLimit = { max: 6, min: 3 };
+  return new Lobby(
+    id,
+    playersLimit.max,
+    playersLimit.min,
+    getShuffledPawns(pawns),
+  );
+};
+
+export const createGameInstance = (
+  id,
+  pawns,
+  gameConfig,
+  shuffleFn = shuffle,
+) => {
   const board = Board.create(boardConfig);
-  const pawns = createPawns();
-  const shuffledPawns = shuffleFn([...pawns]);
   const deck = new DeckManager(
     {
-      suspects: SUSPECTS,
-      weapons: WEAPONS,
-      rooms: ROOMS,
+      suspects: gameConfig.suspects,
+      weapons: gameConfig.weapons,
+      rooms: gameConfig.rooms,
     },
     shuffleFn,
   );
 
-  const game = new Game(1, board, pawns, deck, shuffledPawns);
-  return game;
+  return new Game(id, board, pawns, deck);
 };
 
 export const getPosition = (pawn) => {

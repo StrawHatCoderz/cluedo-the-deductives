@@ -11,7 +11,7 @@ export class LobbyController {
     this.#lobbies = {};
   }
 
-  static createInstance(createLobby) {
+  static create(createLobby) {
     if (typeof createLobby !== "function") {
       throw new Error("createLobby is not a function");
     }
@@ -34,6 +34,12 @@ export class LobbyController {
     const isHost = false;
     lobby.addPlayer(++this.#currentPlayerId, name, isHost);
     return { lobbyId: this.#currentLobbyId, playerId: this.#currentPlayerId };
+  }
+
+  startGame(lobbyId) {
+    const lobby = this.#lobbies[lobbyId];
+
+    lobby.updateState();
   }
 
   getLobbyState(lobbyId, playerId) {

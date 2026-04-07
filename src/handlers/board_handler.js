@@ -2,6 +2,7 @@ import { getPosition, parseNode } from "../utils/game.js";
 
 export const serveRollDice = (c, randomFn, ceilFn) => {
   const game = c.get("game");
+
   const diceValues = game.rollDice(randomFn, ceilFn);
   return c.json({ diceValues });
 };

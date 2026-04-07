@@ -46,5 +46,6 @@ export const serveLobbyState = (c) => {
   return c.json({
     success: true,
     data: lobbyController.getLobbyState(parseInt(lobbyId), parseInt(playerId)),
+    currentPlayer: +playerId,
   });
 };

@@ -1,8 +1,8 @@
 import { assertEquals, assertThrows } from "@std/assert";
 import { beforeEach, describe, it } from "@std/testing/bdd";
+import { Pawn } from "../../src/models/pawn.js";
 import { Player } from "../../src/models/player.js";
 import { Turn } from "../../src/models/turn.js";
-import { Pawn } from "../../src/models/pawn.js";
 
 describe("Turn Management", () => {
   let turn;

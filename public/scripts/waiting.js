@@ -50,9 +50,15 @@ const setupLobbyStatus = (isHost, playersCount) => {
   const lobbyStatusContainer = document.getElementById("lobby-status");
   const message = isHost
     ? `${playersCount} Player Joined`
-    : "Waiting For Host To Join";
+    : "Waiting For Host To Start";
 
   lobbyStatusContainer.textContent = message;
+};
+
+const redirectToSetupPage = (state) => {
+  if (state !== "waiting") {
+    globalThis.window.location = "/pages/setup.html";
+  }
 };
 
 const handleGameStart = async () => {
@@ -94,6 +100,7 @@ const setupWaitingPage = async () => {
     setupProfiles(lobby, profilesTemplate, profilesContainer);
     setupLobbyStatus(lobby.isHost, totalPlayers);
     assignStartBtn(lobby.isHost, totalPlayers, hostActions);
+    redirectToSetupPage(lobby.state);
   }, 500);
 };
 
