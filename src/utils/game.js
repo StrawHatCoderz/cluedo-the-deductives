@@ -12,8 +12,8 @@ export const createPawnInstances = (pawns) =>
       new Pawn(index + 1, name, position, color),
   );
 
-const getShuffledPawns = (pawns) =>
-  shuffle(pawns.map(({ name, color }) => ({
+const getShuffledPawns = (pawns, shuffleFn = shuffle) =>
+  shuffleFn(pawns.map(({ name, color }) => ({
     name,
     color,
   })));

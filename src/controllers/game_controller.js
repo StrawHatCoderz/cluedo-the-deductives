@@ -88,7 +88,6 @@ export class GameController {
   getDisprovedCard(gameId) {
     const game = this.#games[gameId];
     const card = game.getDisprovedCard();
-    console.log("card");
     return { card };
   }
 }

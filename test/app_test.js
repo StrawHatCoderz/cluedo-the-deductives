@@ -285,6 +285,42 @@ describe("APP TEST", () => {
         assertEquals(res.status, 200);
         assertEquals(body.success, true);
       });
+
+      it(" => should not join lobby if username is undefined", async () => {
+        lobbyController.hostLobby("loki");
+
+        const res = await app.request("/lobby/join", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify({ name: "", roomId: "1" }),
+        });
+
+        const body = await res.json();
+
+        assertEquals(res.status, 400);
+        assertEquals(body.success, false);
+        assertEquals(body.error, "Invalid name");
+      });
+
+      it(" => should not join lobby if roomid is undefined", async () => {
+        lobbyController.hostLobby("loki");
+
+        const res = await app.request("/lobby/join", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify({ name: "loki", roomId: "" }),
+        });
+
+        const body = await res.json();
+
+        assertEquals(res.status, 400);
+        assertEquals(body.success, false);
+        assertEquals(body.error, "Invalid RoomId");
+      });
     });
 
     describe("GET /lobby", () => {

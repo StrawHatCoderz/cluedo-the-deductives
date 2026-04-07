@@ -117,5 +117,12 @@ describe("LOBBY", () => {
 
       assertThrows(() => lobby.updateState(1));
     });
+
+    it(" => should not update state if requester is not host", () => {
+      lobby.addPlayer(1, "username1", true);
+      lobby.addPlayer(2, "username2", false);
+
+      assertThrows(() => lobby.updateState(2));
+    });
   });
 });

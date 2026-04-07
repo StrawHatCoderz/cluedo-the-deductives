@@ -25,6 +25,9 @@ describe("GAME CONTROLLER", () => {
       addPlayer: () => {},
       start: () => {},
       getState: () => ({ state: "running" }),
+      rollDice: () => [1, 2],
+      getReachableNodes: () => [1, 2, 3, 4],
+      getDiceValue: () => [1, 2],
     };
 
     createGameMock = () => gameMock;
@@ -130,6 +133,240 @@ describe("GAME CONTROLLER", () => {
 
     it(" => should throw if game does not exist", () => {
       assertThrows(() => controller.getGameState(999));
+    });
+  });
+
+  describe("rollDice()", () => {
+    it(" => should return array of dice value", () => {
+      controller.startGame(1, [
+        {
+          id: 1,
+          name: "tony",
+          isHost: true,
+          character: { name: "Scarlet" },
+        },
+      ]);
+
+      const randomFn = () => {};
+      const ceilFn = () => {};
+      const rolledNumber = controller.rollDice(1, randomFn, ceilFn);
+
+      assertEquals(rolledNumber, [1, 2]);
+    });
+  });
+
+  describe("getReachableNodes()", () => {
+    it(" => should return array of reahable nodes", () => {
+      controller.startGame(1, [
+        {
+          id: 1,
+          name: "tony",
+          isHost: true,
+          character: { name: "Scarlet" },
+        },
+      ]);
+
+      const rolledNumber = controller.getReachableNodes(1);
+
+      assertEquals(rolledNumber, [1, 2, 3, 4]);
+    });
+  });
+
+  describe("getDiceValue()", () => {
+    it(" => should return previously rolled dice value", () => {
+      controller.startGame(1, [
+        {
+          id: 1,
+          name: "tony",
+          isHost: true,
+          character: { name: "Scarlet" },
+        },
+      ]);
+
+      const rolledNumber = controller.getDiceValue(1);
+
+      assertEquals(rolledNumber, [1, 2]);
+    });
+  });
+
+  describe("movePawn()", () => {
+    it(" => should call game.movePawn with correct args", () => {
+      let receivedArgs;
+
+      gameMock.movePawn = (...args) => {
+        receivedArgs = args;
+        return { status: true };
+      };
+
+      controller.startGame(1, [
+        {
+          id: 1,
+          name: "tony",
+          isHost: true,
+          character: { name: "Scarlet" },
+        },
+      ]);
+
+      const result = controller.movePawn(
+        1,
+        "pawn-1",
+        { newNodeId: 10 },
+        "tile-1",
+        { x: 1, y: 2 },
+      );
+
+      assertEquals(receivedArgs, [
+        "pawn-1",
+        { newNodeId: 10 },
+        "tile-1",
+        { x: 1, y: 2 },
+      ]);
+
+      assertEquals(result, { status: true });
+    });
+  });
+
+  describe("accuse()", () => {
+    it(" => should call game.accuse with correct payload", () => {
+      let receivedPayload;
+
+      gameMock.accuse = (payload) => {
+        receivedPayload = payload;
+        return { isCorrect: true };
+      };
+
+      controller.startGame(1, [
+        {
+          id: 1,
+          name: "tony",
+          isHost: true,
+          character: { name: "Scarlet" },
+        },
+      ]);
+
+      const result = controller.accuse(1, {
+        suspect: "A",
+        weapon: "B",
+        room: "C",
+      });
+
+      assertEquals(receivedPayload, {
+        suspect: "A",
+        weapon: "B",
+        room: "C",
+      });
+
+      assertEquals(result, { isCorrect: true });
+    });
+  });
+
+  describe("updateTurn()", () => {
+    it(" => should call game.updateTurn", () => {
+      let called = false;
+
+      gameMock.updateTurn = () => {
+        called = true;
+        return { id: 1 };
+      };
+
+      controller.startGame(1, [
+        {
+          id: 1,
+          name: "tony",
+          isHost: true,
+          character: { name: "Scarlet" },
+        },
+      ]);
+
+      const result = controller.updateTurn(1);
+
+      assertEquals(called, true);
+      assertEquals(result, { id: 1 });
+    });
+  });
+
+  describe("addSuspicion()", () => {
+    it(" => should add suspicion when allowed", () => {
+      let received;
+
+      gameMock.canSuspect = () => true;
+      gameMock.addSuspicion = (s) => {
+        received = s;
+      };
+
+      controller.startGame(1, [
+        {
+          id: 1,
+          name: "tony",
+          isHost: true,
+          character: { name: "Scarlet" },
+        },
+      ]);
+
+      const result = controller.addSuspicion(1, { suspect: "A" });
+
+      assertEquals(received, { suspect: "A" });
+      assertEquals(result, { status: true });
+    });
+
+    it(" => should return false if cannot suspect", () => {
+      gameMock.canSuspect = () => false;
+
+      controller.startGame(1, [
+        {
+          id: 1,
+          name: "tony",
+          isHost: true,
+          character: { name: "Scarlet" },
+        },
+      ]);
+
+      const result = controller.addSuspicion(1, { suspect: "A" });
+
+      assertEquals(result, { status: false });
+    });
+  });
+
+  describe("confirmDisproval()", () => {
+    it(" => should call addDisprovedCard", () => {
+      let received;
+
+      gameMock.addDisprovedCard = (card) => {
+        received = card;
+      };
+
+      controller.startGame(1, [
+        {
+          id: 1,
+          name: "tony",
+          isHost: true,
+          character: { name: "Scarlet" },
+        },
+      ]);
+
+      const result = controller.confirmDisproval(1, "card-1");
+
+      assertEquals(received, "card-1");
+      assertEquals(result, { status: true });
+    });
+  });
+
+  describe("getDisprovedCard()", () => {
+    it(" => should return card from game", () => {
+      gameMock.getDisprovedCard = () => "card-123";
+
+      controller.startGame(1, [
+        {
+          id: 1,
+          name: "tony",
+          isHost: true,
+          character: { name: "Scarlet" },
+        },
+      ]);
+
+      const result = controller.getDisprovedCard(1);
+
+      assertEquals(result, { card: "card-123" });
     });
   });
 });

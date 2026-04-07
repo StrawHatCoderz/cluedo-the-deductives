@@ -54,7 +54,6 @@ export const confirmDisprove = async (c) => {
   const { disprove } = await c.req.parseBody();
   const gameController = c.get("gameController");
   const lobbyId = getCookie(c, "lobbyId");
-  console.log(disprove);
   c.json(gameController.confirmDisproval(lobbyId, disprove), 303);
 };
 

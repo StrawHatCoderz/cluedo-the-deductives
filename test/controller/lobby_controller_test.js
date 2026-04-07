@@ -84,4 +84,35 @@ describe("LOBBY", () => {
       assertThrows(() => lobbyController.joinLobby("thor", 1));
     });
   });
+  describe("updateLobbyState", () => {
+    it(" => should call updateState on lobby with playerId", () => {
+      const lobby = {
+        updateState: fn(() => "started"),
+        addPlayer: fn(),
+        getState: fn(() => ({ id: 1 })),
+      };
+
+      const lobbyController = LobbyController.create(() => lobby);
+
+      lobbyController.hostLobby("loki");
+
+      const result = lobbyController.updateLobbyState(1, 1);
+
+      assertEquals(result, "started");
+      expect(lobby.updateState).toHaveBeenCalledWith(1);
+      expect(lobby.updateState).toHaveBeenCalledTimes(1);
+    });
+
+    it(" => should throw if lobby does not exist", () => {
+      const lobby = {
+        updateState: fn(),
+        addPlayer: fn(),
+        getState: fn(() => ({ id: 1 })),
+      };
+
+      const lobbyController = LobbyController.create(() => lobby);
+
+      assertThrows(() => lobbyController.updateLobbyState(1, 1));
+    });
+  });
 });
