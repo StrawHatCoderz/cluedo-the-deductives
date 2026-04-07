@@ -1,35 +1,46 @@
+import { getCookie } from "hono/cookie";
 import { getPosition, parseNode } from "../utils/game.js";
 
 export const serveRollDice = (c, randomFn, ceilFn) => {
-  const game = c.get("game");
+  const gameController = c.get("gameController");
+  const lobbyId = getCookie(c, "lobbyId");
 
-  const diceValues = game.rollDice(randomFn, ceilFn);
+  const diceValues = gameController.rollDice(lobbyId, randomFn, ceilFn);
   return c.json({ diceValues });
 };
 
 export const serveGetReachableNodes = (c) => {
-  const game = c.get("game");
-  const activePlayer = game.getState().activePlayer;
+  const gameController = c.get("gameController");
+  const lobbyId = getCookie(c, "lobbyId");
+  const playerId = getCookie(c, "playerId");
+
+  const activePlayer =
+    gameController.getGameState(lobbyId, playerId).activePlayer;
   const pawn = activePlayer?.pawn;
   const position = getPosition(pawn);
-  const steps = game.getDiceValue();
-  const reachableNodes = game.getReachableNodes(position, steps);
+  const steps = gameController.getDiceValue(lobbyId);
+  const reachableNodes = gameController.getReachableNodes(
+    lobbyId,
+    position,
+    steps,
+  );
 
   return c.json({ reachableNodes });
 };
 
 export const movePawnHandler = async (c) => {
-  const game = c.get("game");
+  const gameController = c.get("gameController");
+  const lobbyId = getCookie(c, "lobbyId");
+
   const payload = await c.req.json();
 
   const [nodeId, pos] = parseNode(payload.newNodeId);
-  const currentPawn = await c.req.param("pawnId");
-  const pawn = game.getPawnInstance(+currentPawn);
-  const oldPosition = getPosition(pawn?.getPawnData());
-  const { status } = game.movePawn(
-    currentPawn,
+  const pawnId = await c.req.param("pawnId");
+
+  const { status } = gameController.movePawn(
+    lobbyId,
+    +pawnId,
     payload,
-    oldPosition,
     nodeId,
     pos,
   );

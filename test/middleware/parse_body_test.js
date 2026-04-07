@@ -3,7 +3,7 @@ import { describe, it } from "@std/testing/bdd";
 import { parseBody } from "../../src/middleware/parse_body.js";
 
 describe("parse body", () => {
-  it("shouldn't set body if method is GET", () => {
+  it(" => shouldn't set body if method is GET", () => {
     let body;
     const context = {
       req: {
@@ -18,7 +18,7 @@ describe("parse body", () => {
     assertEquals(body, undefined);
   });
 
-  it("shouldn't set body if method is HEAD", () => {
+  it(" => shouldn't set body if method is HEAD", () => {
     let body;
     const context = {
       req: {
@@ -33,7 +33,7 @@ describe("parse body", () => {
     assertEquals(body, undefined);
   });
 
-  it("shouldn't set body if method is not GET and HEAD and content type is formdata", async () => {
+  it(" => shouldn't set body if method is not GET and HEAD and content type is formdata", async () => {
     const mockBody = {};
 
     const context = {
@@ -51,7 +51,7 @@ describe("parse body", () => {
     assertEquals(mockBody, { body: "1" });
   });
 
-  it("shouldn't set body if method is not GET and HEAD and content type is json", async () => {
+  it(" => shouldn't set body if method is not GET and HEAD and content type is json", async () => {
     const mockBody = {};
 
     const context = {

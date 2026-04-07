@@ -31,8 +31,12 @@ export const updateTurn = (c) => {
 
 export const handleAccusation = async (c) => {
   const accusationDetails = await c.req.json();
-  const game = c.get("game");
-  const { isCorrect, murderCombination } = game.accuse(accusationDetails);
+  const gameController = c.get("gameController");
+  const lobbyId = getCookie(c, "lobbyId");
+  const { isCorrect, murderCombination } = gameController.accuse(
+    lobbyId,
+    accusationDetails,
+  );
 
   return c.json({ isCorrect, murderCombination });
 };

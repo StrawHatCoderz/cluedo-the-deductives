@@ -51,24 +51,24 @@ describe("GAME", () => {
   });
 
   describe("add player", () => {
-    it("should assign pawn to player", () => {
+    it(" => should assign pawn to player", () => {
       const player = new Player(1, "Javed", false);
       game.addPlayer(player, pawns[2]);
 
       assertEquals(player.getPlayerData().pawn.name, "Plum");
     });
 
-    it("should throw error for invalid player", () => {
+    it(" => should throw error for invalid player", () => {
       assertThrows(() => game.addPlayer({}, pawns[0]), Error);
     });
   });
 
   describe("game state", () => {
-    it("should return initial state as setup", () => {
+    it(" => should return initial state as setup", () => {
       assertEquals(game.getState().state, "setup");
     });
 
-    it(" => should change state from setup to running", () => {
+    it(" =>  => should change state from setup to running", () => {
       add3Players();
       game.start();
 
@@ -77,7 +77,7 @@ describe("GAME", () => {
   });
 
   describe("start game", () => {
-    it("should throw error if players less than 3", () => {
+    it(" => should throw error if players less than 3", () => {
       const p1 = new Player(1, "thor", true);
       const p2 = new Player(2, "hulk", false);
 
@@ -87,7 +87,7 @@ describe("GAME", () => {
       assertThrows(() => game.start());
     });
 
-    it("should distribute cards", () => {
+    it(" => should distribute cards", () => {
       const { p1 } = add3Players();
 
       game.start();
@@ -97,13 +97,13 @@ describe("GAME", () => {
   });
 
   describe("turn and dice", () => {
-    it("should throw if updateTurn before running", () => {
+    it(" => should throw if updateTurn before running", () => {
       add3Players();
 
       assertThrows(() => game.updateTurn(), Error);
     });
 
-    it("should roll dice correctly", () => {
+    it(" => should roll dice correctly", () => {
       const randomGenerator = () => 1;
 
       add3Players();
@@ -114,13 +114,13 @@ describe("GAME", () => {
       assertEquals(game.rollDice(randomGenerator), [6, 6]);
     });
 
-    it("should throw if rollDice before turn init", () => {
+    it(" => should throw if rollDice before turn init", () => {
       assertThrows(() => game.rollDice(), Error);
     });
   });
 
   describe("turn order", () => {
-    it("should return current player after start", () => {
+    it(" => should return current player after start", () => {
       const { p3 } = add3Players();
 
       game.start();
@@ -132,7 +132,7 @@ describe("GAME", () => {
   });
 
   describe("update current player", () => {
-    it("should update turn correctly", () => {
+    it(" => should update turn correctly", () => {
       const { p1 } = add3Players();
 
       game.start();
@@ -142,7 +142,7 @@ describe("GAME", () => {
       assertEquals(currentPlayer.id, p1.getPlayerData().id);
     });
 
-    it("should skip eliminated player", () => {
+    it(" => should skip eliminated player", () => {
       const { p1, p2 } = add3Players();
 
       game.start();
@@ -156,14 +156,14 @@ describe("GAME", () => {
   });
 
   describe("pawn", () => {
-    it("should return correct pawn instance", () => {
+    it(" => should return correct pawn instance", () => {
       const pawn = game.getPawnInstance(1);
       assertEquals(pawn.getPawnData().name, "Scarlet");
     });
   });
 
   describe("add suspect combination", () => {
-    it("should store suspicion", () => {
+    it(" => should store suspicion", () => {
       add3Players();
 
       game.start();
@@ -187,7 +187,7 @@ describe("GAME", () => {
       game.start();
     });
 
-    it("should return true for correct combination", () => {
+    it(" => should return true for correct combination", () => {
       const combo = {
         suspect: SUSPECTS[0],
         weapon: WEAPONS[0],
@@ -199,7 +199,7 @@ describe("GAME", () => {
       assertEquals(result.isCorrect, true);
     });
 
-    it("should return false for wrong combination", () => {
+    it(" => should return false for wrong combination", () => {
       const combo = {
         suspect: SUSPECTS[1],
         weapon: WEAPONS[0],
@@ -211,7 +211,7 @@ describe("GAME", () => {
       assertEquals(result.isCorrect, false);
     });
 
-    it("should throw for invalid combination", () => {
+    it(" => should throw for invalid combination", () => {
       assertThrows(() => {
         game.accuse({ weapon: WEAPONS[0] });
       });
@@ -257,7 +257,7 @@ describe("GAME", () => {
 
       game.updateTurn();
     });
-    it("should return secret passage id", () => {
+    it(" => should return secret passage id", () => {
       const state = game.getState(p1.getPlayerData().id);
 
       assertEquals(state.secretPassageId, "kitchen");
@@ -265,7 +265,7 @@ describe("GAME", () => {
   });
 
   describe("disproveASuspicion", () => {
-    it("should return disprovable player", () => {
+    it(" => should return disprovable player", () => {
       add3Players();
       game.start();
 

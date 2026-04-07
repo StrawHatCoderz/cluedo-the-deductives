@@ -63,9 +63,7 @@ export class Game {
     return this.#players[playerId]?.getPlayerData();
   }
 
-  getState() {
-    const playerId = this.#activePlayer?.getPlayerData().id;
-
+  getState(playerId) {
     return {
       state: this.#gameState,
       players: this.#getAllPlayers(),
@@ -265,19 +263,24 @@ export class Game {
     );
   }
 
+  parsePawnPosition(pawn) {
+    const { x, y, room } = pawn.position;
+    return room ? room : `tile-${x}-${y}`;
+  }
+
   movePawn(
-    currentPawn,
+    pawnId,
     { newNodeId, isUsingSecretPassage, tiles },
-    oldPosition,
     tileId,
     pos,
   ) {
-    const pawn = this.getPawnInstance(+currentPawn);
+    const pawn = this.getPawnInstance(pawnId);
+    const pawnPrevPosition = this.parsePawnPosition(pawn.getPawnData());
 
     if (isUsingSecretPassage) this.setUsedSecretPassage();
     if (this.#isValidMove(tileId, tiles)) {
       pawn.updatePosition(pos);
-      this.#toggleIsOccupied(oldPosition);
+      this.#toggleIsOccupied(pawnPrevPosition);
       this.#toggleIsOccupied(newNodeId);
       return { status: true };
     }

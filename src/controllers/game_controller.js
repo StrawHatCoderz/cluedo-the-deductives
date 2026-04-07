@@ -36,7 +36,33 @@ export class GameController {
     game.start();
   }
 
-  getGameState(gameId) {
-    return this.#games[gameId].getState();
+  getGameState(gameId, playerId) {
+    return this.#games[gameId].getState(playerId);
+  }
+
+  rollDice(gameId, randomFn, ceilFn) {
+    const game = this.#games[gameId];
+    return game.rollDice(randomFn, ceilFn);
+  }
+
+  getReachableNodes(gameId, position, steps) {
+    const game = this.#games[gameId];
+    return game.getReachableNodes(position, steps);
+  }
+
+  getDiceValue(gameId) {
+    const game = this.#games[gameId];
+    return game.getDiceValue();
+  }
+
+  movePawn(gameId, pawnId, payload, nodeId, pos) {
+    const game = this.#games[gameId];
+
+    return game.movePawn(pawnId, payload, nodeId, pos);
+  }
+
+  accuse(gameId, { suspect, weapon, room }) {
+    const game = this.#games[gameId];
+    return game.accuse({ suspect, weapon, room });
   }
 }

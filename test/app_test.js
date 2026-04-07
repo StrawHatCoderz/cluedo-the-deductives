@@ -19,7 +19,7 @@ import { createGameInstance } from "../src/utils/game.js";
 
 const silentLogger = () => (_, next) => next();
 
-describe.ignore("APP TEST", () => {
+describe("APP TEST", () => {
   let app;
   let lobbyController;
 
@@ -72,7 +72,7 @@ describe.ignore("APP TEST", () => {
 
   describe("BOARD", () => {
     describe("POST /roll", () => {
-      it.only("should return dice values", async () => {
+      it(" => should return dice values", async () => {
         const { cookie } = setupLobby();
 
         await app.request("/start-game", {
@@ -93,7 +93,7 @@ describe.ignore("APP TEST", () => {
     });
 
     describe("GET /get-reachable-nodes", () => {
-      it("should return reachable nodes", async () => {
+      it(" => should return reachable nodes", async () => {
         const { cookie } = setupLobby();
 
         await app.request("/start-game", {
@@ -115,7 +115,7 @@ describe.ignore("APP TEST", () => {
     });
 
     describe("POST /update-pawn-position", () => {
-      it("should update pawn position", async () => {
+      it(" => should update pawn position", async () => {
         const { cookie } = setupLobby();
 
         await app.request("/start-game", {
@@ -147,7 +147,7 @@ describe.ignore("APP TEST", () => {
         assertEquals(body, { status: true });
       });
 
-      it("should fail if dice not rolled", async () => {
+      it(" => should fail if dice not rolled", async () => {
         const { cookie } = setupLobby();
 
         await app.request("/start-game", {
@@ -178,7 +178,7 @@ describe.ignore("APP TEST", () => {
 
   describe("GAME HANDLER", () => {
     describe("POST /start-game", () => {
-      it("should start the game", async () => {
+      it(" => should start the game", async () => {
         const { cookie } = setupLobby();
 
         const res = await app.request("/start-game", {
@@ -191,7 +191,7 @@ describe.ignore("APP TEST", () => {
     });
 
     describe("GET /game-state", () => {
-      it("should return game state", async () => {
+      it(" => should return game state", async () => {
         const { cookie } = setupLobby();
 
         await app.request("/start-game", {
@@ -212,7 +212,7 @@ describe.ignore("APP TEST", () => {
     });
 
     describe("POST /accuse", () => {
-      it("should fail for invalid accusation", async () => {
+      it(" => should fail for invalid accusation", async () => {
         const { cookie } = setupLobby();
 
         await app.request("/start-game", {
@@ -242,7 +242,7 @@ describe.ignore("APP TEST", () => {
 
   describe("LOBBY", () => {
     describe("POST /lobby/create", () => {
-      it("should fail if name missing", async () => {
+      it(" => should fail if name missing", async () => {
         const res = await app.request("/lobby/create", { method: "POST" });
         const body = await res.json();
 
@@ -250,7 +250,7 @@ describe.ignore("APP TEST", () => {
         assertEquals(body.success, false);
       });
 
-      it("should create lobby", async () => {
+      it(" => should create lobby", async () => {
         const formData = new FormData();
         formData.append("name", "loki");
 
@@ -269,7 +269,7 @@ describe.ignore("APP TEST", () => {
     });
 
     describe("POST /lobby/join", () => {
-      it("should join lobby", async () => {
+      it(" => should join lobby", async () => {
         lobbyController.hostLobby("loki");
 
         const res = await app.request("/lobby/join", {
@@ -288,7 +288,7 @@ describe.ignore("APP TEST", () => {
     });
 
     describe("GET /lobby", () => {
-      it("should return lobby state", async () => {
+      it(" => should return lobby state", async () => {
         const { lobbyId, playerId } = lobbyController.hostLobby("tony");
 
         const res = await app.request("/lobby", {

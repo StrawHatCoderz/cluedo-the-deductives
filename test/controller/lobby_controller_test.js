@@ -34,7 +34,7 @@ describe("LOBBY", () => {
   });
 
   describe("hostLobby", () => {
-    it("=> should create a lobby and add the player as host", () => {
+    it(" => should create a lobby and add the player as host", () => {
       const players = [];
       const lobby = {
         addPlayer: fn((id, name) => players.push({ id, name, isHost: true })),
@@ -49,7 +49,7 @@ describe("LOBBY", () => {
   });
 
   describe("joinLobby", () => {
-    it("=> should join a lobby and add the player", () => {
+    it(" => should join a lobby and add the player", () => {
       const players = [];
       const lobby = {
         addPlayer: fn((id, name, isHost) => players.push({ id, name, isHost })),
@@ -74,7 +74,7 @@ describe("LOBBY", () => {
       assertEquals(lobbyId, 1);
     });
 
-    it("=> should not join a lobby if lobby does not exists", () => {
+    it(" => should not join a lobby if lobby does not exists", () => {
       const players = [];
       const lobby = {
         addPlayer: fn((id, name, isHost) => players.push({ id, name, isHost })),

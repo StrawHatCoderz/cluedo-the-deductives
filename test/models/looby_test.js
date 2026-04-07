@@ -14,12 +14,12 @@ describe("LOBBY", () => {
   });
 
   describe("get state", () => {
-    it("=> should give current lobby state", () => {
+    it(" => should give current lobby state", () => {
       const state = lobby.getState();
       assertEquals(state, { id, players: [], state: "waiting" });
     });
 
-    it("=> should give current lobby state: one player", () => {
+    it(" => should give current lobby state: one player", () => {
       lobby.addPlayer(2, "tony", true);
       const state = lobby.getState();
       assertEquals(state, {
@@ -34,7 +34,7 @@ describe("LOBBY", () => {
       });
     });
 
-    it("=> should give current lobby state: two players", () => {
+    it(" => should give current lobby state: two players", () => {
       lobby.addPlayer(2, "tony", true);
       lobby.addPlayer(3, "steve", false);
 
@@ -47,7 +47,7 @@ describe("LOBBY", () => {
   });
 
   describe("add player", () => {
-    it("=> should add player into lobby and assign character", () => {
+    it(" => should add player into lobby and assign character", () => {
       lobby.addPlayer(1, "name", true);
       const state = lobby.getState();
 
@@ -64,7 +64,7 @@ describe("LOBBY", () => {
       ]);
     });
 
-    it("=> should not add player into lobby if max player reached", () => {
+    it(" => should not add player into lobby if max player reached", () => {
       lobby.addPlayer(1, "username", true);
       lobby.addPlayer(2, "username", true);
       lobby.addPlayer(3, "username", true);
@@ -75,7 +75,7 @@ describe("LOBBY", () => {
       assertThrows(() => lobby.addPlayer(7, "username", true));
     });
 
-    it("=> should not add player into lobby if looby is not at waiting state", () => {
+    it(" => should not add player into lobby if looby is not at waiting state", () => {
       lobby.addPlayer(1, "username", true);
       lobby.addPlayer(2, "username", false);
       lobby.addPlayer(3, "username", false);
@@ -85,13 +85,13 @@ describe("LOBBY", () => {
   });
 
   describe("is host", () => {
-    it("=> should return true if a player is host", () => {
+    it(" => should return true if a player is host", () => {
       lobby.addPlayer(1, "name", true);
       const isHost = lobby.isHost(1);
       assertEquals(isHost, true);
     });
 
-    it("=> should return false if a player is not host", () => {
+    it(" => should return false if a player is not host", () => {
       lobby.addPlayer(1, "name", false);
       const isHost = lobby.isHost(1);
       assertEquals(isHost, false);
@@ -99,7 +99,7 @@ describe("LOBBY", () => {
   });
 
   describe("update state", () => {
-    it("=> should update state if valid player count", () => {
+    it(" => should update state if valid player count", () => {
       lobby.addPlayer(1, "name", true);
       lobby.addPlayer(2, "name", false);
       lobby.addPlayer(3, "name", false);
@@ -111,7 +111,7 @@ describe("LOBBY", () => {
       assertEquals(state.state, "started");
     });
 
-    it("=> should not update state if invalid player count", () => {
+    it(" => should not update state if invalid player count", () => {
       lobby.addPlayer(1, "username", true);
 
       assertThrows(() => lobby.updateState("started"));
