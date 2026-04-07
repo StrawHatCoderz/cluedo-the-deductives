@@ -70,6 +70,7 @@ export class Game {
     return {
       id: activePlayer?.id,
       pawn: activePlayer?.pawn,
+      name: activePlayer?.name,
     };
   }
 
@@ -84,6 +85,11 @@ export class Game {
   }
 
   getState(playerId) {
+    const shouldShowDicePopup = this.#turn?.getIsDiceRolled() &&
+      !this.#turn?.hasPlayerSeenDicePopup(playerId);
+
+    if (shouldShowDicePopup) this.#turn?.markDicePopupShownForPlayer(playerId);
+
     return {
       state: this.#gameState,
       players: this.#getAllPlayers(),
@@ -91,6 +97,10 @@ export class Game {
       pawns: this.#getAllPawns(),
       activePlayer: this.#getActivePlayerData(),
       currentPlayer: this.#getCurrentPlayerData(playerId),
+
+      diceValues: this.#turn?.getDiceValue(),
+      shouldShowDicePopup,
+
       canRoll: this.#isRollAllowed(playerId),
       secretPassageId: this.#getSecretPassageId(playerId),
       canSuspect: this.canSuspect(),

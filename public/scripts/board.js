@@ -222,7 +222,21 @@ const renderPassBtn = () => {
   passBtnListener(passBtn);
 };
 
+const showDiceAnimationForPassivePlayer = (boardConfig) => {
+  if (!boardConfig.isPlayerActive && boardConfig.shouldShowDicePopup) {
+    showDiceAnimation(boardConfig.diceValues, () => {
+      displayPopup(
+        `${boardConfig.activePlayer.name} rolled the dice and got ${
+          boardConfig.diceValues[0] + boardConfig.diceValues[1]
+        }`,
+        "info",
+      );
+    });
+  }
+};
+
 export const renderActions = (boardConfig) => {
+  showDiceAnimationForPassivePlayer(boardConfig);
   const path = getHighlightPath();
 
   renderDice(boardConfig);

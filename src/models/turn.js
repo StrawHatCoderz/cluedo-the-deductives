@@ -9,6 +9,7 @@ export class Turn {
   #canDisproved;
   #hasDisproved;
   #disprovedCard;
+  #dicePopupShownMap;
 
   constructor(player) {
     this.#player = player;
@@ -20,6 +21,7 @@ export class Turn {
     this.#canDisproved = false;
     this.#hasDisproved = false;
     this.#disprovedCard;
+    this.#dicePopupShownMap = {};
   }
 
   setUsedSecretPassage() {
@@ -38,8 +40,16 @@ export class Turn {
     return this.#isDiceRolled;
   }
 
+  hasPlayerSeenDicePopup(playerId) {
+    return this.#dicePopupShownMap[playerId];
+  }
+
+  markDicePopupShownForPlayer(playerId) {
+    this.#dicePopupShownMap[playerId] = true;
+  }
+
   getDiceValue() {
-    return this.#diceValue.reduce((sum, value) => sum + value);
+    return this.#diceValue;
   }
 
   updateDisprovedCard(card) {

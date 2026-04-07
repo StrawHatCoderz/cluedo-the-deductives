@@ -22,7 +22,7 @@ export const serveGetReachableNodes = (c) => {
   const reachableNodes = gameController.getReachableNodes(
     lobbyId,
     position,
-    steps,
+    steps[0] + steps[1],
   );
 
   return c.json({ reachableNodes });

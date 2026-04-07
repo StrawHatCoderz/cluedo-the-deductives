@@ -107,12 +107,15 @@ export const fetchGameConfig = async (url, etag) => {
     activePlayer: {
       id: gameContext.activePlayer.id,
       pawn: gameContext.activePlayer.pawn,
+      name: gameContext.activePlayer.name,
     },
     canRoll: gameContext.canRoll,
     canSuspect: gameContext.canSuspect,
     secretPassageId: gameContext.secretPassageId,
     isPlayerActive:
       gameContext.currentPlayer.id === gameContext.activePlayer.id,
+    diceValues: gameContext.diceValues,
+    shouldShowDicePopup: gameContext.shouldShowDicePopup,
   };
   return { etag: res.etag, changed: res.changed, gameConfig };
 };
