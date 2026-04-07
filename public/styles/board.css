@@ -464,3 +464,7 @@ path.room.highlight-room {
     opacity: 1;
   }
 }
+
+.hide {
+  display: none;
+}

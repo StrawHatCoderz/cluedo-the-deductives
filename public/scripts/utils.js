@@ -66,10 +66,36 @@ export const sendRequest = async ({ method, body, url }) => {
   return await fetch(url, requestConfig).then((data) => data.json());
 };
 
-export const fetchGameConfig = async (url) => {
-  const { data: gameContext } = await sendRequest({ url });
+export const getWithEtagEnabled = async ({ method, body, url, etag }) => {
+  const requestConfig = method === "post"
+    ? {
+      method,
+      body: JSON.stringify(body),
+      headers: {
+        "content-type": "application/json",
+        "If-None-Match": etag,
+      },
+    }
+    : { method, headers: { "If-None-Match": etag } };
+  const res = await fetch(url, requestConfig);
 
-  return {
+  if (res.status === 304) {
+    return { etag, changed: false };
+  }
+
+  const newEtag = res.headers.get("etag");
+  const resBody = await res.json();
+  return { etag: newEtag, body: resBody, changed: true };
+};
+
+export const fetchGameConfig = async (url, etag) => {
+  const res = await getWithEtagEnabled({ url, etag });
+  if (!res.changed) {
+    return res;
+  }
+  const gameContext = res.body.data;
+
+  const gameConfig = {
     state: gameContext.state,
     players: parsePlayersData(gameContext.players),
     pawns: parsePawnsData(gameContext.pawns),
@@ -85,7 +111,9 @@ export const fetchGameConfig = async (url) => {
     canRoll: gameContext.canRoll,
     canSuspect: gameContext.canSuspect,
     secretPassageId: gameContext.secretPassageId,
+    isPlayerActive: gameContext.isPlayerActive,
   };
+  return { etag: res.etag, changed: res.changed, gameConfig };
 };
 
 export const fetchLobbyState = async (url) => {
@@ -128,39 +156,55 @@ const disableButtons = () => {
   const path = getHighlightPath();
 
   if (path.length) {
-    passBtn.setAttribute("disabled", "");
-    accuseBtn.setAttribute("disabled", "");
+    passBtn?.setAttribute("disabled", "");
+    accuseBtn?.setAttribute("disabled", "");
     removePawnHighlight();
   } else {
-    accuseBtn.removeAttribute("disabled");
+    accuseBtn?.removeAttribute("disabled");
+  }
+};
+
+const toggleActionButton = ({ isPlayerActive }) => {
+  console.log(isPlayerActive);
+
+  const actionsContainer = document.querySelector(".action-buttons");
+
+  if (!isPlayerActive) {
+    actionsContainer.classList.add("hide");
+  } else {
+    actionsContainer.classList.remove("hide");
   }
 };
 
 export const polling = (playerCardsContainer) => {
-  let prevState = null;
+  let prevEtag = null;
 
   setInterval(async () => {
-    const newState = await fetchGameConfig("/game-state");
+    const { etag, changed, gameConfig } = await fetchGameConfig(
+      "/game-state",
+      prevEtag,
+    );
+    prevEtag = etag;
 
     disableButtons();
-    if (JSON.stringify(newState) !== JSON.stringify(prevState)) {
-      handleRedirectBasedOnGameState(newState);
-      renderBoard(newState);
-      renderPlayers(newState);
-      renderPlayerCards(newState.currentPlayer.hand, playerCardsContainer);
-      renderActions(newState);
-      suspicionBtnListener(newState);
-      newState.hasSuspected && disproveASuspicion(newState);
-      prevState = newState;
+    if (changed) {
+      handleRedirectBasedOnGameState(gameConfig);
+      renderBoard(gameConfig);
+      renderPlayers(gameConfig);
+      renderPlayerCards(gameConfig.currentPlayer.hand, playerCardsContainer);
+      suspicionBtnListener(gameConfig);
+      gameConfig.hasSuspected && disproveASuspicion(gameConfig);
+      toggleActionButton(gameConfig);
+      renderActions(gameConfig);
     }
   }, 300);
 };
 
 export const displayInitialMessage = async () => {
-  const boardConfig = await fetchGameConfig("/game-state");
+  const { gameConfig } = await fetchGameConfig("/game-state");
   const alreadyShown = sessionStorage.getItem("gameStartedPopup");
 
-  if (boardConfig.state === "running" && !alreadyShown) {
+  if (gameConfig.state === "running" && !alreadyShown) {
     displayPopup("Game has started!", "info");
     sessionStorage.setItem("gameStartedPopup", "true");
   }

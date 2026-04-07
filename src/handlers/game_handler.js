@@ -20,13 +20,14 @@ export const getGameState = (c) => {
   const lobbyId = getCookie(c, "lobbyId");
   const playerId = getCookie(c, "playerId");
 
-  const gameState = gameController.getGameState(lobbyId, playerId);
+  const gameState = gameController.getGameState(+lobbyId, +playerId);
   return c.json({ success: true, data: gameState }, 200);
 };
 
 export const updateTurn = (c) => {
-  const game = c.get("game");
-  const currentPlayer = game.updateTurn();
+  const gameController = c.get("gameController");
+  const lobbyId = getCookie(c, "lobbyId");
+  const currentPlayer = gameController.updateTurn(lobbyId);
   return c.json({ currentPlayer }, 200);
 };
 

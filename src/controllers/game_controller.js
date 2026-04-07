@@ -37,7 +37,6 @@ export class GameController {
   }
 
   getGameState(gameId, playerId) {
-
     return this.#games[gameId].getState(playerId);
   }
 
@@ -65,5 +64,9 @@ export class GameController {
   accuse(gameId, { suspect, weapon, room }) {
     const game = this.#games[gameId];
     return game.accuse({ suspect, weapon, room });
+  }
+
+  updateTurn(gameId) {
+    return this.#games[gameId].updateTurn();
   }
 }

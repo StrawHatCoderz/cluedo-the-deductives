@@ -1,5 +1,6 @@
 import { Hono } from "hono";
 import { serveStatic } from "hono/deno";
+import { etag } from "hono/etag";
 import {
   movePawnHandler,
   serveGetReachableNodes,
@@ -31,6 +32,7 @@ export const createApp = ({
 }) => {
   const app = new Hono();
   app.use(logger());
+  app.use(etag());
 
   app.use(async (c, next) => {
     c.set("gameController", gameController);
