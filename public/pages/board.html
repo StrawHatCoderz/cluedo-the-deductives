@@ -1,558 +1,736 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cluedo Board</title>
+    <link rel="stylesheet" href="/styles/board.css" />
+    <link rel="stylesheet" href="/styles/suspicion.css" />
+    <link rel="stylesheet" href="/styles/accusation.css" />
+    <link rel="stylesheet" href="/styles/dice.css" />
+    <link rel="stylesheet" href="/styles/disprove.css">
+    <script type="module" src="/scripts/script.js"></script>
+    <script type="module" src="/components/overlay.js"></script>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cluedo Board</title>
-  <link rel="stylesheet" href="/styles/board.css" />
-  <link rel="stylesheet" href="/styles/suspicion.css" />
-  <link rel="stylesheet" href="/styles/accusation.css" />
-  <link rel="stylesheet" href="/styles/dice.css" />
-  <link rel="stylesheet" href="/styles/disprove.css">
-  <script type="module" src="/scripts/script.js"></script>
-  <script type="module" src="/components/overlay.js"></script>
-</head>
+  <body>
+    <div id="players-details-container"></div>
 
-<body>
-  <div id="players-details-container"></div>
+    <div class="board-container">
+      <svg
+        id="board-svg"
+        viewBox="0 0 720 450"
+        preserveAspectRatio="xMidYMid slice"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <defs>
+          <pattern
+            id="colonel_mustard_pawn"
+            patternUnits="objectBoundingBox"
+            width="8"
+            height="8"
+          >
+            <rect x="0" y="0" fill="#a67c52" width="10" height="10"></rect>
+            <circle cx="5" cy="5" r="4" fill="#E1C05A" />
+          </pattern>
+          <pattern
+            id="mrs_white_pawn"
+            patternUnits="objectBoundingBox"
+            width="10"
+            height="10"
+          >
+            <rect x="0" y="0" fill="#a67c52" width="10" height="10"></rect>
+            <circle cx="5" cy="5" r="4" fill="#FFFFFF" />
+          </pattern>
+          <pattern
+            id="miss_scarlett_pawn"
+            patternUnits="objectBoundingBox"
+            width="10"
+            height="10"
+          >
+            <rect x="0" y="0" fill="#a67c52" width="10" height="10"></rect>
+            <circle cx="5" cy="5" r="4" fill="#D42A2A" />
+          </pattern>
+          <pattern
+            id="professor_plum_pawn"
+            patternUnits="objectBoundingBox"
+            width="10"
+            height="10"
+          >
+            <rect x="0" y="0" fill="#a67c52" width="10" height="10"></rect>
+            <circle cx="5" cy="5" r="4" fill="#7D4CA1" />
+          </pattern>
+          <pattern
+            id="mrs_peacock_pawn"
+            patternUnits="objectBoundingBox"
+            width="10"
+            height="10"
+          >
+            <rect x="0" y="0" fill="#a67c52" width="10" height="10"></rect>
+            <circle cx="5" cy="5" r="4" fill="#2C75FF" />
+          </pattern>
+          <pattern
+            id="reverend_green_pawn"
+            patternUnits="objectBoundingBox"
+            width="10"
+            height="10"
+          >
+            <rect x="0" y="0" fill="#a67c52" width="10" height="10"></rect>
+            <circle cx="5" cy="5" r="4" fill="#2E7D32" />
+          </pattern>
 
-  <div class="board-container">
-    <svg id="board-svg" viewBox="0 0 720 450" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <pattern id="colonel_mustard_pawn" patternUnits="objectBoundingBox" width="8" height="8">
-          <rect x="0" y="0" fill="#a67c52" width="10" height="10"></rect>
-          <circle cx="5" cy="5" r="4" fill="#E1C05A" />
-        </pattern>
-        <pattern id="mrs_white_pawn" patternUnits="objectBoundingBox" width="10" height="10">
-          <rect x="0" y="0" fill="#a67c52" width="10" height="10"></rect>
-          <circle cx="5" cy="5" r="4" fill="#FFFFFF" />
-        </pattern>
-        <pattern id="miss_scarlett_pawn" patternUnits="objectBoundingBox" width="10" height="10">
-          <rect x="0" y="0" fill="#a67c52" width="10" height="10"></rect>
-          <circle cx="5" cy="5" r="4" fill="#D42A2A" />
-        </pattern>
-        <pattern id="professor_plum_pawn" patternUnits="objectBoundingBox" width="10" height="10">
-          <rect x="0" y="0" fill="#a67c52" width="10" height="10"></rect>
-          <circle cx="5" cy="5" r="4" fill="#7D4CA1" />
-        </pattern>
-        <pattern id="mrs_peacock_pawn" patternUnits="objectBoundingBox" width="10" height="10">
-          <rect x="0" y="0" fill="#a67c52" width="10" height="10"></rect>
-          <circle cx="5" cy="5" r="4" fill="#2C75FF" />
-        </pattern>
-        <pattern id="reverend_green_pawn" patternUnits="objectBoundingBox" width="10" height="10">
-          <rect x="0" y="0" fill="#a67c52" width="10" height="10"></rect>
-          <circle cx="5" cy="5" r="4" fill="#2E7D32" />
-        </pattern>
+          <pattern
+            id="tile-pattern"
+            width="10"
+            height="10"
+            patternUnits="objectBoundingBox"
+          >
+            <rect width="10" height="10" fill="#a47148" />
 
-        <pattern id="tile-pattern" width="10" height="10" patternUnits="objectBoundingBox">
+            <line
+              x1="0"
+              y1="0"
+              x2="10"
+              y2="10"
+              stroke="#8b5a2b"
+              stroke-width="0.5"
+            />
+            <line
+              x1="0"
+              y1="5"
+              x2="5"
+              y2="10"
+              stroke="#8b5a2b"
+              stroke-width="0.5"
+            />
+            <line
+              x1="5"
+              y1="0"
+              x2="10"
+              y2="5"
+              stroke="#8b5a2b"
+              stroke-width="0.5"
+            />
 
-          <rect width="10" height="10" fill="#a47148" />
-
-          <line x1="0" y1="0" x2="10" y2="10" stroke="#8b5a2b" stroke-width="0.5" />
-          <line x1="0" y1="5" x2="5" y2="10" stroke="#8b5a2b" stroke-width="0.5" />
-          <line x1="5" y1="0" x2="10" y2="5" stroke="#8b5a2b" stroke-width="0.5" />
-
-          <line x1="10" y1="0" x2="0" y2="10" stroke="#8b5a2b" stroke-width="0.5" />
-          <line x1="0" y1="5" x2="5" y2="0" stroke="#8b5a2b" stroke-width="0.5" />
-          <line x1="10" y1="5" x2="5" y2="10" stroke="#8b5a2b" stroke-width="0.5" />
-          <circle r="1" cx="5" cy="5" fill="#8b5a2b"></circle>
-        </pattern>
-      </defs>
-      <g id="tiles-group" transform="matrix(1.4433155,0,0,1.4066001,177.46019,41.200637)" class="tiles">
-        <rect id="tile-9-0" x="90" y="0" />
-        <rect id="tile-14-0" x="140" y="0" />
-        <rect id="tile-7-1" x="70" y="10" />
-        <rect id="tile-8-1" x="80" y="10" />
-        <rect id="tile-9-1" x="90" y="10" />
-        <rect id="tile-14-1" x="140" y="10" />
-        <rect id="tile-15-1" x="150" y="10" />
-        <rect id="tile-16-1" x="160" y="10" />
-        <rect id="tile-6-2" x="60" y="20" />
-        <rect id="tile-7-2" x="70" y="20" />
-        <rect id="tile-16-2" x="160" y="20" />
-        <rect id="tile-17-2" x="170" y="20" />
-        <rect id="tile-6-3" x="60" y="30" />
-        <rect id="tile-7-3" x="70" y="30" />
-        <rect id="tile-16-3" x="160" y="30" />
-        <rect id="tile-17-3" x="170" y="30" />
-        <rect id="tile-6-4" x="60" y="40" />
-        <rect id="tile-7-4" x="70" y="40" />
-        <rect id="tile-16-4" x="160" y="40" />
-        <rect id="tile-17-4" x="170" y="40" />
-        <rect id="tile-6-5" x="60" y="50" />
-        <rect id="tile-7-5" x="70" y="50" />
-        <rect id="tile-16-5" x="160" y="50" />
-        <rect id="tile-17-5" x="170" y="50" />
-        <rect id="tile-18-5" x="180" y="50" />
-        <rect id="tile-6-6" x="60" y="60" />
-        <rect id="tile-7-6" x="70" y="60" />
-        <rect id="tile-16-6" x="160" y="60" />
-        <rect id="tile-17-6" x="170" y="60" />
-        <rect id="tile-18-6" x="180" y="60" />
-        <rect id="tile-19-6" x="190" y="60" />
-        <rect id="tile-20-6" x="200" y="60" />
-        <rect id="tile-21-6" x="210" y="60" />
-        <rect id="tile-22-6" x="220" y="60" />
-        <rect id="tile-23-6" x="230" y="60" />
-        <rect id="tile-0-7" x="0" y="70" />
-        <rect id="tile-1-7" x="10" y="70" />
-        <rect id="tile-2-7" x="20" y="70" />
-        <rect id="tile-3-7" x="30" y="70" />
-        <rect id="tile-4-7" x="40" y="70" />
-        <rect id="tile-5-7" x="50" y="70" />
-        <rect id="tile-6-7" x="60" y="70" />
-        <rect id="tile-7-7" x="70" y="70" />
-        <rect id="tile-16-7" x="160" y="70" />
-        <rect id="tile-17-7" x="170" y="70" />
-        <rect id="tile-18-7" x="180" y="70" />
-        <rect id="tile-19-7" x="190" y="70" />
-        <rect id="tile-20-7" x="200" y="70" />
-        <rect id="tile-21-7" x="210" y="70" />
-        <rect id="tile-22-7" x="220" y="70" />
-        <rect id="tile-1-8" x="10" y="80" />
-        <rect id="tile-2-8" x="20" y="80" />
-        <rect id="tile-3-8" x="30" y="80" />
-        <rect id="tile-4-8" x="40" y="80" />
-        <rect id="tile-5-8" x="50" y="80" />
-        <rect id="tile-6-8" x="60" y="80" />
-        <rect id="tile-7-8" x="70" y="80" />
-        <rect id="tile-8-8" x="80" y="80" />
-        <rect id="tile-9-8" x="90" y="80" />
-        <rect id="tile-10-8" x="100" y="80" />
-        <rect id="tile-11-8" x="110" y="80" />
-        <rect id="tile-12-8" x="120" y="80" />
-        <rect id="tile-13-8" x="130" y="80" />
-        <rect id="tile-14-8" x="140" y="80" />
-        <rect id="tile-15-8" x="150" y="80" />
-        <rect id="tile-16-8" x="160" y="80" />
-        <rect id="tile-17-8" x="170" y="80" />
-        <rect id="tile-5-9" x="50" y="90" />
-        <rect id="tile-6-9" x="60" y="90" />
-        <rect id="tile-7-9" x="70" y="90" />
-        <rect id="tile-8-9" x="80" y="90" />
-        <rect id="tile-9-9" x="90" y="90" />
-        <rect id="tile-10-9" x="100" y="90" />
-        <rect id="tile-11-9" x="110" y="90" />
-        <rect id="tile-12-9" x="120" y="90" />
-        <rect id="tile-13-9" x="130" y="90" />
-        <rect id="tile-14-9" x="140" y="90" />
-        <rect id="tile-15-9" x="150" y="90" />
-        <rect id="tile-16-9" x="160" y="90" />
-        <rect id="tile-17-9" x="170" y="90" />
-        <rect id="tile-8-10" x="80" y="100" />
-        <rect id="tile-9-10" x="90" y="100" />
-        <rect id="tile-15-10" x="150" y="100" />
-        <rect id="tile-16-10" x="160" y="100" />
-        <rect id="tile-17-10" x="170" y="100" />
-        <rect id="tile-8-11" x="80" y="110" />
-        <rect id="tile-9-11" x="90" y="110" />
-        <rect id="tile-15-11" x="150" y="110" />
-        <rect id="tile-16-11" x="160" y="110" />
-        <rect id="tile-17-11" x="170" y="110" />
-        <rect id="tile-8-12" x="80" y="120" />
-        <rect id="tile-9-12" x="90" y="120" />
-        <rect id="tile-15-12" x="150" y="120" />
-        <rect id="tile-16-12" x="160" y="120" />
-        <rect id="tile-17-12" x="170" y="120" />
-        <rect id="tile-8-13" x="80" y="130" />
-        <rect id="tile-9-13" x="90" y="130" />
-        <rect id="tile-15-13" x="150" y="130" />
-        <rect id="tile-16-13" x="160" y="130" />
-        <rect id="tile-17-13" x="170" y="130" />
-        <rect id="tile-18-13" x="180" y="130" />
-        <rect id="tile-19-13" x="190" y="130" />
-        <rect id="tile-20-13" x="200" y="130" />
-        <rect id="tile-21-13" x="210" y="130" />
-        <rect id="tile-22-13" x="220" y="130" />
-        <rect id="tile-8-14" x="80" y="140" />
-        <rect id="tile-9-14" x="90" y="140" />
-        <rect id="tile-15-14" x="150" y="140" />
-        <rect id="tile-16-14" x="160" y="140" />
-        <rect id="tile-17-14" x="170" y="140" />
-        <rect id="tile-8-15" x="80" y="150" />
-        <rect id="tile-9-15" x="90" y="150" />
-        <rect id="tile-15-15" x="150" y="150" />
-        <rect id="tile-16-15" x="160" y="150" />
-        <rect id="tile-1-16" x="10" y="160" />
-        <rect id="tile-2-16" x="20" y="160" />
-        <rect id="tile-3-16" x="30" y="160" />
-        <rect id="tile-4-16" x="40" y="160" />
-        <rect id="tile-5-16" x="50" y="160" />
-        <rect id="tile-6-16" x="60" y="160" />
-        <rect id="tile-7-16" x="70" y="160" />
-        <rect id="tile-8-16" x="80" y="160" />
-        <rect id="tile-9-16" x="90" y="160" />
-        <rect id="tile-15-16" x="150" y="160" />
-        <rect id="tile-16-16" x="160" y="160" />
-        <rect id="tile-0-17" x="0" y="170" />
-        <rect id="tile-1-17" x="10" y="170" />
-        <rect id="tile-2-17" x="20" y="170" />
-        <rect id="tile-3-17" x="30" y="170" />
-        <rect id="tile-4-17" x="40" y="170" />
-        <rect id="tile-5-17" x="50" y="170" />
-        <rect id="tile-6-17" x="60" y="170" />
-        <rect id="tile-7-17" x="70" y="170" />
-        <rect id="tile-8-17" x="80" y="170" />
-        <rect id="tile-9-17" x="90" y="170" />
-        <rect id="tile-10-17" x="100" y="170" />
-        <rect id="tile-11-17" x="110" y="170" />
-        <rect id="tile-12-17" x="120" y="170" />
-        <rect id="tile-13-17" x="130" y="170" />
-        <rect id="tile-14-17" x="140" y="170" />
-        <rect id="tile-15-17" x="150" y="170" />
-        <rect id="tile-16-17" x="160" y="170" />
-        <rect id="tile-1-18" x="10" y="180" />
-        <rect id="tile-2-18" x="20" y="180" />
-        <rect id="tile-3-18" x="30" y="180" />
-        <rect id="tile-4-18" x="40" y="180" />
-        <rect id="tile-5-18" x="50" y="180" />
-        <rect id="tile-6-18" x="60" y="180" />
-        <rect id="tile-7-18" x="70" y="180" />
-        <rect id="tile-8-18" x="80" y="180" />
-        <rect id="tile-15-18" x="150" y="180" />
-        <rect id="tile-16-18" x="160" y="180" />
-        <rect id="tile-17-18" x="170" y="180" />
-        <rect id="tile-7-19" x="70" y="190" />
-        <rect id="tile-8-19" x="80" y="190" />
-        <rect id="tile-15-19" x="150" y="190" />
-        <rect id="tile-16-19" x="160" y="190" />
-        <rect id="tile-17-19" x="170" y="190" />
-        <rect id="tile-18-19" x="180" y="190" />
-        <rect id="tile-19-19" x="190" y="190" />
-        <rect id="tile-20-19" x="200" y="190" />
-        <rect id="tile-21-19" x="210" y="190" />
-        <rect id="tile-22-19" x="220" y="190" />
-        <rect id="tile-23-19" x="230" y="190" />
-        <rect id="tile-7-20" x="70" y="200" />
-        <rect id="tile-8-20" x="80" y="200" />
-        <rect id="tile-15-20" x="150" y="200" />
-        <rect id="tile-16-20" x="160" y="200" />
-        <rect id="tile-17-20" x="170" y="200" />
-        <rect id="tile-18-20" x="180" y="200" />
-        <rect id="tile-19-20" x="190" y="200" />
-        <rect id="tile-20-20" x="200" y="200" />
-        <rect id="tile-21-20" x="210" y="200" />
-        <rect id="tile-22-20" x="220" y="200" />
-        <rect id="tile-7-21" x="70" y="210" />
-        <rect id="tile-8-21" x="80" y="210" />
-        <rect id="tile-15-21" x="150" y="210" />
-        <rect id="tile-16-21" x="160" y="210" />
-        <rect id="tile-7-22" x="70" y="220" />
-        <rect id="tile-8-22" x="80" y="220" />
-        <rect id="tile-15-22" x="150" y="220" />
-        <rect id="tile-16-22" x="160" y="220" />
-        <rect id="tile-7-23" x="70" y="230" />
-        <rect id="tile-8-23" x="80" y="230" />
-        <rect id="tile-15-23" x="150" y="230" />
-        <rect id="tile-16-23" x="160" y="230" />
-        <rect id="tile-7-24" x="70" y="240" />
-        <rect id="tile-16-24" x="160" y="240" />
-      </g>
-      <g class="rooms-group">
-        <rect id="cluedo" x="321.41016" y="182.49559" />
-        <g id="kitchen-group">
-          <path class="room"
-            d="m 175.41368,41.485311 c 90.60453,0 88.25118,-1.172847 88.25118,-1.172847 v 99.691626 h -17.06191 l -14.70851,-7.62346 v 6.45063 H 176.002 Z"
-            id="kitchen" />
-          <circle class="room-slot" cx="200" cy="70" r="5" />
-          <circle class="room-slot" cx="230" cy="70" r="5" />
-          <circle class="room-slot" cx="260" cy="70" r="5" />
-          <circle class="room-slot" cx="200" cy="110" r="5" />
-          <circle class="room-slot" cx="230" cy="110" r="5" />
-          <circle class="room-slot" cx="260" cy="110" r="5" />
+            <line
+              x1="10"
+              y1="0"
+              x2="0"
+              y2="10"
+              stroke="#8b5a2b"
+              stroke-width="0.5"
+            />
+            <line
+              x1="0"
+              y1="5"
+              x2="5"
+              y2="0"
+              stroke="#8b5a2b"
+              stroke-width="0.5"
+            />
+            <line
+              x1="10"
+              y1="5"
+              x2="5"
+              y2="10"
+              stroke="#8b5a2b"
+              stroke-width="0.5"
+            />
+            <circle r="1" cx="5" cy="5" fill="#8b5a2b"></circle>
+          </pattern>
+        </defs>
+        <g
+          id="tiles-group"
+          transform="matrix(1.4433155,0,0,1.4066001,177.46019,41.200637)"
+          class="tiles"
+        >
+          <rect id="tile-9-0" x="90" y="0" />
+          <rect id="tile-14-0" x="140" y="0" />
+          <rect id="tile-7-1" x="70" y="10" />
+          <rect id="tile-8-1" x="80" y="10" />
+          <rect id="tile-9-1" x="90" y="10" />
+          <rect id="tile-14-1" x="140" y="10" />
+          <rect id="tile-15-1" x="150" y="10" />
+          <rect id="tile-16-1" x="160" y="10" />
+          <rect id="tile-6-2" x="60" y="20" />
+          <rect id="tile-7-2" x="70" y="20" />
+          <rect id="tile-16-2" x="160" y="20" />
+          <rect id="tile-17-2" x="170" y="20" />
+          <rect id="tile-6-3" x="60" y="30" />
+          <rect id="tile-7-3" x="70" y="30" />
+          <rect id="tile-16-3" x="160" y="30" />
+          <rect id="tile-17-3" x="170" y="30" />
+          <rect id="tile-6-4" x="60" y="40" />
+          <rect id="tile-7-4" x="70" y="40" />
+          <rect id="tile-16-4" x="160" y="40" />
+          <rect id="tile-17-4" x="170" y="40" />
+          <rect id="tile-6-5" x="60" y="50" />
+          <rect id="tile-7-5" x="70" y="50" />
+          <rect id="tile-16-5" x="160" y="50" />
+          <rect id="tile-17-5" x="170" y="50" />
+          <rect id="tile-18-5" x="180" y="50" />
+          <rect id="tile-6-6" x="60" y="60" />
+          <rect id="tile-7-6" x="70" y="60" />
+          <rect id="tile-16-6" x="160" y="60" />
+          <rect id="tile-17-6" x="170" y="60" />
+          <rect id="tile-18-6" x="180" y="60" />
+          <rect id="tile-19-6" x="190" y="60" />
+          <rect id="tile-20-6" x="200" y="60" />
+          <rect id="tile-21-6" x="210" y="60" />
+          <rect id="tile-22-6" x="220" y="60" />
+          <rect id="tile-23-6" x="230" y="60" />
+          <rect id="tile-0-7" x="0" y="70" />
+          <rect id="tile-1-7" x="10" y="70" />
+          <rect id="tile-2-7" x="20" y="70" />
+          <rect id="tile-3-7" x="30" y="70" />
+          <rect id="tile-4-7" x="40" y="70" />
+          <rect id="tile-5-7" x="50" y="70" />
+          <rect id="tile-6-7" x="60" y="70" />
+          <rect id="tile-7-7" x="70" y="70" />
+          <rect id="tile-16-7" x="160" y="70" />
+          <rect id="tile-17-7" x="170" y="70" />
+          <rect id="tile-18-7" x="180" y="70" />
+          <rect id="tile-19-7" x="190" y="70" />
+          <rect id="tile-20-7" x="200" y="70" />
+          <rect id="tile-21-7" x="210" y="70" />
+          <rect id="tile-22-7" x="220" y="70" />
+          <rect id="tile-1-8" x="10" y="80" />
+          <rect id="tile-2-8" x="20" y="80" />
+          <rect id="tile-3-8" x="30" y="80" />
+          <rect id="tile-4-8" x="40" y="80" />
+          <rect id="tile-5-8" x="50" y="80" />
+          <rect id="tile-6-8" x="60" y="80" />
+          <rect id="tile-7-8" x="70" y="80" />
+          <rect id="tile-8-8" x="80" y="80" />
+          <rect id="tile-9-8" x="90" y="80" />
+          <rect id="tile-10-8" x="100" y="80" />
+          <rect id="tile-11-8" x="110" y="80" />
+          <rect id="tile-12-8" x="120" y="80" />
+          <rect id="tile-13-8" x="130" y="80" />
+          <rect id="tile-14-8" x="140" y="80" />
+          <rect id="tile-15-8" x="150" y="80" />
+          <rect id="tile-16-8" x="160" y="80" />
+          <rect id="tile-17-8" x="170" y="80" />
+          <rect id="tile-5-9" x="50" y="90" />
+          <rect id="tile-6-9" x="60" y="90" />
+          <rect id="tile-7-9" x="70" y="90" />
+          <rect id="tile-8-9" x="80" y="90" />
+          <rect id="tile-9-9" x="90" y="90" />
+          <rect id="tile-10-9" x="100" y="90" />
+          <rect id="tile-11-9" x="110" y="90" />
+          <rect id="tile-12-9" x="120" y="90" />
+          <rect id="tile-13-9" x="130" y="90" />
+          <rect id="tile-14-9" x="140" y="90" />
+          <rect id="tile-15-9" x="150" y="90" />
+          <rect id="tile-16-9" x="160" y="90" />
+          <rect id="tile-17-9" x="170" y="90" />
+          <rect id="tile-8-10" x="80" y="100" />
+          <rect id="tile-9-10" x="90" y="100" />
+          <rect id="tile-15-10" x="150" y="100" />
+          <rect id="tile-16-10" x="160" y="100" />
+          <rect id="tile-17-10" x="170" y="100" />
+          <rect id="tile-8-11" x="80" y="110" />
+          <rect id="tile-9-11" x="90" y="110" />
+          <rect id="tile-15-11" x="150" y="110" />
+          <rect id="tile-16-11" x="160" y="110" />
+          <rect id="tile-17-11" x="170" y="110" />
+          <rect id="tile-8-12" x="80" y="120" />
+          <rect id="tile-9-12" x="90" y="120" />
+          <rect id="tile-15-12" x="150" y="120" />
+          <rect id="tile-16-12" x="160" y="120" />
+          <rect id="tile-17-12" x="170" y="120" />
+          <rect id="tile-8-13" x="80" y="130" />
+          <rect id="tile-9-13" x="90" y="130" />
+          <rect id="tile-15-13" x="150" y="130" />
+          <rect id="tile-16-13" x="160" y="130" />
+          <rect id="tile-17-13" x="170" y="130" />
+          <rect id="tile-18-13" x="180" y="130" />
+          <rect id="tile-19-13" x="190" y="130" />
+          <rect id="tile-20-13" x="200" y="130" />
+          <rect id="tile-21-13" x="210" y="130" />
+          <rect id="tile-22-13" x="220" y="130" />
+          <rect id="tile-8-14" x="80" y="140" />
+          <rect id="tile-9-14" x="90" y="140" />
+          <rect id="tile-15-14" x="150" y="140" />
+          <rect id="tile-16-14" x="160" y="140" />
+          <rect id="tile-17-14" x="170" y="140" />
+          <rect id="tile-8-15" x="80" y="150" />
+          <rect id="tile-9-15" x="90" y="150" />
+          <rect id="tile-15-15" x="150" y="150" />
+          <rect id="tile-16-15" x="160" y="150" />
+          <rect id="tile-1-16" x="10" y="160" />
+          <rect id="tile-2-16" x="20" y="160" />
+          <rect id="tile-3-16" x="30" y="160" />
+          <rect id="tile-4-16" x="40" y="160" />
+          <rect id="tile-5-16" x="50" y="160" />
+          <rect id="tile-6-16" x="60" y="160" />
+          <rect id="tile-7-16" x="70" y="160" />
+          <rect id="tile-8-16" x="80" y="160" />
+          <rect id="tile-9-16" x="90" y="160" />
+          <rect id="tile-15-16" x="150" y="160" />
+          <rect id="tile-16-16" x="160" y="160" />
+          <rect id="tile-0-17" x="0" y="170" />
+          <rect id="tile-1-17" x="10" y="170" />
+          <rect id="tile-2-17" x="20" y="170" />
+          <rect id="tile-3-17" x="30" y="170" />
+          <rect id="tile-4-17" x="40" y="170" />
+          <rect id="tile-5-17" x="50" y="170" />
+          <rect id="tile-6-17" x="60" y="170" />
+          <rect id="tile-7-17" x="70" y="170" />
+          <rect id="tile-8-17" x="80" y="170" />
+          <rect id="tile-9-17" x="90" y="170" />
+          <rect id="tile-10-17" x="100" y="170" />
+          <rect id="tile-11-17" x="110" y="170" />
+          <rect id="tile-12-17" x="120" y="170" />
+          <rect id="tile-13-17" x="130" y="170" />
+          <rect id="tile-14-17" x="140" y="170" />
+          <rect id="tile-15-17" x="150" y="170" />
+          <rect id="tile-16-17" x="160" y="170" />
+          <rect id="tile-1-18" x="10" y="180" />
+          <rect id="tile-2-18" x="20" y="180" />
+          <rect id="tile-3-18" x="30" y="180" />
+          <rect id="tile-4-18" x="40" y="180" />
+          <rect id="tile-5-18" x="50" y="180" />
+          <rect id="tile-6-18" x="60" y="180" />
+          <rect id="tile-7-18" x="70" y="180" />
+          <rect id="tile-8-18" x="80" y="180" />
+          <rect id="tile-15-18" x="150" y="180" />
+          <rect id="tile-16-18" x="160" y="180" />
+          <rect id="tile-17-18" x="170" y="180" />
+          <rect id="tile-7-19" x="70" y="190" />
+          <rect id="tile-8-19" x="80" y="190" />
+          <rect id="tile-15-19" x="150" y="190" />
+          <rect id="tile-16-19" x="160" y="190" />
+          <rect id="tile-17-19" x="170" y="190" />
+          <rect id="tile-18-19" x="180" y="190" />
+          <rect id="tile-19-19" x="190" y="190" />
+          <rect id="tile-20-19" x="200" y="190" />
+          <rect id="tile-21-19" x="210" y="190" />
+          <rect id="tile-22-19" x="220" y="190" />
+          <rect id="tile-23-19" x="230" y="190" />
+          <rect id="tile-7-20" x="70" y="200" />
+          <rect id="tile-8-20" x="80" y="200" />
+          <rect id="tile-15-20" x="150" y="200" />
+          <rect id="tile-16-20" x="160" y="200" />
+          <rect id="tile-17-20" x="170" y="200" />
+          <rect id="tile-18-20" x="180" y="200" />
+          <rect id="tile-19-20" x="190" y="200" />
+          <rect id="tile-20-20" x="200" y="200" />
+          <rect id="tile-21-20" x="210" y="200" />
+          <rect id="tile-22-20" x="220" y="200" />
+          <rect id="tile-7-21" x="70" y="210" />
+          <rect id="tile-8-21" x="80" y="210" />
+          <rect id="tile-15-21" x="150" y="210" />
+          <rect id="tile-16-21" x="160" y="210" />
+          <rect id="tile-7-22" x="70" y="220" />
+          <rect id="tile-8-22" x="80" y="220" />
+          <rect id="tile-15-22" x="150" y="220" />
+          <rect id="tile-16-22" x="160" y="220" />
+          <rect id="tile-7-23" x="70" y="230" />
+          <rect id="tile-8-23" x="80" y="230" />
+          <rect id="tile-15-23" x="150" y="230" />
+          <rect id="tile-16-23" x="160" y="230" />
+          <rect id="tile-7-24" x="70" y="240" />
+          <rect id="tile-16-24" x="160" y="240" />
         </g>
-        <g id="dining_room-group">
-          <path class="room"
-            d="m 177.04796,167.24224 h 72.99823 v 13.07431 l 43.58104,1.08953 v 83.89349 l -14.70861,0.54476 -15.25335,-8.17144 v 8.17144 l -85.52778,-0.54476 z"
-            id="dining_room" />
-          <circle class="room-slot" cx="210" cy="200" r="5" />
-          <circle class="room-slot" cx="240" cy="200" r="5" />
-          <circle class="room-slot" cx="270" cy="200" r="5" />
-          <circle class="room-slot" cx="210" cy="240" r="5" />
-          <circle class="room-slot" cx="240" cy="240" r="5" />
-          <circle class="room-slot" cx="270" cy="240" r="5" />
+        <g class="rooms-group">
+          <rect id="cluedo" x="321.41016" y="182.49559" />
+          <g id="kitchen-group">
+            <path
+              class="room"
+              d="m 175.41368,41.485311 c 90.60453,0 88.25118,-1.172847 88.25118,-1.172847 v 99.691626 h -17.06191 l -14.70851,-7.62346 v 6.45063 H 176.002 Z"
+              id="kitchen"
+            />
+            <circle class="room-slot" cx="200" cy="70" r="5" />
+            <circle class="room-slot" cx="230" cy="70" r="5" />
+            <circle class="room-slot" cx="260" cy="70" r="5" />
+            <circle class="room-slot" cx="200" cy="110" r="5" />
+            <circle class="room-slot" cx="230" cy="110" r="5" />
+            <circle class="room-slot" cx="260" cy="110" r="5" />
+          </g>
+          <g id="dining_room-group">
+            <path
+              class="room"
+              d="m 177.04796,167.24224 h 72.99823 v 13.07431 l 43.58104,1.08953 v 83.89349 l -14.70861,0.54476 -15.25335,-8.17144 v 8.17144 l -85.52778,-0.54476 z"
+              id="dining_room"
+            />
+            <circle class="room-slot" cx="210" cy="200" r="5" />
+            <circle class="room-slot" cx="240" cy="200" r="5" />
+            <circle class="room-slot" cx="270" cy="200" r="5" />
+            <circle class="room-slot" cx="210" cy="240" r="5" />
+            <circle class="room-slot" cx="240" cy="240" r="5" />
+            <circle class="room-slot" cx="270" cy="240" r="5" />
+          </g>
+          <g id="lounge-group">
+            <path
+              class="room"
+              d="m 175.95844,308.33584 h 87.16207 v 14.16383 l 14.70859,-13.0743 v 84.43825 H 176.50321 Z"
+              id="lounge"
+            />
+            <circle class="room-slot" cx="210" cy="330" r="5" />
+            <circle class="room-slot" cx="240" cy="330" r="5" />
+            <circle class="room-slot" cx="270" cy="330" r="5" />
+            <circle class="room-slot" cx="210" cy="370" r="5" />
+            <circle class="room-slot" cx="240" cy="370" r="5" />
+            <circle class="room-slot" cx="270" cy="370" r="5" />
+          </g>
+          <g id="hall-group">
+            <path
+              class="room"
+              d="m 306.15679,294.72278 44.12579,-0.55079 v 13.76957 l 14.89247,-13.21878 h 29.23333 v 99.14085 h -88.25159 z"
+              id="hall"
+            />
+            <circle class="room-slot" cx="330" cy="320" r="5" />
+            <circle class="room-slot" cx="360" cy="320" r="5" />
+            <circle class="room-slot" cx="390" cy="320" r="5" />
+            <circle class="room-slot" cx="330" cy="360" r="5" />
+            <circle class="room-slot" cx="360" cy="360" r="5" />
+            <circle class="room-slot" cx="390" cy="360" r="5" />
+          </g>
+          <g id="study-group">
+            <path
+              class="room"
+              d="m 422.73606,336.66351 15.4165,13.45885 v -13.45885 h 87.5437 v 57.20011 H 423.28667 Z"
+              id="study"
+            />
+            <circle class="room-slot" cx="450" cy="350" r="5" />
+            <circle class="room-slot" cx="480" cy="350" r="5" />
+            <circle class="room-slot" cx="510" cy="350" r="5" />
+            <circle class="room-slot" cx="450" cy="380" r="5" />
+            <circle class="room-slot" cx="480" cy="380" r="5" />
+            <circle class="room-slot" cx="510" cy="380" r="5" />
+          </g>
+          <g id="library-group">
+            <path
+              class="room"
+              d="m 422.1913,294.17199 h 15.79814 v 14.70861 h 86.61731 v -70.81919 h -87.16209 v 14.16384 h -14.70858 v 14.7086 l 13.61906,11.44002 h -12.52953 z"
+              id="library"
+            />
+            <circle class="room-slot" cx="450" cy="270" r="5" />
+            <circle class="room-slot" cx="480" cy="270" r="5" />
+            <circle class="room-slot" cx="510" cy="270" r="5" />
+            <circle class="room-slot" cx="450" cy="310" r="5" />
+            <circle class="room-slot" cx="480" cy="310" r="5" />
+            <circle class="room-slot" cx="510" cy="310" r="5" />
+          </g>
+          <g id="billiard_room-group">
+            <path
+              class="room"
+              d="m 437.44466,180.74729 v 43.15029 h 87.70685 v -71.36395 h -87.70685 v 14.38344 l 14.43955,13.27701 z"
+              id="billiard_room"
+            />
+            <circle class="room-slot" cx="460" cy="190" r="5" />
+            <circle class="room-slot" cx="490" cy="190" r="5" />
+            <circle class="room-slot" cx="520" cy="190" r="5" />
+            <circle class="room-slot" cx="460" cy="220" r="5" />
+            <circle class="room-slot" cx="490" cy="220" r="5" />
+            <circle class="room-slot" cx="520" cy="220" r="5" />
+          </g>
+          <g id="conservatory-group">
+            <path
+              class="room"
+              d="m 451.60849,125.29548 h 73.543 V 40.857221 l -88.25159,0.54476 v 69.729659 0 h 15.79812 l 5.44763,4.90287 z"
+              id="conservatory"
+            />
+            <circle class="room-slot" cx="460" cy="80" r="5" />
+            <circle class="room-slot" cx="490" cy="80" r="5" />
+            <circle class="room-slot" cx="520" cy="80" r="5" />
+            <circle class="room-slot" cx="460" cy="110" r="5" />
+            <circle class="room-slot" cx="490" cy="110" r="5" />
+            <circle class="room-slot" cx="520" cy="110" r="5" />
+          </g>
+          <g id="ballroom-group">
+            <path
+              class="room"
+              d="m 378.61016,40.31263 v 28.051 h 30.507 v 43.45201 l -10.895,14.301 h 10.35 v 28.051 h -87.162 v -13.751 l -14.164,13.751 h -14.708 V 68.91363 h 28.872 v -28.051 z"
+              id="ballroom"
+            />
+            <circle class="room-slot" cx="320" cy="80" r="5" />
+            <circle class="room-slot" cx="350" cy="80" r="5" />
+            <circle class="room-slot" cx="380" cy="80" r="5" />
+            <circle class="room-slot" cx="320" cy="120" r="5" />
+            <circle class="room-slot" cx="350" cy="120" r="5" />
+            <circle class="room-slot" cx="380" cy="120" r="5" />
+          </g>
         </g>
-        <g id="lounge-group">
-          <path class="room"
-            d="m 175.95844,308.33584 h 87.16207 v 14.16383 l 14.70859,-13.0743 v 84.43825 H 176.50321 Z" id="lounge" />
-          <circle class="room-slot" cx="210" cy="330" r="5" />
-          <circle class="room-slot" cx="240" cy="330" r="5" />
-          <circle class="room-slot" cx="270" cy="330" r="5" />
-          <circle class="room-slot" cx="210" cy="370" r="5" />
-          <circle class="room-slot" cx="240" cy="370" r="5" />
-          <circle class="room-slot" cx="270" cy="370" r="5" />
+        <g class="room-labels-group">
+          <text class="room-label" x="225" y="90">Kitchen</text>
+          <text class="room-label" x="225" y="220">Dining Room</text>
+          <text class="room-label" x="225" y="350">Lounge</text>
+          <text class="room-label" x="350" y="350">Hall</text>
+          <text class="room-label" x="470" y="370">Study</text>
+          <text class="room-label" x="480" y="275">Library</text>
+          <text class="room-label" x="485" y="195">Billiard Room</text>
+          <text class="room-label" x="485" y="80">Conservatory</text>
+          <text class="room-label" x="350" y="110">Ballroom</text>
+          <text class="room-label-cluedo" x="335" y="240">Cluedo</text>
         </g>
-        <g id="hall-group">
-          <path class="room"
-            d="m 306.15679,294.72278 44.12579,-0.55079 v 13.76957 l 14.89247,-13.21878 h 29.23333 v 99.14085 h -88.25159 z"
-            id="hall" />
-          <circle class="room-slot" cx="330" cy="320" r="5" />
-          <circle class="room-slot" cx="360" cy="320" r="5" />
-          <circle class="room-slot" cx="390" cy="320" r="5" />
-          <circle class="room-slot" cx="330" cy="360" r="5" />
-          <circle class="room-slot" cx="360" cy="360" r="5" />
-          <circle class="room-slot" cx="390" cy="360" r="5" />
+        <g id="secret-passages-group">
+          <rect
+            class="secret-passage"
+            x="180"
+            y="50"
+            data-from="kitchen"
+            data-to="study"
+            data-tooltip="right"
+          >
+          </rect>
+
+          <rect
+            class="secret-passage"
+            x="510"
+            y="375"
+            data-from="study"
+            data-to="kitchen"
+            data-tooltip="left"
+          >
+          </rect>
+
+          <rect
+            class="secret-passage"
+            x="180"
+            y="375"
+            data-from="lounge"
+            data-to="conservatory"
+            data-tooltip="right"
+          >
+          </rect>
+
+          <rect
+            class="secret-passage"
+            x="510"
+            y="50"
+            data-from="conservatory"
+            data-to="lounge"
+            data-tooltip="left"
+          >
+          </rect>
         </g>
-        <g id="study-group">
-          <path class="room" d="m 422.73606,336.66351 15.4165,13.45885 v -13.45885 h 87.5437 v 57.20011 H 423.28667 Z"
-            id="study" />
-          <circle class="room-slot" cx="450" cy="350" r="5" />
-          <circle class="room-slot" cx="480" cy="350" r="5" />
-          <circle class="room-slot" cx="510" cy="350" r="5" />
-          <circle class="room-slot" cx="450" cy="380" r="5" />
-          <circle class="room-slot" cx="480" cy="380" r="5" />
-          <circle class="room-slot" cx="510" cy="380" r="5" />
+        <g id="weapons-group">
+          <image
+            class="weapon"
+            data-name="dagger"
+            href="https://cdn-icons-png.flaticon.com/128/3863/3863317.png"
+            x="325"
+            y="185"
+            width="10"
+            height="10"
+          />
+
+          <image
+            class="weapon"
+            data-name="candle stick"
+            href="https://cdn-icons-png.flaticon.com/128/17080/17080905.png"
+            x="355"
+            y="185"
+            width="10"
+            height="10"
+          />
+
+          <image
+            class="weapon"
+            data-name="revolver"
+            href="https://cdn-icons-png.flaticon.com/128/1320/1320476.png"
+            x="345"
+            y="200"
+            width="10"
+            height="10"
+          />
+
+          <image
+            class="weapon"
+            data-name="rope"
+            href="https://cdn-icons-png.flaticon.com/128/3539/3539196.png"
+            x="375"
+            y="200"
+            width="10"
+            height="10"
+          />
+
+          <image
+            class="weapon"
+            data-name="lead pipe"
+            href="https://cdn-icons-png.flaticon.com/128/5672/5672227.png"
+            x="325"
+            y="215"
+            width="10"
+            height="10"
+          />
+
+          <image
+            class="weapon"
+            data-name="spanner"
+            href="https://cdn-icons-png.flaticon.com/128/5233/5233077.png"
+            x="355"
+            y="215"
+            width="10"
+            height="10"
+          />
         </g>
-        <g id="library-group">
-          <path class="room"
-            d="m 422.1913,294.17199 h 15.79814 v 14.70861 h 86.61731 v -70.81919 h -87.16209 v 14.16384 h -14.70858 v 14.7086 l 13.61906,11.44002 h -12.52953 z"
-            id="library" />
-          <circle class="room-slot" cx="450" cy="270" r="5" />
-          <circle class="room-slot" cx="480" cy="270" r="5" />
-          <circle class="room-slot" cx="510" cy="270" r="5" />
-          <circle class="room-slot" cx="450" cy="310" r="5" />
-          <circle class="room-slot" cx="480" cy="310" r="5" />
-          <circle class="room-slot" cx="510" cy="310" r="5" />
-        </g>
-        <g id="billiard_room-group">
-          <path class="room"
-            d="m 437.44466,180.74729 v 43.15029 h 87.70685 v -71.36395 h -87.70685 v 14.38344 l 14.43955,13.27701 z"
-            id="billiard_room" />
-          <circle class="room-slot" cx="460" cy="190" r="5" />
-          <circle class="room-slot" cx="490" cy="190" r="5" />
-          <circle class="room-slot" cx="520" cy="190" r="5" />
-          <circle class="room-slot" cx="460" cy="220" r="5" />
-          <circle class="room-slot" cx="490" cy="220" r="5" />
-          <circle class="room-slot" cx="520" cy="220" r="5" />
-        </g>
-        <g id="conservatory-group">
-          <path class="room"
-            d="m 451.60849,125.29548 h 73.543 V 40.857221 l -88.25159,0.54476 v 69.729659 0 h 15.79812 l 5.44763,4.90287 z"
-            id="conservatory" />
-          <circle class="room-slot" cx="460" cy="80" r="5" />
-          <circle class="room-slot" cx="490" cy="80" r="5" />
-          <circle class="room-slot" cx="520" cy="80" r="5" />
-          <circle class="room-slot" cx="460" cy="110" r="5" />
-          <circle class="room-slot" cx="490" cy="110" r="5" />
-          <circle class="room-slot" cx="520" cy="110" r="5" />
-        </g>
-        <g id="ballroom-group">
-          <path class="room"
-            d="m 378.61016,40.31263 v 28.051 h 30.507 v 43.45201 l -10.895,14.301 h 10.35 v 28.051 h -87.162 v -13.751 l -14.164,13.751 h -14.708 V 68.91363 h 28.872 v -28.051 z"
-            id="ballroom" />
-          <circle class="room-slot" cx="320" cy="80" r="5" />
-          <circle class="room-slot" cx="350" cy="80" r="5" />
-          <circle class="room-slot" cx="380" cy="80" r="5" />
-          <circle class="room-slot" cx="320" cy="120" r="5" />
-          <circle class="room-slot" cx="350" cy="120" r="5" />
-          <circle class="room-slot" cx="380" cy="120" r="5" />
-        </g>
-      </g>
-      <g class="room-labels-group">
-        <text class="room-label" x="225" y="90">Kitchen</text>
-        <text class="room-label" x="225" y="220">Dining Room</text>
-        <text class="room-label" x="225" y="350">Lounge</text>
-        <text class="room-label" x="350" y="350">Hall</text>
-        <text class="room-label" x="470" y="370">Study</text>
-        <text class="room-label" x="480" y="275">Library</text>
-        <text class="room-label" x="485" y="195">Billiard Room</text>
-        <text class="room-label" x="485" y="80">Conservatory</text>
-        <text class="room-label" x="350" y="110">Ballroom</text>
-        <text class="room-label-cluedo" x="335" y="240">Cluedo</text>
-      </g>
-      <g id="secret-passages-group">
-        <rect class="secret-passage" x="180" y="50" data-from="kitchen" data-to="study" data-tooltip="right">
-        </rect>
+      </svg>
+    </div>
 
-        <rect class="secret-passage" x="510" y="375" data-from="study" data-to="kitchen" data-tooltip="left">
-        </rect>
+    <div id="players-cards-details"></div>
 
-        <rect class="secret-passage" x="180" y="375" data-from="lounge" data-to="conservatory" data-tooltip="right">
-        </rect>
+    <div class="action-buttons" class="hide">
+      <div id="weapon-popup" class="weapon-popup hidden"></div>
 
-        <rect class="secret-passage" x="510" y="50" data-from="conservatory" data-to="lounge" data-tooltip="left">
-        </rect>
-      </g>
-      <g id="weapons-group">
-        <image class="weapon" data-name="dagger" href="https://cdn-icons-png.flaticon.com/128/3863/3863317.png" x="325"
-          y="185" width="10" height="10" />
+      <div id="suspicion-modal" class="modal hidden">
+        <div class="modal-content">
+          <h2>Suspicion</h2>
+          <p id="suspicion-text"></p>
+          <p id="suspicion-status"></p>
 
-        <image class="weapon" data-name="candle stick" href="https://cdn-icons-png.flaticon.com/128/17080/17080905.png"
-          x="355" y="185" width="10" height="10" />
+          <div id="revealed-card" class="revealed-card hidden"></div>
 
-        <image class="weapon" data-name="revolver" href="https://cdn-icons-png.flaticon.com/128/1320/1320476.png"
-          x="345" y="200" width="10" height="10" />
+          <button id="close-modal">OK</button>
+        </div>
+      </div>
 
-        <image class="weapon" data-name="rope" href="https://cdn-icons-png.flaticon.com/128/3539/3539196.png" x="375"
-          y="200" width="10" height="10" />
+      <button id="accuse-button">🔍<span class="tooltip">Accuse</span></button>
+      <button id="dice-button">🎲<span class="tooltip">Roll Dice</span></button>
+      <button id="pass-button">
+        &gt;&gt;<span class="tooltip">Pass</span>
+      </button>
+    </div>
 
-        <image class="weapon" data-name="lead pipe" href="https://cdn-icons-png.flaticon.com/128/5672/5672227.png"
-          x="325" y="215" width="10" height="10" />
+    <div class="popup">
+      <div class="popup-dot"></div>
+      <p></p>
+    </div>
 
-        <image class="weapon" data-name="spanner" href="https://cdn-icons-png.flaticon.com/128/5233/5233077.png" x="355"
-          y="215" width="10" height="10" />
-      </g>
-    </svg>
-  </div>
+    <div id="tooltip" class="tooltip hidden"></div>
 
-  <div id="players-cards-details"></div>
+    <template id="player-template">
+      <div class="player">
+        <div class="player-icon"></div>
+        <div class="player-info">
+          <span class="player-name"></span>
+          <span class="player-pawn"></span>
+        </div>
+      </div>
+    </template>
 
-  <div class="action-buttons" class="hide">
-    <div id="weapon-popup" class="weapon-popup hidden"></div>
+    <template id="card-template">
+      <div class="card">
+        <img class="player-card" src="" alt="">
+      </div>
+    </template>
 
-    <div id="suspicion-modal" class="modal hidden">
-      <div class="modal-content">
+    <template id="suspicion-model-temp">
+      <div id="suspicion-container">
         <h2>Suspicion</h2>
-        <p id="suspicion-text"></p>
-        <p id="suspicion-status"></p>
-
-        <div id="revealed-card" class="revealed-card hidden"></div>
-
-        <button id="close-modal">OK</button>
-      </div>
-    </div>
-
-    <button id="accuse-button">🔍<span class="tooltip">Accuse</span></button>
-    <button id="dice-button">🎲<span class="tooltip">Roll Dice</span></button>
-    <button id="pass-button">
-      &gt;&gt;<span class="tooltip">Pass</span>
-    </button>
-  </div>
-
-  <div class="popup">
-    <div class="popup-dot"></div>
-    <p></p>
-  </div>
-
-  <div id="tooltip" class="tooltip hidden"></div>
-
-  <template id="player-template">
-    <div class="player">
-      <div class="player-icon"></div>
-      <div class="player-info">
-        <span class="player-name"></span>
-        <span class="player-pawn"></span>
-      </div>
-    </div>
-  </template>
-
-  <template id="card-template">
-    <div class="card">
-      <img class="player-card" src="" alt="">
-    </div>
-  </template>
-
-  <template id="suspicion-model-temp">
-    <div id="suspicion-container">
-      <h2>Suspicion</h2>
-      <p class="modal-room-label"></p>
-      <div class="suspicion-cards">
-        <div class="sus-card" id="card-suspect">
-          <span class="card-label">Suspect</span>
-          <span class="card-value"></span>
-        </div>
-        <div class="sus-card" id="card-weapon">
-          <span class="card-label">Weapon</span>
-          <span class="card-value"></span>
-        </div>
-        <div class="sus-card" id="card-room">
-          <span class="card-label">Room</span>
-          <span class="card-value"></span>
-        </div>
-      </div>
-
-      <p id="suspicion-status" class="waiting-text">
-        ....Waiting for players to disprove
-      </p>
-    </div>
-  </template>
-
-  <template id="disprove-model">
-    <div id="disproval-container">
-      <form action="/game/disprove" method="post">
-        <h2>Disprove Suspicion</h2>
-        <p class="modal-room-label">Select a card to challenge the claim</p>
+        <p class="modal-room-label"></p>
         <div class="suspicion-cards">
-          <div class="dis-card" id="dis-suspect">
-            <input type="radio" name="disprove" id="suspect" value="suspect" />
-            <label class="sus-card" for="suspect">
-              <span class="card-title">Suspect</span>
-            </label>
+          <div class="sus-card" id="card-suspect">
+            <span class="card-label">Suspect</span>
+            <span class="card-value"></span>
           </div>
-          <div class="dis-card" id="dis-weapon">
-            <input type="radio" name="disprove" id="weapon" value="weapon" />
-            <label class="sus-card" for="weapon">
-              <span class="card-title">Weapon</span>
-            </label>
+          <div class="sus-card" id="card-weapon">
+            <span class="card-label">Weapon</span>
+            <span class="card-value"></span>
           </div>
-
-          <div class="dis-card" id="dis-room">
-            <input type="radio" name="disprove" id="room" value="room" />
-            <label class="sus-card" for="room">
-              <span class="card-title">Room</span>
-            </label>
+          <div class="sus-card" id="card-room">
+            <span class="card-label">Room</span>
+            <span class="card-value"></span>
           </div>
         </div>
 
-        <button type="submit">Confirm Selection</button>
-      </form>
-    </div>
-  </template>
-
-  <template id="overlay-template">
-    <article id="content">
-      <slot></slot>
-    </article>
-  </template>
-
-  <template id="accusation-form-template">
-    <form action="" id="accusation-form">
-      <legend>Suspects</legend>
-      <div class="options" id="suspects"></div>
-      <legend>Weapons</legend>
-      <div class="options" id="weapons"></div>
-      <legend>Rooms</legend>
-      <div class="options" id="rooms"></div>
-      <div id="actions">
-        <button type="reset">Reset</button>
-        <button type="submit">Accuse</button>
+        <p id="suspicion-status" class="waiting-text">
+          ....Waiting for players to disprove
+        </p>
       </div>
-    </form>
-  </template>
+    </template>
 
-  <template id="option-template">
-    <div class="option">
-      <input type="radio" />
-      <label></label>
-    </div>
-  </template>
+    <template id="disprove-model">
+      <div id="disproval-container">
+        <form action="/game/disprove" method="post">
+          <h2>Disprove Suspicion</h2>
+          <p class="modal-room-label">Select a card to challenge the claim</p>
+          <div class="suspicion-cards">
+            <div class="dis-card" id="dis-suspect">
+              <input
+                type="radio"
+                name="disprove"
+                id="suspect"
+                value="suspect"
+              />
+              <label class="sus-card" for="suspect">
+                <span class="card-title">Suspect</span>
+              </label>
+            </div>
+            <div class="dis-card" id="dis-weapon">
+              <input type="radio" name="disprove" id="weapon" value="weapon" />
+              <label class="sus-card" for="weapon">
+                <span class="card-title">Weapon</span>
+              </label>
+            </div>
 
-  <template id="weapon-popup-temp">
-    <div id="weapon-popup-info">
-      <div class="weapon-popup-suspect" id="weapon-popup-suspect"></div>
-      <div class="weapon-popup-room" id="weapon-popup-room"></div>
-    </div>
-    <div class="weapon-selected-label" id="weapon-selected-label">
-      Select a weapon
-    </div>
-    <div class="weapon-cards-row" id="weapon-cards-row"></div>
-    <div class="weapon-popup-actions">
-      <button class="weapon-btn weapon-btn-confirm" id="weapon-suspect-btn">
-        Suspect
-      </button>
-      <button class="weapon-btn weapon-btn-cancel" id="weapon-cancel-btn">
-        Cancel
-      </button>
-    </div>
-  </template>
+            <div class="dis-card" id="dis-room">
+              <input type="radio" name="disprove" id="room" value="room" />
+              <label class="sus-card" for="room">
+                <span class="card-title">Room</span>
+              </label>
+            </div>
+          </div>
 
-  <template id="weapon-card-temp">
-    <div class="weapon-item">
-      <img class="weapon-img" src="" alt="" />
-      <span class="weapon-name tooltip"></span>
-    </div>
-  </template>
-</body>
+          <button type="submit">Confirm Selection</button>
+        </form>
+      </div>
+    </template>
 
+    <template id="overlay-template">
+      <article id="content">
+        <slot></slot>
+      </article>
+    </template>
+
+    <template id="accusation-form-template">
+      <form action="" id="accusation-form">
+        <legend>Suspects</legend>
+        <div class="options" id="suspects"></div>
+        <legend>Weapons</legend>
+        <div class="options" id="weapons"></div>
+        <legend>Rooms</legend>
+        <div class="options" id="rooms"></div>
+        <div id="actions">
+          <button type="reset">Reset</button>
+          <button type="submit">Accuse</button>
+        </div>
+      </form>
+    </template>
+
+    <template id="option-template">
+      <div class="option">
+        <input type="radio" />
+        <label></label>
+      </div>
+    </template>
+
+    <template id="weapon-popup-temp">
+      <div id="weapon-popup-info">
+        <div class="weapon-popup-suspect" id="weapon-popup-suspect"></div>
+        <div class="weapon-popup-room" id="weapon-popup-room"></div>
+      </div>
+      <div class="weapon-selected-label" id="weapon-selected-label">
+        Select a weapon
+      </div>
+      <div class="weapon-cards-row" id="weapon-cards-row"></div>
+      <div class="weapon-popup-actions">
+        <button class="weapon-btn weapon-btn-confirm" id="weapon-suspect-btn">
+          Suspect
+        </button>
+        <button class="weapon-btn weapon-btn-cancel" id="weapon-cancel-btn">
+          Cancel
+        </button>
+      </div>
+    </template>
+
+    <template id="weapon-card-temp">
+      <div class="weapon-item">
+        <img class="weapon-img" src="" alt="" />
+        <span class="weapon-name tooltip"></span>
+      </div>
+    </template>
+  </body>
 </html>
