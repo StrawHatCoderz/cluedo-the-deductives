@@ -16,6 +16,16 @@ const registerListeners = (container, temp) => {
   form.addEventListener("submit", (e) => sendDisprovedCard(e, temp));
 };
 
+const setValues = (combo, cards, disprovableCards) =>
+  Object.values(combo).forEach((card, i) => {
+    console.log(cards[i], "==>");
+    cards[i].querySelector("input").value = card;
+    cards[i].querySelector("label").textContent = card;
+    if (!disprovableCards?.includes(card)) {
+      cards[i].querySelector("input").setAttribute("disabled", true);
+    }
+  });
+
 const createDisprovePopUp = ({ currentPlayer, suspicionCombo }) => {
   const hand = currentPlayer.hand;
   const combo = {
@@ -32,14 +42,7 @@ const createDisprovePopUp = ({ currentPlayer, suspicionCombo }) => {
     hand.includes(card)
   );
   const cards = disproveTemp.querySelectorAll(".dis-card");
-  Object.values(combo).forEach((card, i) => {
-    console.log(cards[i], "==>");
-    cards[i].querySelector("input").value = card;
-    cards[i].querySelector("label").textContent = card;
-    if (!disprovableCards.includes(card)) {
-      cards[i].querySelector("input").setAttribute("disabled", true);
-    }
-  });
+  setValues(combo, cards, disprovableCards);
   registerListeners(disproveTemp);
   document.body.appendChild(disproveTemp);
 };
@@ -56,20 +59,43 @@ const showDisproval = async (state) => {
   showResult(suspicion, data);
 };
 
+const announceSuspicion = (state) => {
+  const combo = {
+    suspect: state.suspicionCombo.suspect,
+    weapon: state.suspicionCombo.weapon,
+    room: state.suspicionCombo.room,
+  };
+
+  const announceTemp = document.querySelector("#announce-suspicion").content
+    .cloneNode(true);
+  const cards = announceTemp.querySelectorAll(".dis-card");
+  setValues(combo, cards);
+
+  announceTemp.querySelector("h2").textContent =
+    `${state.activePlayer.name} suspects`;
+  document.body.append(announceTemp);
+
+  document.addEventListener("click", () => {
+    document.querySelector("#announce-container").remove();
+  });
+};
+
 export const disproveASuspicion = (state) => {
   if (state.hasDisproved && state.activePlayer?.id === state.currentPlayer.id) {
-    showDisproval(state);
-    return;
+    return showDisproval(state);
   }
   if (state.hasDisproved) {
     const { name } = state.players.find(
       ({ id }) => id === state.disprovablePlayer,
     );
-    displayPopup(`${name} has disproved`);
-    return;
+    return displayPopup(`${name} has disproved`);
   }
-  if (state.currentPlayer.id === state.disprovablePlayer) {
-    createDisprovePopUp(state);
-    return;
+  if (
+    state.currentPlayer.id === state.disprovablePlayer && !state.hasDisproved
+  ) {
+    return createDisprovePopUp(state);
+  }
+  if (!state.hasDisproved && state.activePlayer.id !== state.currentPlayer.id) {
+    announceSuspicion(state);
   }
 };

@@ -133,7 +133,9 @@ const fillModalCards = (clone, data) => {
   clone.querySelector("#card-room .card-value").textContent = data.room;
 };
 
-const showModal = (data) => {
+export const showModal = (data) => {
+  console.log(data);
+
   const modal = getEl("suspicion-modal");
   const suspicionClone = document
     .querySelector("#suspicion-model-temp")
@@ -145,6 +147,7 @@ const showModal = (data) => {
 
   modal.addEventListener("click", (e) => e.target === modal && hide(modal));
   show(modal);
+  return modal;
 };
 
 const getHighlightId = (result, data) => {
@@ -179,7 +182,6 @@ const moveSuspectPawn = (suspicion) =>
   });
 
 const mockFetchSuspicion = async (suspicion) => {
-  // sends req to server
   removePawnHighlight();
   await moveSuspectPawn(suspicion);
   await saveSuspicion(suspicion);
