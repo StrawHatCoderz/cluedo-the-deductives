@@ -1,9 +1,9 @@
-import { isCurrentPlayer } from "./utils.js";
+import { isActivePlayer, isCurrentPlayer } from "./utils.js";
 
-const createPlayer = (node, player, currentPlayerId) => {
+const createPlayer = (node, player, activePlayer, currentPlayer) => {
   const playerNode = node.querySelector(".player");
-  if (isCurrentPlayer(player.id, currentPlayerId)) {
-    playerNode.setAttribute("id", "current-player");
+  if (isActivePlayer(player.id, activePlayer)) {
+    playerNode.setAttribute("id", "active-player");
   }
 
   if (player.isEliminated) {
@@ -14,7 +14,9 @@ const createPlayer = (node, player, currentPlayerId) => {
   icon.setAttribute("id", `${player.pawn}-icon`);
 
   const playerName = node.querySelector(".player-name");
-  playerName.textContent = player.name;
+  playerName.textContent = isCurrentPlayer(player.id, currentPlayer)
+    ? "You"
+    : player.name;
 
   const playerPawn = node.querySelector(".player-pawn");
   playerPawn.textContent = player.pawn;
@@ -31,7 +33,12 @@ export const renderPlayers = (boardConfig) => {
   for (const player of boardConfig.players) {
     const playerClone = playerTemplate.content.cloneNode(true);
 
-    createPlayer(playerClone, player, boardConfig.currentPlayer.id);
+    createPlayer(
+      playerClone,
+      player,
+      boardConfig.activePlayer,
+      boardConfig.currentPlayer,
+    );
     allPlayerContainer.appendChild(playerClone);
   }
 };

@@ -18,8 +18,9 @@ export const getGameState = (c) => {
   const gameController = c.get("gameController");
 
   const lobbyId = getCookie(c, "lobbyId");
+  const playerId = getCookie(c, "playerId");
 
-  const gameState = gameController.getGameState(lobbyId);
+  const gameState = gameController.getGameState(lobbyId, playerId);
   return c.json({ success: true, data: gameState }, 200);
 };
 

@@ -37,6 +37,7 @@ export class GameController {
   }
 
   getGameState(gameId, playerId) {
+
     return this.#games[gameId].getState(playerId);
   }
 

@@ -6,8 +6,11 @@ import { renderPlayerCards } from "./render_player_cards.js";
 import { removePawnHighlight, suspicionBtnListener } from "./suspicion.js";
 import { handleRedirectBasedOnGameState } from "./victory.js";
 
-export const isCurrentPlayer = (playerId, currentPlayerId) =>
-  playerId === currentPlayerId;
+export const isActivePlayer = (playerId, activePlayer) =>
+  playerId === activePlayer.id;
+
+export const isCurrentPlayer = (playerId, currentPlayer) =>
+  playerId === currentPlayer.id;
 
 export const getCharacterColor = (char) => {
   const colors = {
@@ -71,8 +74,12 @@ export const fetchGameConfig = async (url) => {
     players: parsePlayersData(gameContext.players),
     pawns: parsePawnsData(gameContext.pawns),
     currentPlayer: {
-      id: gameContext.activePlayer.id,
+      id: gameContext.currentPlayer.id,
       hand: gameContext.hand,
+      pawn: gameContext.currentPlayer.id,
+    },
+    activePlayer: {
+      id: gameContext.activePlayer.id,
       pawn: gameContext.activePlayer.pawn,
     },
     canRoll: gameContext.canRoll,

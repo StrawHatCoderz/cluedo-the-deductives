@@ -63,13 +63,33 @@ export class Game {
     return this.#players[playerId]?.getPlayerData();
   }
 
+  #getActivePlayerData() {
+    const activePlayer = this.#activePlayer?.getPlayerData();
+
+    return {
+      id: activePlayer?.id,
+      pawn: activePlayer?.pawn,
+    };
+  }
+
+  #getCurrentPlayerData(playerId) {
+    const currentPlayer = this.#players[playerId]?.getPlayerData();
+
+    return {
+      id: currentPlayer?.id,
+      hand: currentPlayer?.hand,
+      pawn: currentPlayer?.pawn,
+    };
+  }
+
   getState(playerId) {
     return {
       state: this.#gameState,
       players: this.#getAllPlayers(),
       hand: this.#findPlayer(playerId)?.hand,
       pawns: this.#getAllPawns(),
-      activePlayer: this.#activePlayer?.getPlayerData(),
+      activePlayer: this.#getActivePlayerData(),
+      currentPlayer: this.#getCurrentPlayerData(playerId),
       canRoll: this.#isRollAllowed(playerId),
       secretPassageId: this.#getSecretPassageId(playerId),
       canSuspect: this.canSuspect(),

@@ -192,7 +192,7 @@ path,
   padding: 10px 12px;
 }
 
-#current-player {
+#active-player {
   border-color: var();
   background: gold;
 }
