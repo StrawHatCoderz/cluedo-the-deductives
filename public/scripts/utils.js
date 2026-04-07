@@ -102,7 +102,7 @@ export const fetchGameConfig = async (url, etag) => {
     currentPlayer: {
       id: gameContext.currentPlayer.id,
       hand: gameContext.hand,
-      pawn: gameContext.currentPlayer.id,
+      pawn: gameContext.currentPlayer.pawn,
     },
     activePlayer: {
       id: gameContext.activePlayer.id,

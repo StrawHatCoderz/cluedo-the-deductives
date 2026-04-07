@@ -235,7 +235,7 @@ export const renderActions = (boardConfig) => {
   if (boardConfig.canRoll) localStorage.clear();
   if (path.length) {
     highlightTiles(path);
-    movePlayer(path, boardConfig.currentPlayer.pawn, boardConfig);
+    movePlayer(path, boardConfig.currentPlayer.pawn);
   }
 };
 
