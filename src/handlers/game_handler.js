@@ -6,7 +6,7 @@ export const startGame = (c) => {
   const lobbyId = getCookie(c, "lobbyId");
   const playerId = getCookie(c, "playerId");
 
-  lobbyController.startGame(lobbyId);
+  lobbyController.startGame(+lobbyId);
   const allPlayers = lobbyController.getLobbyState(+lobbyId, +playerId).players;
 
   gameController.startGame(lobbyId, allPlayers);

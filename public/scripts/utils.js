@@ -94,7 +94,6 @@ export const fetchGameConfig = async (url, etag) => {
     return res;
   }
   const gameContext = res.body.data;
-  console.log(gameContext);
 
   const gameConfig = {
     state: gameContext.state,
@@ -167,8 +166,6 @@ const disableButtons = () => {
 };
 
 const toggleActionButton = ({ isPlayerActive }) => {
-  console.log(isPlayerActive);
-
   const actionsContainer = document.querySelector(".action-buttons");
 
   if (!isPlayerActive) {
