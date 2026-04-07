@@ -160,8 +160,7 @@ export class Game {
   }
 
   addSuspicion(suspectCombination) {
-    this.#turn.addSuspectCombination(suspectCombination);
-    this.#turn.disproveASuspicion(this.#turnOrder, this.#activePlayer);
+    this.#turn.addSuspectCombination(suspectCombination, this.#turnOrder);
   }
 
   addDisprovedCard(card) {

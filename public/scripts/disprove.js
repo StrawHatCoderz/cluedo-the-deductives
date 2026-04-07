@@ -1,4 +1,5 @@
 import { showResult } from "./suspicion.js";
+import { displayPopup } from "./utils.js";
 
 const mockedState = {
   players: [],
@@ -56,6 +57,9 @@ const showDisproval = async (state) => {
 export const disproveASuspicion = (state = mockedState) => {
   if (state.hasDisproved && state.activePlayer?.id === state.currentPlayer.id) {
     showDisproval(state);
+  }
+  if (state.hasDisproved) {
+    displayPopup(`${state.disprovablePlayer} is disproved`);
   }
   if (state.currentPlayer.id === state.disprovablePlayer) {
     createDisprovePopUp(state);

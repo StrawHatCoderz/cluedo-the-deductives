@@ -1,4 +1,5 @@
 import { renderActions } from "./board.js";
+import { disproveASuspicion } from "./disprove.js";
 import { renderBoard } from "./render_board.js";
 import { renderPlayers } from "./render_player.js";
 import { renderPlayerCards } from "./render_player_cards.js";
@@ -142,7 +143,7 @@ export const polling = (playerCardsContainer) => {
       renderPlayerCards(newState.currentPlayer.hand, playerCardsContainer);
       renderActions(newState);
       suspicionBtnListener(newState);
-      disproveASuspicion(newState);
+      newState.hasSuspected && disproveASuspicion(newState);
       prevState = newState;
     }
   }, 300);

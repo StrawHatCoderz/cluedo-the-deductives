@@ -57,14 +57,15 @@ export class Turn {
   }
 
   canSuspect() {
-    const pawnLocation = this.#player.getPlayerData().pawn.position;
+    const pawnLocation = this.#player?.getPlayerData().pawn.position;
     return !!pawnLocation.room && !this.#hasSuspected;
   }
 
-  addSuspectCombination(suspectCombination) {
+  addSuspectCombination(suspectCombination, order) {
     this.#suspectCombination = suspectCombination;
     this.#hasSuspected = true;
     this.#isDiceRolled = true;
+    this.#disproveASuspicion(order, this.#player);
   }
 
   getSuspectCombination() {
@@ -74,7 +75,7 @@ export class Turn {
   #findDisprovablePlayer(order) {
     return order.find((player) =>
       Object.values(this.#suspectCombination).some((clue) =>
-        player.getPlayerData().hand.includes(clue)
+        player?.getPlayerData().hand.includes(clue)
       )
     );
   }
@@ -103,7 +104,7 @@ export class Turn {
     return this.#disprovablePlayer;
   }
 
-  disproveASuspicion(playersOrder, activePlayer) {
+  #disproveASuspicion(playersOrder, activePlayer) {
     const disprovalOrder = this.#getDisprovalOrder(playersOrder, activePlayer);
     this.#disprovablePlayer = this.#findDisprovablePlayer(disprovalOrder)
       ?.getPlayerData()?.id;

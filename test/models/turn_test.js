@@ -59,7 +59,7 @@ describe("Turn Management", () => {
       player.assignPawn(pawn);
       turn = new Turn(player);
 
-      turn.addSuspectCombination({});
+      turn.addSuspectCombination({}, [player]);
       const result = turn.canSuspect();
 
       assertEquals(result, false);
@@ -73,8 +73,9 @@ describe("Turn Management", () => {
         weapon: "dagger",
         room: "kitchen",
       };
+      const order = [player];
 
-      turn.addSuspectCombination(combination);
+      turn.addSuspectCombination(combination, order);
       assertEquals(turn.getSuspectCombination(), combination);
     });
   });
