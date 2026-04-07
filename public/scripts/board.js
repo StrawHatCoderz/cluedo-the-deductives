@@ -69,7 +69,7 @@ const handleMovePlayer = async (e, tiles, pawn) => {
     body: JSON.stringify({ newNodeId, tiles, isUsingSecretPassage: false }),
   });
 
-  localStorage.clear();
+  localStorage.removeItem("reachableNodes");
   removePlayerIcon(pawn);
   clearHighlights();
   const passBtn = document.querySelector("#pass-button");
@@ -167,7 +167,7 @@ const handleSecretPassageClick = async (
   clearAllSecretPassages();
   clearHighlights();
 
-  localStorage.clear();
+  localStorage.removeItem("reachableNodes");
 };
 
 const clearAllSecretPassages = () => {
@@ -232,7 +232,7 @@ export const renderActions = (boardConfig) => {
     boardConfig.currentPlayer.pawn,
   );
 
-  if (boardConfig.canRoll) localStorage.clear();
+  if (boardConfig.canRoll) localStorage.removeItem("reachableNodes");
   if (path.length) {
     highlightTiles(path);
     movePlayer(path, boardConfig.currentPlayer.pawn);

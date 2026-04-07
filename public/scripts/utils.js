@@ -170,8 +170,14 @@ const toggleActionButton = ({ isPlayerActive }) => {
 
   if (!isPlayerActive) {
     actionsContainer.classList.add("hide");
-  } else {
-    actionsContainer.classList.remove("hide");
+    return;
+  }
+
+  actionsContainer.classList.remove("hide");
+  const isTurnPopUpShown = localStorage.getItem("isTurnPopUpShown") ?? "";
+
+  if (!isTurnPopUpShown) {
+    localStorage.setItem("isTurnPopUpShown", "1");
     displayPopup("It's Your Turn");
   }
 };
