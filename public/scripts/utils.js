@@ -94,6 +94,7 @@ export const fetchGameConfig = async (url, etag) => {
     return res;
   }
   const gameContext = res.body.data;
+  console.log(gameContext);
 
   const gameConfig = {
     state: gameContext.state,
@@ -111,7 +112,8 @@ export const fetchGameConfig = async (url, etag) => {
     canRoll: gameContext.canRoll,
     canSuspect: gameContext.canSuspect,
     secretPassageId: gameContext.secretPassageId,
-    isPlayerActive: gameContext.isPlayerActive,
+    isPlayerActive:
+      gameContext.currentPlayer.id === gameContext.activePlayer.id,
   };
   return { etag: res.etag, changed: res.changed, gameConfig };
 };

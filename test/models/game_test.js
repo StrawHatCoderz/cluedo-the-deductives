@@ -135,12 +135,12 @@ describe("GAME", () => {
 
   describe("update current player", () => {
     it(" => should update turn correctly", () => {
-      const { p1 } = add3Players();
+      const { p2 } = add3Players();
 
       game.start();
 
       const currentPlayer = game.updateTurn();
-      assertEquals(currentPlayer.id, p1.getPlayerData().id);
+      assertEquals(currentPlayer.id, p2.getPlayerData().id);
     });
 
     it(" => should skip eliminated player", () => {

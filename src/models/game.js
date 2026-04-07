@@ -39,6 +39,7 @@ export class Game {
     this.#distributeCards();
     this.#updateActivePlayer(0);
     this.changeCurrentState();
+    this.updateTurn();
   }
 
   #getActivePlayers() {
