@@ -172,6 +172,7 @@ const toggleActionButton = ({ isPlayerActive }) => {
     actionsContainer.classList.add("hide");
   } else {
     actionsContainer.classList.remove("hide");
+    displayPopup("It's Your Turn");
   }
 };
 
