@@ -37,10 +37,9 @@ export class LobbyController {
     return { lobbyId, playerId: this.#currentPlayerId };
   }
 
-  startGame(lobbyId) {
+  updateLobbyState(lobbyId, playerId) {
     const lobby = this.#lobbies[lobbyId];
-
-    lobby.updateState("started");
+    return lobby.updateState(playerId);
   }
 
   getLobbyState(lobbyId, playerId) {

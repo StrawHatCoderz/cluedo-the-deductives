@@ -16,7 +16,8 @@ describe("LOBBY", () => {
   describe("get state", () => {
     it(" => should give current lobby state", () => {
       const state = lobby.getState();
-      assertEquals(state, { id, players: [], state: "waiting" });
+
+      assertEquals(state, { id, players: [], isStarted: false });
     });
 
     it(" => should give current lobby state: one player", () => {
@@ -30,7 +31,7 @@ describe("LOBBY", () => {
           character: { color: "violet", name: "professor plum" },
           isHost: true,
         }],
-        state: "waiting",
+        isStarted: false,
       });
     });
 
@@ -42,7 +43,7 @@ describe("LOBBY", () => {
 
       assertEquals(state.id, id);
       assertEquals(state.players.length, 2);
-      assertEquals(state.state, "waiting");
+      assertEquals(state.isStarted, false);
     });
   });
 
@@ -79,7 +80,7 @@ describe("LOBBY", () => {
       lobby.addPlayer(1, "username", true);
       lobby.addPlayer(2, "username", false);
       lobby.addPlayer(3, "username", false);
-      lobby.updateState();
+      lobby.updateState(1);
       assertThrows(() => lobby.addPlayer(4, "username", true));
     });
   });
@@ -105,16 +106,16 @@ describe("LOBBY", () => {
       lobby.addPlayer(3, "name", false);
       lobby.addPlayer(4, "name", false);
       lobby.addPlayer(5, "name", false);
-      lobby.updateState("started");
+      lobby.updateState(1);
       const state = lobby.getState();
 
-      assertEquals(state.state, "started");
+      assertEquals(state.isStarted, true);
     });
 
     it(" => should not update state if invalid player count", () => {
       lobby.addPlayer(1, "username", true);
 
-      assertThrows(() => lobby.updateState("started"));
+      assertThrows(() => lobby.updateState(1));
     });
   });
 });

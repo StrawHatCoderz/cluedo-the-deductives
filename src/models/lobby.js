@@ -1,10 +1,10 @@
 export class Lobby {
   #id;
-  #state;
   #maxPlayer;
   #minPlayer;
   #pawns;
   #players;
+  #isStarted;
 
   constructor(id, maxPlayer, minPlayer, pawns) {
     this.#id = id;
@@ -12,7 +12,7 @@ export class Lobby {
     this.#minPlayer = minPlayer;
     this.#pawns = pawns;
     this.#players = [];
-    this.#state = "waiting";
+    this.#isStarted = false;
   }
 
   #findPlayer(playerId) {
@@ -22,7 +22,7 @@ export class Lobby {
   getState() {
     return {
       id: this.#id,
-      state: this.#state,
+      isStarted: this.#isStarted,
       players: this.#players,
     };
   }
@@ -36,17 +36,24 @@ export class Lobby {
       throw new Error("MaxPlayer reached");
     }
 
-    if (this.#state !== "waiting") throw new Error("Game already started");
+    if (this.#isStarted) throw new Error("Game already started");
     const character = this.#pawns.pop();
     this.#players.push({ id, name, isHost, character });
   }
 
-  updateState(state) {
-    if (this.#players.length >= 3 && this.#players.length <= 6) {
-      this.#state = state;
-      return;
+  updateState(playerId) {
+    const playerCount = this.#players.length;
+    const belowMinPlayers = playerCount < this.#minPlayer;
+    const aboveMaxPlayers = playerCount > this.#maxPlayer;
+
+    if (!this.isHost(playerId)) {
+      throw new Error("You Can't Start Game");
     }
 
-    throw new Error("Invalid Player Count");
+    if (belowMinPlayers || aboveMaxPlayers) {
+      throw new Error("Invalid Player Count");
+    }
+
+    this.#isStarted = true;
   }
 }
