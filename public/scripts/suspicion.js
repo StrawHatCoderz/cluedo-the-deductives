@@ -61,8 +61,9 @@ const createWeaponCard = (weapon, selectedLabel, suspectBtn) => {
   cardClone.querySelector(".weapon-img").alt = weapon;
   cardClone.querySelector(".weapon-name").textContent = weapon;
   card.dataset.weapon = weapon;
-  card.addEventListener("click", () =>
-    selectWeapon(card, selectedLabel, weapon, suspectBtn),
+  card.addEventListener(
+    "click",
+    () => selectWeapon(card, selectedLabel, weapon, suspectBtn),
   );
 
   return cardClone;
@@ -154,7 +155,7 @@ const getHighlightId = (result, data) => {
 
 export const showResult = (data, result) => {
   const statusEl = getEl("suspicion-status");
-  
+
   getEl(getHighlightId(result, data))?.classList.add("card-revealed");
   statusEl.textContent = `${result.by} revealed the card`;
 };

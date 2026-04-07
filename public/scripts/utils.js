@@ -117,7 +117,7 @@ export const fetchGameConfig = async (url, etag) => {
       gameContext.currentPlayer.id === gameContext.activePlayer.id,
     diceValues: gameContext.diceValues,
     shouldShowDicePopup: gameContext.shouldShowDicePopup,
-    ...disprovalData
+    ...disprovalData,
   };
   return { etag: res.etag, changed: res.changed, gameConfig };
 };

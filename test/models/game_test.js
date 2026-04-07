@@ -276,7 +276,7 @@ describe("GAME", () => {
 
       game.addSuspicion(combination);
 
-      assertEquals(game.getState().disprovablePlayer !== undefined, true);
+      assertEquals(game.getState().disprovalData.disprovablePlayer, 2);
     });
   });
 });

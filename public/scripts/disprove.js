@@ -1,7 +1,7 @@
 import { showResult } from "./suspicion.js";
 import { displayPopup } from "./utils.js";
 
-const sendDisprovedCard = async (e, container) => {
+const sendDisprovedCard = async (e) => {
   e.preventDefault();
   const data = new FormData(e.target);
   await fetch("/game/disprove", {
@@ -29,7 +29,7 @@ const createDisprovePopUp = ({ currentPlayer, suspicionCombo }) => {
     .content.cloneNode(true);
 
   const disprovableCards = Object.values(suspicionCombo).filter((card) =>
-    hand.includes(card),
+    hand.includes(card)
   );
   const cards = disproveTemp.querySelectorAll(".dis-card");
   Object.values(combo).forEach((card, i) => {
