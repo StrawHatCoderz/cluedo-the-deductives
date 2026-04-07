@@ -21,14 +21,6 @@ const getCenter = (el) => {
   };
 };
 
-const shuffle = (array) => {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array;
-};
-
 const createPlayers = (num = 6) => {
   const table = getElement("table");
   document.querySelectorAll(".player").forEach((p) => p.remove());
@@ -76,6 +68,18 @@ const animateTo = (el, pos, deckIndex, extra = "") =>
     el.style.transform = `translate(-50%,-50%) scale(1) ${extra}`;
   }, deckIndex * 400);
 
+const moveEnvelope = (deckIndex, total, cb) => {
+  if (deckIndex === total - 1) {
+    const flap = document.querySelector(".flap");
+    const seal = getElement("seal");
+    flap.style.transform = "rotate(0deg)";
+    setTimeout(() => {
+      seal.classList.add("seal");
+      cb?.();
+    }, 400);
+  }
+};
+
 const placeInEnvelope = (flying, top, deckIndex, envelope, total, cb) => {
   setTimeout(
     () => {
@@ -92,7 +96,7 @@ const placeInEnvelope = (flying, top, deckIndex, envelope, total, cb) => {
       });
 
       envelope.appendChild(card);
-      if (deckIndex === total - 1) cb?.();
+      moveEnvelope(deckIndex, total, cb);
     },
     deckIndex * 400 + 700,
   );
@@ -106,7 +110,7 @@ const moveToPlayer = (card, player, ox, oy, delay) =>
 
     card.style.left = player.style.left;
     card.style.top = player.style.top;
-
+    card.style.zIndex *= -1;
     card.style.transform =
       `translate(-50%,-50%) rotate(${rot}deg) translate(${ox}px,${oy}px)`;
 
@@ -115,7 +119,7 @@ const moveToPlayer = (card, player, ox, oy, delay) =>
 
 const distributeCards = (cards, table, players, startPos) => {
   setTimeout(() => {
-    shuffle(cards).forEach((card, i) => {
+    cards.forEach((card, i) => {
       card.className = "card";
       table.appendChild(card);
 
@@ -125,6 +129,8 @@ const distributeCards = (cards, table, players, startPos) => {
       Object.assign(card.style, {
         left: `${startPos.x}px`,
         top: `${startPos.y}px`,
+        transform: `translate(-${50 + i * 0.5}%, -${50 - i * 0.5}%)`,
+        "z-index": -i,
       });
 
       moveToPlayer(card, player, offset, offset, i * 200);
@@ -159,16 +165,16 @@ const collectCards = (decks) =>
 const collectAndDeal = (totalPlayers) => {
   const decks = ["deck1", "deck2", "deck3"].map(getElement);
   const table = getElement("table");
-  const env = getElement("envelope");
+  const envelop = getElement("envelope");
 
   const cards = collectCards(decks);
   createPlayers(totalPlayers);
 
   const players = [...document.querySelectorAll(".player")];
   const start = getPlayersCenter();
-
-  env.style.transition = "all 1s ease";
-  env.style.bottom = "-200px";
+  envelop.style.transition = "all 1s ease";
+  envelop.style.bottom = "-200px";
+  envelop.style.opacity = "0";
 
   distributeCards(cards, table, players, start);
 };

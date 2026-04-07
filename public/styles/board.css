@@ -18,7 +18,7 @@
   --font-body: "Crimson Pro", serif;
 
   --tile: #a67c52;
-  --tile-border: #5d3a1a;
+  --tile-border: #593110;
   --tile-hover: #cdaa7d;
   --tile-highlight: #f0d94a;
 
@@ -67,14 +67,14 @@ svg {
 .tiles rect {
   width: 10px;
   height: 10px;
-  fill: var(--tile);
+  fill: url("#tile-pattern");
   stroke: var(--tile-border);
-  stroke-width: 1;
+  stroke-width: 0.5;
   transition: fill 0.2s ease;
 }
 
 .tiles rect:hover {
-  fill: var(--tile-hover);
+  opacity: 0.8;
 }
 
 path,
@@ -450,17 +450,17 @@ path.room.highlight-room {
 
 @keyframes pulse {
   0% {
-    stroke-width: 2;
+    stroke-width: 1;
     opacity: 1;
   }
 
   50% {
-    stroke-width: 2;
+    stroke-width: 1;
     opacity: 0.6;
   }
 
   100% {
-    stroke-width: 2;
+    stroke-width: 1;
     opacity: 1;
   }
 }

@@ -1,7 +1,9 @@
 export const createCard = (node, card, cardStyles = ["player-card"]) => {
-  const cardName = node.querySelector(".card-name");
-  cardName.textContent = card;
-  cardName.classList.add(...cardStyles);
+  const cardImg = node.querySelector(".player-card");
+  const imgName = card.split(" ").join("_");
+  cardImg.src = `/images/${imgName}.jpg`;
+  cardImg.alt = card;
+  cardImg.classList.add(...cardStyles);
 };
 
 export const renderPlayerCards = (playerHand, handContainer) => {
