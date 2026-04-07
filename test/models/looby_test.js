@@ -105,7 +105,7 @@ describe("LOBBY", () => {
       lobby.addPlayer(3, "name", false);
       lobby.addPlayer(4, "name", false);
       lobby.addPlayer(5, "name", false);
-      lobby.updateState();
+      lobby.updateState("started");
       const state = lobby.getState();
 
       assertEquals(state.state, "started");
@@ -114,7 +114,7 @@ describe("LOBBY", () => {
     it("=> should not update state if invalid player count", () => {
       lobby.addPlayer(1, "username", true);
 
-      assertThrows(() => lobby.updateState());
+      assertThrows(() => lobby.updateState("started"));
     });
   });
 });

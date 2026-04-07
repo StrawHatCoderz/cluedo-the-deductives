@@ -40,7 +40,7 @@ export class LobbyController {
   startGame(lobbyId) {
     const lobby = this.#lobbies[lobbyId];
 
-    lobby.updateState();
+    lobby.updateState("started");
   }
 
   getLobbyState(lobbyId, playerId) {

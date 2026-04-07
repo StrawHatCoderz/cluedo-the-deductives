@@ -63,7 +63,7 @@ export const sendRequest = async ({ method, body, url }) => {
 };
 
 export const fetchGameConfig = async (url) => {
-  const gameContext = await sendRequest({ url });
+  const { data: gameContext } = await sendRequest({ url });
 
   return {
     state: gameContext.state,
@@ -133,6 +133,7 @@ export const polling = (playerCardsContainer) => {
 
   setInterval(async () => {
     const newState = await fetchGameConfig("/game-state");
+
     disableButtons();
     if (JSON.stringify(newState) !== JSON.stringify(prevState)) {
       handleRedirectBasedOnGameState(newState);

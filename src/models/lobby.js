@@ -41,9 +41,9 @@ export class Lobby {
     this.#players.push({ id, name, isHost, character });
   }
 
-  updateState() {
+  updateState(state) {
     if (this.#players.length >= 3 && this.#players.length <= 6) {
-      this.#state = "started";
+      this.#state = state;
       return;
     }
 
