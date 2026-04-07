@@ -73,15 +73,8 @@ const handleAccusationSubmission = async (combination) => {
   }
 };
 
-const closePopup = (popup) => {
-  setTimeout(() => {
-    popup.remove();
-  }, 3000);
-};
-
-const attachSubmitAccusationListener = () => {
+const attachSubmitAccusationListener = (overlay) => {
   const form = document.querySelector("form");
-  const accusationBackGround = document.getElementById("accusation-popup");
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -94,8 +87,8 @@ const attachSubmitAccusationListener = () => {
     } = accusationDetails;
 
     if (Object.keys(accusationDetails).length === 3) {
+      overlay.close();
       await handleAccusationSubmission({ suspect, weapon, room });
-      closePopup(accusationBackGround);
     } else {
       displayPopup("Incomplete combination", "error");
     }
@@ -104,27 +97,17 @@ const attachSubmitAccusationListener = () => {
   });
 };
 
-const attachClosePopupListener = () => {
-  const accusationBackGround = document.getElementById("accusation-popup");
-
-  accusationBackGround.addEventListener("click", (e) => {
-    if (e.target.id === "accusation-popup") {
-      accusationBackGround.remove();
-    }
-  });
-};
-
 const renderAccusationForm = (suspects, weapons, rooms) => {
-  const accusationTemplateClone = getTemplateClone("accusation-template");
-  const accusationPopup = accusationTemplateClone.querySelector(
-    "#accusation-popup",
-  );
+  const accusationForm = getTemplateClone("accusation-form-template");
 
-  const body = document.querySelector("body");
-  body.appendChild(accusationPopup);
-  attachClosePopupListener();
+  const overlay = document.createElement("our-overlay");
+
+  overlay.appendChild(accusationForm);
+  document.body.appendChild(overlay);
+  overlay.open();
+
   renderOptions([suspects, weapons, rooms]);
-  attachSubmitAccusationListener();
+  attachSubmitAccusationListener(overlay);
 };
 
 export const displayAccusationPopup = () => {

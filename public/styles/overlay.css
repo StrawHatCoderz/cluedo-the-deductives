@@ -1,0 +1,24 @@
+:host {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  background: rgba(10, 10, 10, 0.35);
+  backdrop-filter: blur(10px);
+}
+
+:host([open]) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.content {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+
+  border: 2px solid var(--frame);
+  border-radius: 6px;
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
