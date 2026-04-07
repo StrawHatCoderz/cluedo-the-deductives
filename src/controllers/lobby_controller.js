@@ -49,6 +49,7 @@ export class LobbyController {
     return {
       ...lobby.getState(),
       isHost: lobby.isHost(parseInt(playerId)),
+      currentPlayerId: playerId,
     };
   }
 }

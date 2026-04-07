@@ -22,7 +22,11 @@ const setupLobbyId = (lobbyId, isHost, hostActions) => {
   }
 };
 
-const setupPlayerProfiles = (profileData, profileContainer) => {
+const setupPlayerProfiles = (
+  profileData,
+  currentPlayerId,
+  profileContainer,
+) => {
   const playerRole = profileContainer.querySelector(".player-role");
   if (profileData.isHost) {
     playerRole.classList.add("host");
@@ -33,13 +37,15 @@ const setupPlayerProfiles = (profileData, profileContainer) => {
 
   const playerName = profileContainer.querySelector(".player-name");
 
-  playerName.textContent = profileData.name;
+  const isCurrentPlayer = profileData.id === currentPlayerId;
+
+  playerName.textContent = isCurrentPlayer ? "You" : profileData.name;
 };
 
 const setupProfiles = (lobby, profilesTemplate, profilesContainer) => {
   const profiles = lobby.players.map((player) => {
     const profileContainer = profilesTemplate.content.cloneNode(true);
-    setupPlayerProfiles(player, profileContainer);
+    setupPlayerProfiles(player, lobby.currentPlayerId, profileContainer);
     return profileContainer;
   });
 

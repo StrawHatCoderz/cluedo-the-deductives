@@ -26,9 +26,9 @@ describe("LOBBY", () => {
 
       const lobbyController = LobbyController.create(() => lobby);
       lobbyController.hostLobby("loki");
-      const state = lobbyController.getLobbyState(1);
+      const state = lobbyController.getLobbyState(1, 1);
 
-      assertEquals(state, { id: 1, isHost: true });
+      assertEquals(state, { id: 1, currentPlayerId: 1, isHost: true });
       expect(lobby.getState).toHaveBeenCalledTimes(2);
     });
   });
