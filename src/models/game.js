@@ -92,9 +92,10 @@ export class Game {
 
     const data = { ...this.#getDisprovalData() };
 
-    const accusationResult = this.#turn?.getAccusationResult();
-    const shouldShowAccusationResult = accusationResult &&
-      !this.#turn.hasPlayerSeenAccusationResult(playerId);
+    const accusationResult = this.#turn.getAccusationResult();
+
+    const shouldShowAccusationResult = accusationResult !== null &&
+      !this.#turn?.hasPlayerSeenAccusationResult(playerId);
 
     const accusationDetails = shouldShowAccusationResult
       ? this.#handleAccusation(playerId, accusationResult)
@@ -230,12 +231,6 @@ export class Game {
     return this.#board.getReachableNodes(position, steps);
   }
 
-  #hasAllPlayersSeenAccusePopup() {
-    const accusePopupStats = Object.values(this.#turn?.getAccusePopupShownMap);
-    return accusePopupStats.length === this.#players.length &&
-      accusePopupStats.every((stat) => stat);
-  }
-
   #isMatchingCombination(murderCombination, playerCombination) {
     return Object.keys(murderCombination).every(
       (key) => murderCombination[key] === playerCombination[key],
@@ -261,7 +256,7 @@ export class Game {
   #handleAccusation(playerId, accusationResult) {
     this.#turn.markAccusationResultSeen(playerId);
 
-    const isAccuser = accusationResult.accusedBy === playerId;
+    const isAccuser = accusationResult.accusedBy.id === playerId;
 
     const accusationDetails = {
       isCorrect: accusationResult.isCorrect,
@@ -285,33 +280,28 @@ export class Game {
     return accusationDetails;
   }
 
-  accuse({ suspect, weapon, room }) {
-    if (!(suspect && weapon && room)) {
-      throw new Error("Invalid Accusation Combination");
-    }
-
-    const playerCombination = { suspect, weapon, room };
-
+  accuse(playerCombination) {
     const murderCombination = this.#deck.getMurderCombination();
-    const isCorrect = this.#isMatchingCombination(
+    const isMatchingCombination = this.#isMatchingCombination(
       murderCombination,
       playerCombination,
     );
 
+    const { id, name } = this.#activePlayer.getPlayerData();
     this.#turn.setAccusationResult({
-      isCorrect,
+      isCorrect: isMatchingCombination,
       murderCombination,
       accusationCombo: playerCombination,
-      accusedBy: this.#activePlayer.getPlayerData().id,
+      accusedBy: { id, name },
     });
 
-    if (isCorrect) {
+    if (isMatchingCombination) {
       this.#finishGame();
     } else {
       this.#activePlayer?.eliminate();
     }
 
-    return { isCorrect };
+    return { isCorrect: isMatchingCombination };
   }
 
   #getHasUsedSecretPassage() {

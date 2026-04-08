@@ -136,7 +136,7 @@ export class Turn {
   }
 
   hasPlayerSeenAccusationResult(playerId) {
-    return !!this.#accusationResultSeenMap[playerId];
+    return this.#accusationResultSeenMap[playerId];
   }
 
   markAccusationResultSeen(playerId) {
@@ -144,6 +144,6 @@ export class Turn {
   }
 
   haveAllPlayersSeen(totalPlayers) {
-    return Object.keys(this.#accusationResultSeenMap).length >= totalPlayers;
+    return Object.keys(this.#accusationResultSeenMap).length === totalPlayers;
   }
 }

@@ -3,8 +3,6 @@ import { createClone } from "./utils/ui_service.js";
 
 const displayCardsCombination = (combination, container) => {
   const cards = Object.values(combination).map((card) => {
-    console.log({ card });
-
     const cardClone = createClone("card-template");
     createCard(cardClone, card);
     return cardClone;
@@ -25,9 +23,6 @@ const displayMurderCombination = (combination, container) => {
 };
 
 const matchCards = (accusingCombination, murderCombination) => {
-  console.log({ accusingCombination });
-  console.log({ murderCombination });
-
   const accusedCards = Object.values(accusingCombination);
   const murderCards = Object.values(murderCombination);
 
@@ -37,19 +32,14 @@ const matchCards = (accusingCombination, murderCombination) => {
   }));
 };
 
-const renderAccusationCards = (
-  accusationDetails,
-  currentPlayer,
-  activePlayer,
-) => {
+const renderAccusationCards = (accusationDetails, currentPlayer) => {
   const container = document.querySelector(
     "#accusation-result-combination",
   );
 
   container.innerHTML = "";
 
-  const isSelf = currentPlayer.id === activePlayer.id;
-  console.log(accusationDetails);
+  const isSelf = currentPlayer.id === accusationDetails.accusedBy.id;
 
   if (isSelf) {
     const murderCombination = matchCards(
@@ -62,19 +52,15 @@ const renderAccusationCards = (
   }
 };
 
-const renderAccusationStatus = (
-  isCorrect,
-  currentPlayer,
-  activePlayer,
-) => {
+const renderAccusationStatus = ({ isCorrect, accusedBy }, currentPlayer) => {
   const el = document.querySelector("#accusation-status");
 
-  const isSelf = currentPlayer.id === activePlayer.id;
+  const isSelf = currentPlayer.id === accusedBy.id;
 
   if (isSelf) {
     el.textContent = isCorrect ? "You won the game" : "You lost the game";
   } else {
-    const name = activePlayer.name;
+    const name = accusedBy.name;
 
     el.textContent = isCorrect
       ? `Player ${name} won the game`
@@ -83,7 +69,7 @@ const renderAccusationStatus = (
 };
 
 export const renderAccusationResult = (
-  { accusationDetails, currentPlayer, activePlayer },
+  { accusationDetails, currentPlayer },
 ) => {
   const accusationForm = createClone("accusation-info-template");
 
@@ -93,11 +79,6 @@ export const renderAccusationResult = (
   document.body.appendChild(overlay);
   overlay.open();
 
-  renderAccusationStatus(
-    accusationDetails.isCorrect,
-    currentPlayer,
-    activePlayer,
-  );
-
-  renderAccusationCards(accusationDetails, currentPlayer, activePlayer);
+  renderAccusationStatus(accusationDetails, currentPlayer);
+  renderAccusationCards(accusationDetails, currentPlayer);
 };

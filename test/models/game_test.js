@@ -223,12 +223,6 @@ describe("GAME", () => {
 
       assertEquals(result.isCorrect, false);
     });
-
-    it(" => should throw for invalid combination", () => {
-      assertThrows(() => {
-        game.accuse({ weapon: WEAPONS[0] });
-      });
-    });
   });
 
   describe("secret passage", () => {
