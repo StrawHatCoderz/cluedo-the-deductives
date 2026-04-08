@@ -18,10 +18,10 @@ const registerListeners = (container, temp) => {
 
 const setValues = (combo, cards, disprovableCards) =>
   Object.values(combo).forEach((card, i) => {
-    console.log(cards[i], "==>");
     cards[i].querySelector("input").value = card;
     cards[i].querySelector("label").textContent = card;
     if (!disprovableCards?.includes(card)) {
+      cards[i].setAttribute("class", "disabled-Card");
       cards[i].querySelector("input").setAttribute("disabled", true);
     }
   });
@@ -54,20 +54,22 @@ const showDisproval = async (state) => {
     ({ id }) => id === state.disprovablePlayer,
   );
   data.by = name;
-
+  data.disproved = true;
   const suspicion = state.suspicionCombo;
   showResult(suspicion, data);
 };
 
 const announceSuspicion = (state) => {
+  if (state.activePlayer.id === state.currentPlayer.id) return;
   const combo = {
     suspect: state.suspicionCombo.suspect,
     weapon: state.suspicionCombo.weapon,
     room: state.suspicionCombo.room,
   };
 
-  const announceTemp = document.querySelector("#announce-suspicion").content
-    .cloneNode(true);
+  const announceTemp = document
+    .querySelector("#announce-suspicion")
+    .content.cloneNode(true);
   const cards = announceTemp.querySelectorAll(".dis-card");
   setValues(combo, cards);
 
@@ -84,6 +86,11 @@ export const disproveASuspicion = (state) => {
   if (state.hasDisproved && state.activePlayer?.id === state.currentPlayer.id) {
     return showDisproval(state);
   }
+  if (!state.canDisproved) {
+    showResult(state.suspicion, { disproved: false });
+    announceSuspicion(state);
+    return displayPopup("No one could disprove");
+  }
   if (state.hasDisproved) {
     const { name } = state.players.find(
       ({ id }) => id === state.disprovablePlayer,
@@ -91,7 +98,8 @@ export const disproveASuspicion = (state) => {
     return displayPopup(`${name} has disproved`);
   }
   if (
-    state.currentPlayer.id === state.disprovablePlayer && !state.hasDisproved
+    state.currentPlayer.id === state.disprovablePlayer &&
+    !state.hasDisproved
   ) {
     return createDisprovePopUp(state);
   }

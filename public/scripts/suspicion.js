@@ -134,8 +134,6 @@ const fillModalCards = (clone, data) => {
 };
 
 export const showModal = (data) => {
-  console.log(data);
-
   const modal = getEl("suspicion-modal");
   const suspicionClone = document
     .querySelector("#suspicion-model-temp")
@@ -158,6 +156,10 @@ const getHighlightId = (result, data) => {
 
 export const showResult = (data, result) => {
   const statusEl = getEl("suspicion-status");
+  if (!result.disproved) {
+    statusEl.textContent = "No one could disprove!";
+    return;
+  }
 
   getEl(getHighlightId(result, data))?.classList.add("card-revealed");
   statusEl.textContent = `${result.by} revealed the card`;

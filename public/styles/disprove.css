@@ -23,6 +23,7 @@
   box-shadow: 0 0 60px rgba(0, 0, 0, 0.9), 0 0 40px rgba(120, 0, 0, 0.25);
   color: #ffffff;
   font-family: "Cinzel", serif;
+  text-align: center;
 }
 
 #disproval-container h2 {
@@ -77,14 +78,6 @@
   text-align: center;
 }
 
-.sus-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.15));
-  z-index: 1;
-}
-
 .dis-card-title {
   position: relative;
   z-index: 2;
@@ -133,12 +126,6 @@
   box-shadow: 0 0 30px rgba(200, 0, 0, 0.8);
 }
 
-@media (max-width: 768px) {
-  .suspicion-cards {
-    gap: 16px;
-  }
-
-  .dis-card {
-    max-width: 160px;
-  }
+.disabled-card > .sus-card::before {
+  background: grey;
 }
