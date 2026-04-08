@@ -136,6 +136,55 @@ section h2::after {
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
 }
 
+#murder-combination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-top: 4px;
+}
+
+.card {
+  position: relative;
+  min-width: 100px;
+  height: 140px;
+  background: linear-gradient(160deg, #f8f0dc, #e8d8a4);
+  border: 1px solid var(--gold-border);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-align: center;
+  color: var(--text-primary);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  transition: all 0.25s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.35);
+}
+
+.player-card {
+  width: 100px;
+  height: 140px;
+  background: linear-gradient(160deg, #f8f0dc, #e8d8a4);
+  border: 1px solid #b89040;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.player-card:hover {
+  transform: translateY(-20px);
+  z-index: 2;
+}
+
 @keyframes panelEnter {
   from {
     opacity: 0;

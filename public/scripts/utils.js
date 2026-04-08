@@ -121,6 +121,7 @@ export const fetchGameConfig = async (url, etag) => {
     ...disprovalData,
     shouldShowAccusationResult: gameContext.shouldShowAccusationResult,
     accusationDetails: gameContext.accusationDetails,
+    murderCombination: gameContext.murderCombination,
   };
   return { etag: res.etag, changed: res.changed, gameConfig };
 };
@@ -199,7 +200,6 @@ export const polling = (playerCardsContainer) => {
       prevEtag,
     );
     prevEtag = etag;
-    console.log(gameConfig);
 
     disableButtons();
     if (changed) {

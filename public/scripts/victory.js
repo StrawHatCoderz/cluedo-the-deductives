@@ -16,11 +16,17 @@ const displayWinner = (winner) => {
 };
 
 globalThis.window.onload = async () => {
-  const { players, murderCombination } = await fetchGameConfig("/game");
+  const { gameConfig } = await fetchGameConfig("/game");
+
   const murderCombinationContainer = document.getElementById(
     "murder-combination",
   );
-  const winner = players.find((player) => player.isWon);
+  const winner = gameConfig.players.find((player) => player.isWon);
   displayWinner(winner);
-  displayCardsCombination(murderCombination, murderCombinationContainer);
+  console.log(gameConfig);
+
+  displayCardsCombination(
+    gameConfig.murderCombination,
+    murderCombinationContainer,
+  );
 };
