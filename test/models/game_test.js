@@ -279,4 +279,14 @@ describe("GAME", () => {
       assertEquals(game.getState().disprovalData.disprovablePlayer, 2);
     });
   });
+
+  describe("add disprove card", () => {
+    it(" => should add disproved card", () => {
+      add3Players();
+      game.start();
+      const disprovedCard = "Dagger";
+      game.addDisprovedCard({ disprovedCard });
+      assertEquals(game.getDisprovedCard(), { disprovedCard });
+    });
+  });
 });

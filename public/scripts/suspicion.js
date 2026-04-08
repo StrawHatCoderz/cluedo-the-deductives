@@ -242,12 +242,9 @@ const startSuspicion = ({ position }, suspects) => {
   highlightPawns(document.querySelectorAll("[data-occupied-by]"), suspects);
 };
 
-export const suspicionBtnListener = ({
-  canSuspect,
-  activePlayer,
-  pawns,
-  currentPlayer,
-}) => {
+export const suspicionBtnListener = (
+  { canSuspect, activePlayer, pawns, currentPlayer },
+) => {
   if (canSuspect && activePlayer.id === currentPlayer.id) {
     startSuspicion(activePlayer.pawn, pawns);
     return;

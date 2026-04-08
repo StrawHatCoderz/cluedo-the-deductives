@@ -23,7 +23,6 @@ export const createApp = ({
     c.set("lobbyController", lobbyController);
     await next();
   });
-
   app.route("/lobby", lobbyRoutes);
   app.route("/game", gameRoutes);
   app.route("/turn", turnRouteCreator(getRandom, roundUp));
