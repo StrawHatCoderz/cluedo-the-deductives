@@ -1,8 +1,11 @@
+import { displayCardsCombination } from "./accusation_result.js";
 import { fetchGameConfig } from "./utils.js";
 
 export const handleRedirectBasedOnGameState = (boardConfig) => {
   if (boardConfig.state === "finished") {
-    globalThis.window.location.href = "/pages/victory.html";
+    setTimeout(() => {
+      globalThis.window.location.href = "/pages/victory.html";
+    }, 3000);
   }
 };
 
@@ -13,7 +16,11 @@ const displayWinner = (winner) => {
 };
 
 globalThis.window.onload = async () => {
-  const { players } = await fetchGameConfig("/game");
+  const { players, murderCombination } = await fetchGameConfig("/game");
+  const murderCombinationContainer = document.getElementById(
+    "murder-combination",
+  );
   const winner = players.find((player) => player.isWon);
   displayWinner(winner);
+  displayCardsCombination(murderCombination, murderCombinationContainer);
 };

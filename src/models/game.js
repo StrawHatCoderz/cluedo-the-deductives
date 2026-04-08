@@ -101,6 +101,10 @@ export class Game {
       ? this.#handleAccusation(playerId, accusationResult)
       : null;
 
+    const murderCombination = this.#gameState === "finished"
+      ? this.#deck.getMurderCombination()
+      : null;
+
     return {
       state: this.#gameState,
       players: this.#getAllPlayers(),
@@ -119,6 +123,7 @@ export class Game {
 
       shouldShowAccusationResult,
       accusationDetails,
+      murderCombination,
     };
   }
 

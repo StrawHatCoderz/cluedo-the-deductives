@@ -1,7 +1,7 @@
 import { createCard } from "./render_player_cards.js";
 import { createClone } from "./utils/ui_service.js";
 
-const displayCardsCombination = (combination, container) => {
+export const displayCardsCombination = (combination, container) => {
   const cards = Object.values(combination).map((card) => {
     const cardClone = createClone("card-template");
     createCard(cardClone, card);

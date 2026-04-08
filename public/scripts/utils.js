@@ -5,6 +5,7 @@ import { renderBoard } from "./render_board.js";
 import { renderPlayers } from "./render_player.js";
 import { renderPlayerCards } from "./render_player_cards.js";
 import { removePawnHighlight, suspicionBtnListener } from "./suspicion.js";
+import { handleRedirectBasedOnGameState } from "./victory.js";
 
 export const isActivePlayer = (playerId, activePlayer) =>
   playerId === activePlayer.id;
@@ -202,8 +203,7 @@ export const polling = (playerCardsContainer) => {
 
     disableButtons();
     if (changed) {
-      console.log({ gameConfig });
-
+      handleRedirectBasedOnGameState(gameConfig);
       renderBoard(gameConfig);
       renderPlayers(gameConfig);
       renderPlayerCards(gameConfig.currentPlayer.hand, playerCardsContainer);
