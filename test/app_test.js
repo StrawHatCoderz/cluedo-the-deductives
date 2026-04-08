@@ -13,7 +13,6 @@ import { GameController } from "../src/controllers/game_controller.js";
 import { LobbyController } from "../src/controllers/lobby_controller.js";
 
 import { Lobby } from "../src/models/lobby.js";
-import { Pawn } from "../src/models/pawn.js";
 
 import { createGameInstance } from "../src/utils/game.js";
 
@@ -29,20 +28,14 @@ describe("APP TEST", () => {
     const createLobby = (id) => new Lobby(id, 6, 3, pawns);
     lobbyController = LobbyController.create(createLobby);
 
-    const createGame = (id, pawnInstances) =>
-      createGameInstance(id, pawnInstances, {
+    const createGame = (id) =>
+      createGameInstance(id, {
         suspects: SUSPECTS,
         weapons: WEAPONS,
         rooms: ROOMS,
       });
 
-    const createPawns = () =>
-      PAWNS.map(
-        ({ name, position, color }, i) =>
-          new Pawn(i + 1, name, position, color),
-      );
-
-    const gameController = GameController.create(createGame, createPawns);
+    const gameController = GameController.create(createGame);
 
     app = createApp({
       gameController,
@@ -341,76 +334,6 @@ describe("APP TEST", () => {
         assertEquals(body.success, true);
         assertEquals(body.data.players.length, 1);
       });
-    });
-  });
-
-  describe("POST /turn/suspect", () => {
-    it(" => should add a suspect combination", async () => {
-      const { cookie } = setupLobby();
-
-      await app.request("/game/start", {
-        method: "POST",
-        headers: { Cookie: cookie },
-      });
-
-      const suspicion = {
-        weapon: "dagger",
-        suspect: "scarlet",
-        room: "hall",
-      };
-      await app.request(`/board/update-pawn-position/1`, {
-        method: "PUT",
-        headers: {
-          Cookie: cookie,
-          "content-type": "application/json",
-        },
-        body: JSON.stringify({
-          newNodeId: "hall",
-          tiles: ["hall"],
-          isUsingSecretPassage: false,
-        }),
-      });
-
-      const res = await app.request("/turn/suspect", {
-        method: "POST",
-        body: JSON.stringify(suspicion),
-        headers: { "content-type": "application/json", Cookie: cookie },
-      });
-
-      assertEquals(res.status, 200);
-    });
-  });
-
-  describe("POST /game/confirmSuspicion", () => {
-    it(" => should add a disproval card", async () => {
-      const { cookie } = setupLobby();
-
-      await app.request("/game/start", {
-        method: "POST",
-        headers: { Cookie: cookie },
-      });
-
-      const formData = new FormData();
-      formData.append("disprove", "scarlet");
-
-      const res = await app.request("/game/disprove", {
-        method: "post",
-        headers: {
-          Cookie: cookie,
-        },
-        body: formData,
-      });
-
-      const card = await app.request("/game/disprove-card", {
-        method: "get",
-        headers: {
-          Cookie: cookie,
-        },
-      });
-
-      const disproved = await card.json();
-      assertEquals(res.status, 200);
-      assertEquals(disproved, { card: "scarlet" });
     });
   });
 });

@@ -198,6 +198,7 @@ export const polling = (playerCardsContainer) => {
       prevEtag,
     );
     prevEtag = etag;
+    console.log(gameConfig);
 
     disableButtons();
     if (changed) {

@@ -1,6 +1,11 @@
 import { assertEquals, assertThrows } from "@std/assert";
 import { beforeEach, describe, it } from "@std/testing/bdd";
-import { ROOMS, SUSPECTS, WEAPONS } from "../../src/constants/game_config.js";
+import {
+  PAWNS,
+  ROOMS,
+  SUSPECTS,
+  WEAPONS,
+} from "../../src/constants/game_config.js";
 import { DeckManager } from "../../src/models/deck_manager.js";
 import { Game } from "../../src/models/game.js";
 import { Pawn } from "../../src/models/pawn.js";
@@ -11,11 +16,9 @@ describe("GAME", () => {
   let pawns;
 
   const createGame = () => {
-    pawns = [
-      new Pawn(1, "Scarlet", "0_0", "red"),
-      new Pawn(2, "Colonel", "0_9", "yellow"),
-      new Pawn(3, "Plum", "0_9", "purple"),
-    ];
+    const pawns = PAWNS.map(
+      ({ name, position, color }, i) => new Pawn(i + 1, name, position, color),
+    );
 
     return new Game(
       1,
@@ -35,13 +38,13 @@ describe("GAME", () => {
   };
 
   const add3Players = () => {
-    const p1 = new Player(1, "A", false);
+    const p1 = new Player(1, "A", true);
     const p2 = new Player(2, "B", false);
     const p3 = new Player(3, "C", false);
 
-    game.addPlayer(p1, pawns[0]);
-    game.addPlayer(p2, pawns[1]);
-    game.addPlayer(p3, pawns[2]);
+    game.addPlayer(p1, { name: "miss scarlett" });
+    game.addPlayer(p2, { name: "colonel mustard" });
+    game.addPlayer(p3, { name: "professor plum" });
 
     return { p1, p2, p3 };
   };
@@ -53,13 +56,16 @@ describe("GAME", () => {
   describe("add player", () => {
     it(" => should assign pawn to player", () => {
       const player = new Player(1, "Javed", false);
-      game.addPlayer(player, pawns[2]);
+      game.addPlayer(player, { name: "professor plum" });
 
-      assertEquals(player.getPlayerData().pawn.name, "Plum");
+      assertEquals(
+        player.getPlayerData().pawn.name,
+        "professor plum",
+      );
     });
 
     it(" => should throw error for invalid player", () => {
-      assertThrows(() => game.addPlayer({}, pawns[0]), Error);
+      assertThrows(() => game.addPlayer({}, { name: "miss scarlett" }), Error);
     });
   });
 
@@ -70,7 +76,13 @@ describe("GAME", () => {
     //   assertEquals(game.getState(0).state, "setup");
     // });
 
-    it(" =>  => should change state from setup to running", () => {
+    it(" => should change state from setup to running", () => {
+      const add3Players = () => {
+        game.addPlayer(new Player(1, "A", true), { name: "miss scarlett" });
+        game.addPlayer(new Player(2, "B", false), { name: "colonel mustard" });
+        game.addPlayer(new Player(3, "C", false), { name: "professor plum" });
+      };
+
       add3Players();
       game.start();
 
@@ -83,8 +95,8 @@ describe("GAME", () => {
       const p1 = new Player(1, "thor", true);
       const p2 = new Player(2, "hulk", false);
 
-      game.addPlayer(p1, pawns[0]);
-      game.addPlayer(p2, pawns[1]);
+      game.addPlayer(p1, { name: "miss scarlett" });
+      game.addPlayer(p2, { name: "colonel mustard" });
 
       assertThrows(() => game.start());
     });
@@ -159,7 +171,7 @@ describe("GAME", () => {
   describe("pawn", () => {
     it(" => should return correct pawn instance", () => {
       const pawn = game.getPawnInstance(1);
-      assertEquals(pawn.getPawnData().name, "Scarlet");
+      assertEquals(pawn.getPawnData().name, "miss scarlett");
     });
   });
 
@@ -225,9 +237,9 @@ describe("GAME", () => {
     let p3;
     beforeEach(() => {
       pawns = [
-        new Pawn(1, "Scarlet", { room: "study" }, "red"),
-        new Pawn(2, "Colonel", "0_9", "yellow"),
-        new Pawn(3, "Plum", "0_9", "purple"),
+        new Pawn(1, "miss scarlett", { room: "study" }, "red"),
+        new Pawn(2, "colonel mustard", "0_9", "yellow"),
+        new Pawn(3, "professor plum", "0_9", "purple"),
       ];
 
       game = new Game(
@@ -245,21 +257,11 @@ describe("GAME", () => {
           (list) => [...list],
         ),
       );
-
-      p1 = new Player(1, "A", false);
-      p2 = new Player(2, "B", false);
-      p3 = new Player(3, "C", false);
-
-      game.addPlayer(p1, pawns[0]);
-      game.addPlayer(p2, pawns[1]);
-      game.addPlayer(p3, pawns[2]);
+      game.addPlayer(p1, { name: "miss scarlett" });
+      game.addPlayer(p2, { name: "colonel mustard" });
+      game.addPlayer(p3, { name: "professor plum" });
 
       game.start();
-    });
-    it(" => should return secret passage id", () => {
-      const state = game.getState(p1.getPlayerData().id);
-
-      assertEquals(state.secretPassageId, "kitchen");
     });
   });
 

@@ -5,6 +5,7 @@ import { DeckManager } from "../models/deck_manager.js";
 import { Game } from "../models/game.js";
 import { Pawn } from "../models/pawn.js";
 import { Lobby } from "../models/lobby.js";
+import { PAWNS } from "../constants/game_config.js";
 
 export const createPawnInstances = (pawns) =>
   pawns.map(
@@ -28,12 +29,7 @@ export const createLobbyInstance = (id, pawns) => {
   );
 };
 
-export const createGameInstance = (
-  id,
-  pawns,
-  gameConfig,
-  shuffleFn = shuffle,
-) => {
+export const createGameInstance = (id, gameConfig, shuffleFn = shuffle) => {
   const board = Board.create(boardConfig);
   const deck = new DeckManager(
     {
@@ -44,7 +40,7 @@ export const createGameInstance = (
     shuffleFn,
   );
 
-  return new Game(id, board, pawns, deck);
+  return new Game(id, board, createPawnInstances(PAWNS), deck);
 };
 
 export const getPosition = (pawn) => {

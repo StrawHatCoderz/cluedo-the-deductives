@@ -4,22 +4,11 @@ import { GameController } from "../../src/controllers/game_controller.js";
 
 describe("GAME CONTROLLER", () => {
   let createGameMock;
-  let createPawnsMock;
   let gameMock;
-  let pawns;
   let controller;
 
   beforeEach(() => {
-    pawns = [
-      {
-        getPawnData: () => ({ name: "Scarlet" }),
-      },
-      {
-        getPawnData: () => ({ name: "Mustard" }),
-      },
-    ];
-
-    createPawnsMock = () => pawns;
+    // createPawnsMock = () => pawns;
 
     gameMock = {
       addPlayer: () => {},
@@ -32,7 +21,7 @@ describe("GAME CONTROLLER", () => {
 
     createGameMock = () => gameMock;
 
-    controller = GameController.create(createGameMock, createPawnsMock);
+    controller = GameController.create(createGameMock);
   });
 
   describe("create()", () => {
@@ -89,8 +78,8 @@ describe("GAME CONTROLLER", () => {
       controller.startGame(1, players);
 
       assertEquals(addPlayerCalls.length, 2);
-      assertEquals(addPlayerCalls[0].pawn.getPawnData().name, "Scarlet");
-      assertEquals(addPlayerCalls[1].pawn.getPawnData().name, "Mustard");
+      assertEquals(addPlayerCalls[0].pawn.name, "Scarlet");
+      assertEquals(addPlayerCalls[1].pawn.name, "Mustard");
     });
 
     it(" => should call game.start()", () => {

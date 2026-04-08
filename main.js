@@ -8,17 +8,12 @@ import {
 } from "./src/constants/game_config.js";
 import { GameController } from "./src/controllers/game_controller.js";
 import { LobbyController } from "./src/controllers/lobby_controller.js";
-import {
-  createGameInstance,
-  createLobbyInstance,
-  createPawnInstances,
-} from "./src/utils/game.js";
+import { createGameInstance, createLobbyInstance } from "./src/utils/game.js";
 
 const createLobby = (id) => createLobbyInstance(id, PAWNS);
-const createPawns = () => createPawnInstances(PAWNS);
 
-const createGame = (id, pawnInstances) =>
-  createGameInstance(id, pawnInstances, {
+const createGame = (id) =>
+  createGameInstance(id, {
     suspects: SUSPECTS,
     weapons: WEAPONS,
     rooms: ROOMS,
@@ -28,7 +23,7 @@ const main = () => {
   const PORT = Deno.env.get("PORT") || 8000;
 
   const lobbyController = LobbyController.create(createLobby);
-  const gameController = GameController.create(createGame, createPawns);
+  const gameController = GameController.create(createGame);
 
   const app = createApp({
     getRandom: Math.random,

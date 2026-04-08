@@ -136,11 +136,16 @@ export class Game {
     );
   }
 
-  addPlayer(player, pawn) {
+  #findPawn(name) {
+    return this.#pawns.find((pawn) => pawn.getPawnData().name === name);
+  }
+
+  addPlayer(player, character) {
     if (!(player instanceof Player)) {
       throw new Error("Invalid player");
     }
 
+    const pawn = this.#findPawn(character.name);
     player.assignPawn(pawn);
     this.#players[player.getPlayerData().id] = player;
   }
