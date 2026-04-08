@@ -1,4 +1,5 @@
 import { getCookie } from "hono/cookie";
+import { accusationSchema } from "../validators/schema.js";
 
 export const startGame = (c) => {
   const gameController = c.get("gameController");
@@ -32,15 +33,21 @@ export const updateTurn = (c) => {
 };
 
 export const handleAccusation = async (c) => {
-  const accusationDetails = await c.req.json();
+  const body = await c.req.json();
+
+  const result = accusationSchema.safeParse(body);
+  if (!result.success) {
+    return c.json({ success: false, error: result.error.flatten() }, 400);
+  }
+
   const gameController = c.get("gameController");
   const lobbyId = getCookie(c, "lobbyId");
-  const { isCorrect, murderCombination } = gameController.accuse(
+  const { isCorrect } = gameController.accuse(
     lobbyId,
-    accusationDetails,
+    result.data,
   );
 
-  return c.json({ isCorrect, murderCombination });
+  return c.json({ success: true, data: { isCorrect } });
 };
 
 export const addSuspicion = async (c) => {

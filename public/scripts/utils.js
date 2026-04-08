@@ -1,10 +1,10 @@
+import { renderAccusationResult } from "./accusation_result.js";
 import { renderActions } from "./board.js";
 import { disproveASuspicion } from "./disprove.js";
 import { renderBoard } from "./render_board.js";
 import { renderPlayers } from "./render_player.js";
 import { renderPlayerCards } from "./render_player_cards.js";
 import { removePawnHighlight, suspicionBtnListener } from "./suspicion.js";
-import { handleRedirectBasedOnGameState } from "./victory.js";
 
 export const isActivePlayer = (playerId, activePlayer) =>
   playerId === activePlayer.id;
@@ -118,6 +118,8 @@ export const fetchGameConfig = async (url, etag) => {
     diceValues: gameContext.diceValues,
     shouldShowDicePopup: gameContext.shouldShowDicePopup,
     ...disprovalData,
+    shouldShowAccusationResult: gameContext.shouldShowAccusationResult,
+    accusationDetails: gameContext.accusationDetails,
   };
   return { etag: res.etag, changed: res.changed, gameConfig };
 };
@@ -199,7 +201,9 @@ export const polling = (playerCardsContainer) => {
 
     disableButtons();
     if (changed) {
-      handleRedirectBasedOnGameState(gameConfig);
+      console.log(gameConfig.shouldShowAccusationResult);
+      console.log(gameConfig.accusationDetails);
+
       renderBoard(gameConfig);
       renderPlayers(gameConfig);
       renderPlayerCards(gameConfig.currentPlayer.hand, playerCardsContainer);
@@ -207,6 +211,9 @@ export const polling = (playerCardsContainer) => {
       gameConfig.hasSuspected && disproveASuspicion(gameConfig);
       toggleActionButton(gameConfig);
       renderActions(gameConfig);
+      if (gameConfig.shouldShowAccusationResult) {
+        renderAccusationResult(gameConfig);
+      }
     }
   }, 300);
 };

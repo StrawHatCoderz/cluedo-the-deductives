@@ -235,7 +235,10 @@ describe("APP TEST", () => {
         const body = await res.json();
 
         assertEquals(res.status, 400);
-        assertEquals(body.error, "Invalid Accusation Combination");
+        assertEquals(
+          body.error.fieldErrors.suspect[0],
+          `Invalid option: expected one of "miss scarlett"|"colonel mustard"|"mrs white"|"reverend green"|"mrs peacock"|"professor plum"`,
+        );
       });
     });
   });

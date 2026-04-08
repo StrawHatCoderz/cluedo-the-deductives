@@ -91,6 +91,15 @@ export class Game {
     if (shouldShowDicePopup) this.#turn?.markDicePopupShownForPlayer(playerId);
 
     const data = { ...this.#getDisprovalData() };
+
+    const accusationResult = this.#turn?.getAccusationResult();
+    const shouldShowAccusationResult = accusationResult &&
+      !this.#turn.hasPlayerSeenAccusationResult(playerId);
+
+    const accusationDetails = shouldShowAccusationResult
+      ? this.#handleAccusation(playerId, accusationResult)
+      : null;
+
     return {
       state: this.#gameState,
       players: this.#getAllPlayers(),
@@ -106,6 +115,9 @@ export class Game {
       secretPassageId: this.#getSecretPassageId(playerId),
       canSuspect: this.canSuspect(),
       disprovalData: data,
+
+      shouldShowAccusationResult,
+      accusationDetails,
     };
   }
 
@@ -213,6 +225,12 @@ export class Game {
     return this.#board.getReachableNodes(position, steps);
   }
 
+  #hasAllPlayersSeenAccusePopup() {
+    const accusePopupStats = Object.values(this.#turn?.getAccusePopupShownMap);
+    return accusePopupStats.length === this.#players.length &&
+      accusePopupStats.every((stat) => stat);
+  }
+
   #isMatchingCombination(murderCombination, playerCombination) {
     return Object.keys(murderCombination).every(
       (key) => murderCombination[key] === playerCombination[key],
@@ -224,13 +242,42 @@ export class Game {
     this.#activePlayer?.setWon();
   }
 
-  #eliminatePlayer() {
-    this.#activePlayer?.eliminate();
-    this.updateTurn();
+  #advanceTurnAfterAccusation(accusationResult) {
+    if (accusationResult.isCorrect) return;
 
     if (this.#getActivePlayers().length <= 1) {
       this.#finishGame();
+      return;
     }
+
+    this.updateTurn();
+  }
+
+  #handleAccusation(playerId, accusationResult) {
+    this.#turn.markAccusationResultSeen(playerId);
+
+    const isAccuser = accusationResult.accusedBy === playerId;
+
+    const accusationDetails = {
+      isCorrect: accusationResult.isCorrect,
+      accusedBy: accusationResult.accusedBy,
+      accusationCombo: accusationResult.accusationCombo,
+    };
+
+    const totalPlayers = Object.keys(this.#players).length;
+
+    if (this.#turn.haveAllPlayersSeen(totalPlayers)) {
+      this.#advanceTurnAfterAccusation(accusationResult);
+    }
+
+    if (isAccuser) {
+      return {
+        ...accusationDetails,
+        murderCombination: accusationResult.murderCombination,
+      };
+    }
+
+    return accusationDetails;
   }
 
   accuse({ suspect, weapon, room }) {
@@ -238,21 +285,28 @@ export class Game {
       throw new Error("Invalid Accusation Combination");
     }
 
-    const murderCombination = this.#deck.getMurderCombination();
     const playerCombination = { suspect, weapon, room };
 
+    const murderCombination = this.#deck.getMurderCombination();
     const isCorrect = this.#isMatchingCombination(
       murderCombination,
       playerCombination,
     );
 
+    this.#turn.setAccusationResult({
+      isCorrect,
+      murderCombination,
+      accusationCombo: playerCombination,
+      accusedBy: this.#activePlayer.getPlayerData().id,
+    });
+
     if (isCorrect) {
       this.#finishGame();
     } else {
-      this.#eliminatePlayer();
+      this.#activePlayer?.eliminate();
     }
 
-    return { isCorrect, murderCombination };
+    return { isCorrect };
   }
 
   #getHasUsedSecretPassage() {

@@ -10,6 +10,8 @@ export class Turn {
   #hasDisproved;
   #disprovedCard;
   #dicePopupShownMap;
+  #accusationResult;
+  #accusationResultSeenMap;
 
   constructor(player) {
     this.#player = player;
@@ -22,6 +24,8 @@ export class Turn {
     this.#hasDisproved = false;
     this.#disprovedCard;
     this.#dicePopupShownMap = {};
+    this.#accusationResult = null;
+    this.#accusationResultSeenMap = {};
   }
 
   setUsedSecretPassage() {
@@ -121,5 +125,25 @@ export class Turn {
     if (this.#disprovablePlayer) {
       this.#canDisproved = true;
     }
+  }
+  setAccusationResult(result) {
+    this.#accusationResult = result;
+    this.#accusationResultSeenMap = {};
+  }
+
+  getAccusationResult() {
+    return this.#accusationResult;
+  }
+
+  hasPlayerSeenAccusationResult(playerId) {
+    return !!this.#accusationResultSeenMap[playerId];
+  }
+
+  markAccusationResultSeen(playerId) {
+    this.#accusationResultSeenMap[playerId] = true;
+  }
+
+  haveAllPlayersSeen(totalPlayers) {
+    return Object.keys(this.#accusationResultSeenMap).length >= totalPlayers;
   }
 }

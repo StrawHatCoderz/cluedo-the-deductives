@@ -13,7 +13,8 @@
     "jsr:@std/path@^1.1.4": "1.1.4",
     "jsr:@std/random@~0.1.5": "0.1.5",
     "jsr:@std/testing@^1.0.17": "1.0.17",
-    "npm:hono@^4.12.9": "4.12.9"
+    "npm:hono@^4.12.9": "4.12.9",
+    "npm:zod@^4.3.6": "4.3.6"
   },
   "jsr": {
     "@std/assert@1.0.19": {
@@ -72,6 +73,9 @@
   "npm": {
     "hono@4.12.9": {
       "integrity": "sha512-wy3T8Zm2bsEvxKZM5w21VdHDDcwVS1yUFFY6i8UobSsKfFceT7TOwhbhfKsDyx7tYQlmRM5FLpIuYvNFyjctiA=="
+    },
+    "zod@4.3.6": {
+      "integrity": "sha512-rftlrkhHZOcjDwkGlnUtZZkvaPHCsDATp4pGpuOOMDaTdDDXF91wuVDJoWoPsKX/3YPQ5fHuF3STjcYyKr+Qhg=="
     }
   },
   "workspace": {
@@ -81,7 +85,8 @@
       "jsr:@std/expect@^1.0.18",
       "jsr:@std/random@~0.1.5",
       "jsr:@std/testing@^1.0.17",
-      "npm:hono@^4.12.9"
+      "npm:hono@^4.12.9",
+      "npm:zod@^4.3.6"
     ]
   }
 }

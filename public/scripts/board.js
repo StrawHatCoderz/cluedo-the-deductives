@@ -1,6 +1,6 @@
-import { displayAccusationPopup } from "./accusation.js";
-import { displayPopup, getHighlightPath, toId } from "./utils.js";
+import { displayAccusationOverlay } from "./accusation.js";
 import { showDiceAnimation } from "./dice_animation.js";
+import { displayPopup, getHighlightPath, toId } from "./utils.js";
 
 const removePlayerIcon = (pawn) => {
   const pawnId = toId(pawn.name);
@@ -256,6 +256,6 @@ export const renderActions = (boardConfig) => {
 export const accuseBtnListener = (accuseBtn) => {
   accuseBtn.addEventListener("click", (event) => {
     event.preventDefault();
-    displayAccusationPopup();
+    displayAccusationOverlay();
   });
 };
