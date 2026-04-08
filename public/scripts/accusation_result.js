@@ -81,4 +81,8 @@ export const renderAccusationResult = (
 
   renderAccusationStatus(accusationDetails, currentPlayer);
   renderAccusationCards(accusationDetails, currentPlayer);
+
+  setTimeout(() => {
+    overlay.close();
+  }, 5000);
 };
