@@ -8,7 +8,7 @@ const sendDisprovedCard = async (e) => {
     body: data,
     method: "post",
   });
-  document.querySelector("#disproval-container").remove();
+  document.querySelector("#disproval-container")?.remove();
 };
 
 const registerListeners = (container, temp) => {
@@ -78,7 +78,7 @@ const announceSuspicion = (state) => {
   document.body.append(announceTemp);
 
   document.addEventListener("click", () => {
-    document.querySelector("#announce-container").remove();
+    document.querySelector("#announce-container")?.remove();
   });
 };
 
