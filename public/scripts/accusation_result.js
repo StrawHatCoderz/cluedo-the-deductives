@@ -1,12 +1,40 @@
+import { createCard } from "./render_player_cards.js";
 import { createClone } from "./utils/ui_service.js";
 
-const createCard = (card) => {
-  const el = document.createElement("div");
-  el.className = "card";
+const displayCardsCombination = (combination, container) => {
+  const cards = Object.values(combination).map((card) => {
+    console.log({ card });
 
-  el.textContent = card.name ?? card;
+    const cardClone = createClone("card-template");
+    createCard(cardClone, card);
+    return cardClone;
+  });
 
-  return el;
+  container.append(...cards);
+};
+
+const displayMurderCombination = (combination, container) => {
+  const cards = Object.values(combination).map((card) => {
+    const cardClone = createClone("card-template");
+    const matchingClass = card.isMatching ? "correct" : "incorrect";
+    createCard(cardClone, card.name, ["card", matchingClass]);
+    return cardClone;
+  });
+
+  container.append(...cards);
+};
+
+const matchCards = (accusingCombination, murderCombination) => {
+  console.log({ accusingCombination });
+  console.log({ murderCombination });
+
+  const accusedCards = Object.values(accusingCombination);
+  const murderCards = Object.values(murderCombination);
+
+  return murderCards.map((card) => ({
+    name: card,
+    isMatching: accusedCards.includes(card),
+  }));
 };
 
 const renderAccusationCards = (
@@ -21,16 +49,17 @@ const renderAccusationCards = (
   container.innerHTML = "";
 
   const isSelf = currentPlayer.id === activePlayer.id;
+  console.log(accusationDetails);
 
-  const combination = isSelf
-    ? accusationDetails.murderCombination
-    : accusationDetails.accusationCombo;
-
-  if (!combination) return;
-
-  combination.forEach((card) => {
-    container.appendChild(createCard(card));
-  });
+  if (isSelf) {
+    const murderCombination = matchCards(
+      accusationDetails.accusationCombo,
+      accusationDetails.murderCombination,
+    );
+    displayMurderCombination(murderCombination, container);
+  } else {
+    displayCardsCombination(accusationDetails.accusationCombo, container);
+  }
 };
 
 const renderAccusationStatus = (

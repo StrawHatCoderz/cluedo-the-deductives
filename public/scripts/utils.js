@@ -201,9 +201,6 @@ export const polling = (playerCardsContainer) => {
 
     disableButtons();
     if (changed) {
-      console.log(gameConfig.shouldShowAccusationResult);
-      console.log(gameConfig.accusationDetails);
-
       renderBoard(gameConfig);
       renderPlayers(gameConfig);
       renderPlayerCards(gameConfig.currentPlayer.hand, playerCardsContainer);
