@@ -1,4 +1,5 @@
 import { shuffle } from "@std/random";
+import { ValidationError } from "../utils/custom_errors.js";
 
 export class DeckManager {
   #shuffle;
@@ -39,7 +40,7 @@ export class DeckManager {
 
   distributeCards(players) {
     let inc = 0;
-    if (players.length < 3) return;
+    if (players.length < 3) throw new ValidationError("Invalid player count");
     while (this.#remainingCards.length !== 0) {
       const card = this.#remainingCards.pop();
       const currentPlayer = players[(inc++) % players.length];

@@ -36,6 +36,18 @@ describe("LOBBY", () => {
       assertEquals(state, { id: 1, currentPlayerId: 1, isHost: true });
       expect(lobby.getState).toHaveBeenCalledTimes(2);
     });
+
+    it("=> should throw validation error if lobby id is invalid", () => {
+      const lobby = {
+        getState: fn(() => ({ id: 1 })),
+        addPlayer: fn(),
+        isHost: fn(() => true),
+      };
+
+      const lobbyController = LobbyController.create(() => lobby);
+      lobbyController.hostLobby("loki");
+      assertThrows(() => lobbyController.getLobbyState(3, 1), ValidationError);
+    });
   });
 
   describe("hostLobby", () => {

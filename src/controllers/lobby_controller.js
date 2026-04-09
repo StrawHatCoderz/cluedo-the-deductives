@@ -32,7 +32,7 @@ export class LobbyController {
   }
 
   joinLobby(name, lobbyId) {
-    const lobby = this.#lobbies[`${lobbyId}`];
+    const lobby = this.#lobbies[lobbyId];
     if (!lobby) throw new ValidationError("Invalid room id");
     const isHost = false;
     lobby.addPlayer(++this.#currentPlayerId, name, isHost);

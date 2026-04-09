@@ -1,10 +1,11 @@
 import { distinct } from "@std/collections";
 
-import { assertEquals, assertFalse } from "@std/assert";
+import { assertEquals, assertFalse, assertThrows } from "@std/assert";
 import { beforeEach, describe, it } from "@std/testing/bdd";
 import { ROOMS, SUSPECTS, WEAPONS } from "../../src/constants/game_config.js";
 import { DeckManager } from "../../src/models/deck_manager.js";
 import { Player } from "../../src/models/player.js";
+import { ValidationError } from "../../src/utils/custom_errors.js";
 
 describe("DECK MANAGER", () => {
   let deckManager;
@@ -84,6 +85,23 @@ describe("DECK MANAGER", () => {
       assertEquals(hands[2].length, 4);
       assertEquals(hands[3].length, 4);
       assertEquals(remainingCards.length, uniqueCardsInHands.length);
+    });
+
+    it(" => should throw validation error if player count is less then 3", () => {
+      const deckManager = new DeckManager(
+        {
+          suspects: SUSPECTS,
+          weapons: WEAPONS,
+          rooms: ROOMS,
+        },
+        (list) => [...list],
+      );
+
+      assertThrows(
+        () => deckManager.distributeCards([]),
+        ValidationError,
+        "Invalid player count",
+      );
     });
   });
 });
