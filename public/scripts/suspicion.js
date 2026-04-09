@@ -182,7 +182,7 @@ const saveSuspicion = (suspicion) =>
 
 const fetchSuspicion = async (suspicion) => {
   removePawnHighlight();
-  await saveSuspicion(suspicion);
+  return await saveSuspicion(suspicion);
 };
 
 const getSuspicion = () => ({
@@ -196,7 +196,8 @@ const submitSuspicion = async () => {
   const suspicion = getSuspicion();
   showModal(suspicion);
   const res = await fetchSuspicion(suspicion);
-  const { success } = res.body();
+
+  const { success } = await res.json();
   if (success) {
     state.hasMadeSuspicion = true;
   }

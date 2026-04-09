@@ -126,7 +126,6 @@ describe("APP TEST", () => {
         });
 
         const reachable = await reachableRes.json();
-        console.log(reachable);
         const validTile = reachable.data[0];
 
         const res = await app.request(`/board/update-pawn-position`, {

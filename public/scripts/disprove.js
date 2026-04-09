@@ -19,8 +19,6 @@ const registerListeners = (container) => {
 
 const fillDisprovalCards = (combo, cards, disprovableCards) =>
   Object.values(combo).forEach((card, i) => {
-    console.log(cards[i]);
-
     cards[i].querySelector("input").value = card;
     const img = cards[i].querySelector("img");
     img.src = `/images/${toId(card)}.jpg`;
