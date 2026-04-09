@@ -147,27 +147,18 @@ const passBtnListener = (passBtn) => {
   passBtn.addEventListener("click", handler, { once: true });
 };
 
-const handleSecretPassageClick = async (
-  e,
-  secretPassage,
-  pawn,
-) => {
+const handleSecretPassageClick = async (e, pawn) => {
   e.preventDefault();
-  await fetch(`/board/update-pawn-position/${pawn.id}`, {
-    method: "put",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify({
-      newNodeId: secretPassage,
-      tiles: [secretPassage],
-      isUsingSecretPassage: true,
-    }),
-  });
+  const res = await fetch(`/board/secret-passage`, { method: "put" });
+  const { success } = await res.body();
 
-  removePlayerIcon(pawn);
-  clearAllSecretPassages();
-  clearHighlights();
+  if (success) {
+    removePlayerIcon(pawn);
+    clearAllSecretPassages();
+    clearHighlights();
 
-  localStorage.removeItem("reachableNodes");
+    localStorage.removeItem("reachableNodes");
+  }
 };
 
 const clearAllSecretPassages = () => {
@@ -198,8 +189,7 @@ const secretPassageHandler = (secretPassage, pawn) => {
   room.classList.add("highlight");
   room.dataset.secretPassage = "true";
 
-  const handler = async (e) =>
-    await handleSecretPassageClick(e, secretPassage, pawn);
+  const handler = async (e) => await handleSecretPassageClick(e, pawn);
 
   scrtPsgElement._handler = handler;
   scrtPsgElement.addEventListener("click", handler, { once: true });

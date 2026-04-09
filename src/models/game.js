@@ -343,6 +343,7 @@ export class Game {
 
   #isValidMove(tileId, possibleTiles) {
     const currentPlayer = this.getCurrentPlayer()?.getPlayerData();
+
     return (
       this.#hasPossibleMove(possibleTiles, tileId) &&
       (this.#getHasUsedSecretPassage() ||
@@ -368,5 +369,36 @@ export class Game {
     }
 
     return { status: false };
+  }
+
+  useSecretPassage(playerId) {
+    const player = this.#getCurrentPlayerData(playerId);
+    const pawnId = player.pawn.id;
+    const pawn = this.getPawnInstance(pawnId);
+    const room = pawn?.getPawnData().position.room;
+    const secretPassages = this.#board.getSecretPassages();
+
+    const isSecretPassage = room in secretPassages;
+    if (!isSecretPassage) {
+      throw new Error("Room Has No Secret Passage");
+    }
+
+    const playerCanRollDice = this.#isRollAllowed(playerId);
+    if (!playerCanRollDice) {
+      throw new Error("Can not use secret passage after rolling the dice");
+    }
+
+    const playerCanSuspect = this.#turn?.canSuspect();
+    if (!playerCanSuspect) {
+      throw new Error("Can not use secret passage after suspicion");
+    }
+
+    const playerHasNotUsedSecretPassage = !this.#turn?.getUsedSecretPassage();
+    if (!playerHasNotUsedSecretPassage) {
+      throw new Error("Player Has Already Used Secret Passage");
+    }
+
+    pawn.updatePosition({ x: null, y: null, room: secretPassages[room] });
+    this.setUsedSecretPassage();
   }
 }

@@ -47,3 +47,17 @@ export const movePawnHandler = async (c) => {
 
   return c.json({ status }, status ? 200 : 400);
 };
+
+export const secretPassageHandler = (c) => {
+  try {
+    const gameController = c.get("gameController");
+    const lobbyId = getCookie(c, "lobbyId");
+    const playerId = getCookie(c, "playerId");
+
+    gameController.useSecretPassage(+lobbyId, +playerId);
+
+    return c.json({ success: true });
+  } catch (error) {
+    return c.json({ success: false, error: error.message });
+  }
+};

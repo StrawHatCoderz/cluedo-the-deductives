@@ -70,12 +70,6 @@ describe("GAME", () => {
   });
 
   describe("game state", () => {
-    // it(" => should return initial state as setup", () => {
-    //   add3Players(1);
-    //   game.start();
-    //   assertEquals(game.getState(0).state, "setup");
-    // });
-
     it(" => should change state from setup to running", () => {
       const add3Players = () => {
         game.addPlayer(new Player(1, "A", true), { name: "miss scarlett" });
@@ -283,6 +277,91 @@ describe("GAME", () => {
       const disprovedCard = "Dagger";
       game.addDisprovedCard({ disprovedCard });
       assertEquals(game.getDisprovedCard(), { disprovedCard });
+    });
+  });
+  describe("secret passage", () => {
+    let p1, p2, p3;
+
+    beforeEach(() => {
+      pawns = [
+        new Pawn(1, "miss scarlett", { room: "study" }, "red"),
+        new Pawn(2, "colonel mustard", { room: "hall" }, "yellow"),
+        new Pawn(3, "professor plum", { room: "hall" }, "purple"),
+      ];
+
+      game = new Game(
+        1,
+        {
+          getSecretPassages: () => ({ study: "kitchen" }),
+        },
+        pawns,
+        new DeckManager(
+          {
+            suspects: SUSPECTS,
+            weapons: WEAPONS,
+            rooms: ROOMS,
+          },
+          (list) => [...list],
+        ),
+      );
+
+      p1 = new Player(1, "A", true);
+      p2 = new Player(2, "B", false);
+      p3 = new Player(3, "C", false);
+
+      game.addPlayer(p1, { name: "miss scarlett" });
+      game.addPlayer(p2, { name: "colonel mustard" });
+      game.addPlayer(p3, { name: "professor plum" });
+
+      game.start();
+    });
+
+    it(" => should use secret passage successfully", () => {
+      game.useSecretPassage(p1.getPlayerData().id);
+
+      const pawn = game.getPawnInstance(1);
+      assertEquals(pawn.getPawnData().position.room, "kitchen");
+    });
+
+    it(" => should throw if room has no secret passage", () => {
+      const pawn = game.getPawnInstance(1);
+      pawn.updatePosition({ room: "hall" });
+
+      assertThrows(
+        () => game.useSecretPassage(p1.getPlayerData().id),
+        Error,
+      );
+    });
+
+    it(" => should throw if dice already rolled", () => {
+      game.rollDice(() => 1);
+
+      assertThrows(
+        () => game.useSecretPassage(p1.getPlayerData().id),
+        Error,
+      );
+    });
+
+    it(" => should throw if player already suspected", () => {
+      game.addSuspicion({
+        suspect: "Scarlet",
+        weapon: "dagger",
+        room: "study",
+      });
+
+      assertThrows(
+        () => game.useSecretPassage(p1.getPlayerData().id),
+        Error,
+      );
+    });
+
+    it(" => should throw if secret passage already used", () => {
+      game.useSecretPassage(p1.getPlayerData().id);
+
+      assertThrows(
+        () => game.useSecretPassage(p1.getPlayerData().id),
+        Error,
+      );
     });
   });
 });

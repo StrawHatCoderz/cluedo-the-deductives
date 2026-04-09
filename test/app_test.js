@@ -344,4 +344,29 @@ describe("APP TEST", () => {
       });
     });
   });
+
+  describe("POST /turn/secret-passage", () => {
+    it(" => should fail if player cannot use secret passage", async () => {
+      const { cookie } = setupLobby();
+
+      await app.request("/game/start", {
+        method: "POST",
+        headers: { Cookie: cookie },
+      });
+
+      const res = await app.request("/board/secret-passage", {
+        method: "PUT",
+        headers: { Cookie: cookie },
+      });
+
+      const body = await res.json();
+
+      assertEquals(res.status, 200);
+      assertEquals(body.success, false);
+      assertEquals(
+        body.error,
+        "Room Has No Secret Passage",
+      );
+    });
+  });
 });

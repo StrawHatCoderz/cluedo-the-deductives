@@ -50,8 +50,12 @@ export class GameController {
 
   movePawn(gameId, pawnId, payload, nodeId, pos) {
     const game = this.#games[gameId];
-
     return game.movePawn(pawnId, payload, nodeId, pos);
+  }
+
+  useSecretPassage(gameId, playerId) {
+    const game = this.#games[gameId];
+    return game.useSecretPassage(playerId);
   }
 
   accuse(gameId, { suspect, weapon, room }) {
