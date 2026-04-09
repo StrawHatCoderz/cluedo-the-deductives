@@ -25,6 +25,16 @@ describe("GAME", () => {
       1,
       {
         getSecretPassages: () => ({ study: "kitchen" }),
+        getReachableNodes: () => ["tile-1-2"],
+        getGraph: () => ({
+          "tile-1-2": { type: "tile" },
+          "tile-0-0": { type: "tile" },
+          "tile-0-9": { type: "tile" },
+          "tile-9-0": { type: "tile" },
+          "tile-9-9": { type: "tile" },
+          "study": { type: "room" },
+        }),
+        toggleIsOccupied: () => {},
       },
       pawns,
       new DeckManager(
@@ -415,6 +425,67 @@ describe("GAME", () => {
       assertThrows(
         () => game.useSecretPassage(p1.getPlayerData().id),
         Error,
+      );
+    });
+  });
+
+  describe("movePawn()", () => {
+    const setupGameWithTurn = () => {
+      const { p1 } = add3Players();
+      game.start();
+      game.updateTurn();
+      return p1;
+    };
+
+    it(" => should move pawn to valid tile", () => {
+      const p1 = setupGameWithTurn();
+
+      game.rollDice(() => 1);
+
+      const reachable = game.getReachableNodes();
+      const validTile = reachable[0];
+
+      game.movePawn(p1.getPlayerData().id, validTile, {
+        x: 1,
+        y: 2,
+        room: null,
+      });
+
+      const pawn = game.getPawnInstance(1);
+
+      assertEquals(pawn.getPawnData().position.x, 1);
+      assertEquals(pawn.getPawnData().position.y, 2);
+    });
+
+    it(" => should throw if dice not rolled", () => {
+      const p1 = setupGameWithTurn();
+
+      assertThrows(
+        () =>
+          game.movePawn(p1.getPlayerData().id, "tile-1-2", {
+            x: 1,
+            y: 2,
+            room: null,
+          }),
+        ValidationError,
+        "Roll dice first",
+      );
+    });
+
+    it(" => should throw for invalid path", () => {
+      const p1 = setupGameWithTurn();
+
+      game.rollDice(() => 1);
+
+      assertThrows(
+        () =>
+          game.movePawn(p1.getPlayerData().id, "tile-999-999", {
+            x: 999,
+            y: 999,
+            room: null,
+          }),
+        ValidationError,
+        "Provide Valid Path to move",
       );
     });
   });

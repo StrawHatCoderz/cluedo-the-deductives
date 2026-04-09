@@ -10,19 +10,19 @@ import {
 describe("UTILS", () => {
   describe("UTILS: PARSE NODE TEST", () => {
     it(" => should return parsed node id for rooms", () => {
-      assertEquals(parseNode("kitchen"), ["kitchen", {
+      assertEquals(parseNode("kitchen"), {
         x: null,
         y: null,
         room: "kitchen",
-      }]);
+      });
     });
 
     it(" => should return parsed node id for tiles", () => {
-      assertEquals(parseNode("tile-6-7"), ["tile-6-7", {
+      assertEquals(parseNode("tile-6-7"), {
         x: "6",
         y: "7",
         room: null,
-      }]);
+      });
     });
   });
 

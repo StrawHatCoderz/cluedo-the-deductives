@@ -53,6 +53,6 @@ export const parseNode = (node) => {
   const [_, x, y] = node.split("-");
 
   return node.includes("-")
-    ? [`tile-${x}-${y}`, { x, y, room: null }]
-    : [node, { x: null, y: null, room: node }];
+    ? { x, y, room: null }
+    : { x: null, y: null, room: node };
 };

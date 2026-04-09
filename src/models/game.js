@@ -179,7 +179,6 @@ export class Game {
 
   rollDice(randomFn = Math.random, ceilFn = Math.ceil) {
     if (!this.#turn) throw new Error("Invalid player turn");
-    this.setUsedSecretPassage();
     return this.#turn.rollDice(randomFn, ceilFn);
   }
 
@@ -250,7 +249,10 @@ export class Game {
   }
 
   #toggleIsOccupied(nodeId) {
-    const hasTile = this.#board.getGraph()[nodeId].type === "tile";
+    const node = this.#board.getGraph()[nodeId];
+    if (!node) return;
+    const hasTile = node.type === "tile";
+
     if (hasTile) {
       this.#board.toggleIsOccupied(nodeId);
     }
@@ -352,9 +354,7 @@ export class Game {
   #getSecretPassageId(playerId, shouldValidate = false) {
     const room = this.#activePlayer?.getPlayerData().pawn.position.room;
     const secretPassages = this.#board.getSecretPassages();
-
     const isSecretPassage = room in secretPassages;
-
     const playerCanRollDice = this.#isRollAllowed(playerId);
     const playerCanSuspect = this.#turn?.canSuspect();
     const playerHasNotUsedSecretPassage = !this.#turn?.getUsedSecretPassage();
@@ -382,34 +382,38 @@ export class Game {
     return possibleTiles.some((tiles) => tileId === tiles);
   }
 
-  #isValidMove(tileId, possibleTiles) {
-    const currentPlayer = this.getCurrentPlayer()?.getPlayerData();
+  #validateMove(tileId, possibleTiles) {
+    if (!this.#turn.getIsDiceRolled()) {
+      throw new ValidationError("Roll dice first");
+    }
 
-    return (
-      this.#hasPossibleMove(possibleTiles, tileId) &&
-      (this.#getHasUsedSecretPassage() ||
-        !this.#isRollAllowed(currentPlayer.id))
-    );
+    if (this.#getHasUsedSecretPassage()) {
+      throw new ValidationError("After using secret passage can't move");
+    }
+
+    if (!this.#hasPossibleMove(possibleTiles, tileId)) {
+      throw new ValidationError("Provide Valid Path to move");
+    }
+
+    return true;
   }
 
-  parsePawnPosition(pawn) {
-    const { x, y, room } = pawn.position;
+  parsePawnPosition({ position }) {
+    const { x, y, room } = position;
     return room ? room : `tile-${x}-${y}`;
   }
 
-  movePawn(pawnId, { newNodeId, isUsingSecretPassage, tiles }, tileId, pos) {
+  movePawn(playerId, newNodeId, pos) {
+    const pawnId = this.#getCurrentPlayerData(playerId).pawn.id;
     const pawn = this.getPawnInstance(pawnId);
     const pawnPrevPosition = this.parsePawnPosition(pawn.getPawnData());
-    if (isUsingSecretPassage) this.setUsedSecretPassage();
-    if (this.#isValidMove(tileId, tiles)) {
-      pawn.updatePosition(pos);
-      this.#toggleIsOccupied(pawnPrevPosition);
-      this.#toggleIsOccupied(newNodeId);
-      this.#turn.setPossiblePaths([]);
-      return { status: true };
-    }
+    const possibleMoves = this.#turn.getPossiblePaths();
+    this.#validateMove(newNodeId, possibleMoves);
 
-    return { status: false };
+    pawn.updatePosition(pos);
+    this.#toggleIsOccupied(pawnPrevPosition);
+    this.#toggleIsOccupied(newNodeId);
+    this.#turn.setPossiblePaths([]);
   }
 
   validateScretPassage(

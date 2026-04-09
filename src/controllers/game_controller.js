@@ -56,9 +56,9 @@ export class GameController {
     return game.getDiceValue();
   }
 
-  movePawn(gameId, pawnId, payload, nodeId, pos) {
+  movePawn(gameId, playerId, newNodeId, pos) {
     const game = this.#games[gameId];
-    return game.movePawn(pawnId, payload, nodeId, pos);
+    return game.movePawn(playerId, newNodeId, pos);
   }
 
   useSecretPassage(gameId, playerId) {

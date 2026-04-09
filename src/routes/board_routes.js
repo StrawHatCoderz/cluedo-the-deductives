@@ -7,6 +7,6 @@ import {
 
 export const boardRoutes = new Hono();
 
-boardRoutes.put("/update-pawn-position/:pawnId", movePawnHandler);
+boardRoutes.put("/update-pawn-position", movePawnHandler);
 boardRoutes.put("/secret-passage", secretPassageHandler);
 boardRoutes.get("/reachable-nodes", serveGetReachableNodes);

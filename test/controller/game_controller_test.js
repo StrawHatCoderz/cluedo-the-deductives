@@ -182,7 +182,6 @@ describe("GAME CONTROLLER", () => {
 
       gameMock.movePawn = (...args) => {
         receivedArgs = args;
-        return { status: true };
       };
 
       controller.startGame(1, [
@@ -196,20 +195,18 @@ describe("GAME CONTROLLER", () => {
 
       const result = controller.movePawn(
         1,
-        "pawn-1",
-        { newNodeId: 10 },
+        1,
         "tile-1",
         { x: 1, y: 2 },
       );
 
       assertEquals(receivedArgs, [
-        "pawn-1",
-        { newNodeId: 10 },
+        1,
         "tile-1",
         { x: 1, y: 2 },
       ]);
 
-      assertEquals(result, { status: true });
+      assertEquals(result, undefined);
     });
   });
 

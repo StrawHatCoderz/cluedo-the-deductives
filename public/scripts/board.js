@@ -59,20 +59,24 @@ const clearHighlights = () => {
   });
 };
 
-const handleMovePlayer = async (e, tiles, pawn) => {
+const handleMovePlayer = async (e, pawn) => {
   e.preventDefault();
   const newNodeId = e.target.id;
 
-  await fetch(`/board/update-pawn-position/${pawn.id}`, {
+  const res = await fetch(`/board/update-pawn-position`, {
     method: "put",
     headers: { "content-type": "application/json" },
-    body: JSON.stringify({ newNodeId, tiles, isUsingSecretPassage: false }),
+    body: JSON.stringify({ newNodeId }),
   });
 
-  removePlayerIcon(pawn);
-  clearHighlights();
-  const passBtn = document.querySelector("#pass-button");
-  passBtn.removeAttribute("disabled");
+  const { success } = await res.json();
+
+  if (success) {
+    removePlayerIcon(pawn);
+    clearHighlights();
+    const passBtn = document.querySelector("#pass-button");
+    passBtn.removeAttribute("disabled");
+  }
 };
 
 const movePlayer = (tiles, pawn) => {
@@ -84,7 +88,7 @@ const movePlayer = (tiles, pawn) => {
       tile.removeEventListener("click", tile._handler);
     }
 
-    const handler = async (e) => await handleMovePlayer(e, tiles, pawn);
+    const handler = async (e) => await handleMovePlayer(e, pawn);
     tile._handler = handler;
     tile.addEventListener("click", handler, { once: true });
   });
@@ -106,9 +110,9 @@ const handleDiceClick = async (event, dice, pawn) => {
 
   showDiceAnimation(diceValues, async () => {
     displayPopup(`dice value is ${diceValues[0] + diceValues[1]}`, "info");
-    const { reachableNodes } = await fetchReachableNodes();
-    highlightTiles(reachableNodes);
-    movePlayer(reachableNodes, pawn);
+    const { data } = await fetchReachableNodes();
+    highlightTiles(data);
+    movePlayer(data, pawn);
   });
 };
 
@@ -148,7 +152,7 @@ const passBtnListener = (passBtn) => {
 const handleSecretPassageClick = async (e, pawn) => {
   e.preventDefault();
   const res = await fetch(`/board/secret-passage`, { method: "put" });
-  const { success } = await res.body();
+  const { success } = await res.json();
 
   if (success) {
     removePlayerIcon(pawn);

@@ -121,23 +121,29 @@ describe("APP TEST", () => {
           headers: { Cookie: cookie },
         });
 
-        const res = await app.request(`/board/update-pawn-position/1`, {
+        const reachableRes = await app.request("/board/reachable-nodes", {
+          headers: { Cookie: cookie },
+        });
+
+        const reachable = await reachableRes.json();
+        console.log(reachable);
+        const validTile = reachable.data[0];
+
+        const res = await app.request(`/board/update-pawn-position`, {
           method: "PUT",
           headers: {
             Cookie: cookie,
             "content-type": "application/json",
           },
           body: JSON.stringify({
-            newNodeId: "tile-7-24",
-            tiles: ["tile-7-24"],
-            isUsingSecretPassage: false,
+            newNodeId: validTile,
           }),
         });
 
         const body = await res.json();
 
         assertEquals(res.status, 200);
-        assertEquals(body, { status: true });
+        assertEquals(body, { success: true });
       });
 
       it(" => should fail if dice not rolled", async () => {
@@ -148,7 +154,7 @@ describe("APP TEST", () => {
           headers: { Cookie: cookie },
         });
 
-        const res = await app.request(`/board/update-pawn-position/1`, {
+        const res = await app.request(`/board/update-pawn-position`, {
           method: "PUT",
           headers: {
             Cookie: cookie,
@@ -156,15 +162,13 @@ describe("APP TEST", () => {
           },
           body: JSON.stringify({
             newNodeId: "tile-7-24",
-            tiles: ["tile-7-24"],
-            isUsingSecretPassage: false,
           }),
         });
 
         const body = await res.json();
 
         assertEquals(res.status, 400);
-        assertEquals(body, { status: false });
+        assertEquals(body.success, false);
       });
     });
   });
