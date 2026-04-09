@@ -60,6 +60,10 @@ export class Lobby {
       throw new ValidationError("Invalid Player Count");
     }
 
+    if (this.#isStarted) {
+      throw new ValidationError(`Game has already started`);
+    }
+
     this.#isStarted = true;
   }
 }

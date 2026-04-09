@@ -41,7 +41,7 @@ export class LobbyController {
 
   updateLobbyState(lobbyId, playerId) {
     const lobby = this.#lobbies[lobbyId];
-    if (!lobby) throw new ValidationError("Invalid lobby id");
+    if (!lobby) throw new ValidationError(`${lobbyId} Invalid Lobby Id`);
     return lobby.updateState(playerId);
   }
 

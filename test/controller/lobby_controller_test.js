@@ -15,9 +15,7 @@ describe("LOBBY", () => {
     });
 
     it(" => should create lobby controller if createLobby fn is provided", () => {
-      expect(() => LobbyController.create(() => {}))
-        .not
-        .toThrow();
+      expect(() => LobbyController.create(() => {})).not.toThrow();
     });
   });
 
@@ -133,6 +131,11 @@ describe("LOBBY", () => {
         () => lobbyController.updateLobbyState(1, 1),
         ValidationError,
       );
+    });
+
+    it(" => should throw if lobby id is invalid for getting state", () => {
+      const lobbyController = new LobbyController();
+      assertThrows(() => lobbyController.getLobbyState(1, 1), ValidationError);
     });
   });
 });
