@@ -10,5 +10,5 @@ export const lobbyRoutes = new Hono();
 
 lobbyRoutes.get("/", serveLobbyState);
 
-lobbyRoutes.post("/create", createLobby);
+lobbyRoutes.post("/create", parseBody, createLobby);
 lobbyRoutes.post("/join", parseBody, joinLobby);

@@ -10,3 +10,8 @@ export const accusationSchema = z.object({
 export const createLobbySchema = z.object({
   name: z.string().nonempty(),
 });
+
+export const joinLobbySchema = z.object({
+  name: z.string().nonempty(),
+  roomId: z.string().nonempty(),
+});

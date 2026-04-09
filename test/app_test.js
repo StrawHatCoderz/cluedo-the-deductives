@@ -239,9 +239,14 @@ describe("APP TEST", () => {
   describe("LOBBY", () => {
     describe("POST /lobby/create", () => {
       it(" => should fail if name missing", async () => {
-        const res = await app.request("/lobby/create", { method: "POST" });
+        const res = await app.request("/lobby/create", {
+          method: "POST",
+          body: new FormData(),
+          header: {
+            "content-type": "multipart/formdata",
+          },
+        });
         const body = await res.json();
-
         assertEquals(res.status, 400);
         assertEquals(body.success, false);
         assertEquals(body.error, "Invalid player name");
@@ -254,6 +259,9 @@ describe("APP TEST", () => {
         const res = await app.request("/lobby/create", {
           method: "POST",
           body: formData,
+          header: {
+            "content-type": "multipart/formdata",
+          },
         });
 
         const body = await res.json();
@@ -271,7 +279,7 @@ describe("APP TEST", () => {
 
         const res = await app.request("/lobby/join", {
           method: "POST",
-          headers: {
+          header: {
             "content-type": "application/json",
           },
           body: JSON.stringify({ name: "thor", roomId: "1" }),
@@ -285,7 +293,6 @@ describe("APP TEST", () => {
 
       it(" => should not join lobby if username is undefined", async () => {
         lobbyController.hostLobby("loki");
-
         const res = await app.request("/lobby/join", {
           method: "POST",
           headers: {
@@ -298,7 +305,7 @@ describe("APP TEST", () => {
 
         assertEquals(res.status, 400);
         assertEquals(body.success, false);
-        assertEquals(body.error, "Invalid name");
+        assertEquals(body.error, "Invalid player name or room id");
       });
 
       it(" => should not join lobby if roomid is undefined", async () => {
@@ -309,14 +316,14 @@ describe("APP TEST", () => {
           headers: {
             "content-type": "application/json",
           },
-          body: JSON.stringify({ name: "loki", roomId: "" }),
+          body: JSON.stringify({ name: "loki", roomId: "5" }),
         });
 
         const body = await res.json();
 
         assertEquals(res.status, 400);
         assertEquals(body.success, false);
-        assertEquals(body.error, "Invalid RoomId");
+        assertEquals(body.error, "Invalid room id");
       });
     });
 

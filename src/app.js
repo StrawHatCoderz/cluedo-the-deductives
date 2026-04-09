@@ -30,7 +30,7 @@ export const createApp = ({
 
   app.get("*", serveStatic({ root: "./public" }));
   app.onError((e, c) => {
-    return c.json({ error: e.message }, 400);
+    return c.json({ success: false, error: e.message }, 400);
   });
 
   return app;
