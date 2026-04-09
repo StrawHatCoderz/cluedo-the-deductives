@@ -189,8 +189,12 @@ export class Game {
 
   #isRollAllowed(playerId) {
     return (
-      playerId === this.#activePlayer?.getPlayerData().id &&
-      !(this.#turn?.getIsDiceRolled() || this.#getHasUsedSecretPassage())
+      +playerId === this.#activePlayer?.getPlayerData().id &&
+      !(
+        this.#turn?.getIsDiceRolled() ||
+        this.#getHasUsedSecretPassage() ||
+        this.hasSuspected()
+      )
     );
   }
 

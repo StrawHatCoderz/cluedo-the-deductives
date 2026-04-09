@@ -5,6 +5,7 @@ import {
   handleAccusation,
   updateTurn,
 } from "../handlers/game_handler.js";
+import { isRollAllowed } from "../middleware/game_validations.js";
 
 export const turnRouteCreator = (getRandom, roundUp) => {
   const turnRoutes = new Hono();
@@ -12,7 +13,11 @@ export const turnRouteCreator = (getRandom, roundUp) => {
   turnRoutes.post("/suspect", addSuspicion);
   turnRoutes.post("/pass", updateTurn);
   turnRoutes.post("/accuse", handleAccusation);
-  turnRoutes.post("/roll", (c) => serveRollDice(c, getRandom, roundUp));
+  turnRoutes.post(
+    "/roll",
+    isRollAllowed,
+    (c) => serveRollDice(c, getRandom, roundUp),
+  );
 
   return turnRoutes;
 };

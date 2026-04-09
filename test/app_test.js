@@ -75,11 +75,12 @@ describe("APP TEST", () => {
 
         const res = await app.request("/turn/roll", {
           method: "POST",
-          headers: { Cookie: cookie },
+          headers: {
+            Cookie: "lobbyId=1; playerId=3;",
+          },
         });
 
         const body = await res.json();
-
         assertEquals(res.status, 200);
         assertEquals(body.diceValues, [6, 6]);
       });
@@ -96,13 +97,12 @@ describe("APP TEST", () => {
 
         await app.request("/turn/roll", {
           method: "POST",
-          headers: { Cookie: cookie },
+          headers: { Cookie: "lobbyId=1; playerId=3;" },
         });
 
         const res = await app.request("/board/reachable-nodes", {
-          headers: { Cookie: cookie },
+          headers: { Cookie: "lobbyId=1; playerId=3;" },
         });
-
         assertEquals(res.status, 200);
       });
     });
@@ -118,7 +118,7 @@ describe("APP TEST", () => {
 
         await app.request("/turn/roll", {
           method: "POST",
-          headers: { Cookie: cookie },
+          headers: { Cookie: "lobbyId=1; playerId=3;" },
         });
 
         const reachableRes = await app.request("/board/reachable-nodes", {
@@ -132,7 +132,7 @@ describe("APP TEST", () => {
         const res = await app.request(`/board/update-pawn-position`, {
           method: "PUT",
           headers: {
-            Cookie: cookie,
+            Cookie: "lobbyId=1; playerId=3;",
             "content-type": "application/json",
           },
           body: JSON.stringify({

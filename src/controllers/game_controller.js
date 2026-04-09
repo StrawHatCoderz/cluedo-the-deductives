@@ -90,6 +90,15 @@ export class GameController {
     return { status: true };
   }
 
+  isRollAllowed(gameId, playerId) {
+    const gameState = this.#games[gameId].getState(playerId);
+    return gameState.canRoll;
+  }
+
+  isValidLobby(gameId) {
+    return gameId in this.#games;
+  }
+
   getDisprovedCard(gameId) {
     const game = this.#games[gameId];
     const card = game.getDisprovedCard();
