@@ -363,10 +363,34 @@ describe("APP TEST", () => {
 
       assertEquals(res.status, 200);
       assertEquals(body.success, false);
-      assertEquals(
-        body.error,
-        "Room Has No Secret Passage",
-      );
+      assertEquals(body.error, "Room Has No Secret Passage");
+    });
+  });
+
+  describe("POST /game/disprove", () => {
+    it("=> should throw invalid game state", async () => {
+      const { cookie } = setupLobby();
+      await app.request("game/start", {
+        method: "POST",
+        headers: {
+          Cookie: cookie,
+        },
+      });
+
+      const formData = new FormData();
+      formData.append("disprove", "scarlet");
+
+      const res = await app.request("/game/disprove", {
+        method: "POST",
+        headers: {
+          Cookie: cookie,
+        },
+        body: formData,
+      });
+
+      const body = await res.json();
+      assertEquals(res.status, 400);
+      assertEquals(body.success, false);
     });
   });
 });

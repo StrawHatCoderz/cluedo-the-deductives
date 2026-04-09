@@ -33,6 +33,14 @@ export class GameController {
     return this.#games[gameId].getState(playerId);
   }
 
+  getDisprovablePlayer(gameId) {
+    return this.#games[gameId].getDisprovablePlayer();
+  }
+
+  getSuspicionCombination(gameId) {
+    return this.#games[gameId].getSuspectCombination();
+  }
+
   rollDice(gameId, randomFn, ceilFn) {
     const game = this.#games[gameId];
     return game.rollDice(randomFn, ceilFn);
@@ -74,6 +82,10 @@ export class GameController {
       return { status: true };
     }
     return { status: false };
+  }
+
+  hasSuspected(gameId) {
+    return this.#games[gameId].hasSuspected();
   }
 
   confirmDisproval(gameId, disprove) {

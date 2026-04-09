@@ -201,8 +201,16 @@ export class Game {
     return this.#turn?.canSuspect();
   }
 
+  hasSuspected() {
+    return this.#turn?.getHasSuspected();
+  }
+
+  getDisprovablePlayer() {
+    return this.#turn.getDisprovablePlayer();
+  }
+
   #getDisprovalData() {
-    return this.#turn?.getHasSuspected()
+    return this.hasSuspected()
       ? {
         hasSuspected: true,
         canDisproved: this.#turn.getCanDisproved(),

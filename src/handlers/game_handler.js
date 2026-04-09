@@ -42,10 +42,7 @@ export const handleAccusation = async (c) => {
 
   const gameController = c.get("gameController");
   const lobbyId = getCookie(c, "lobbyId");
-  const { isCorrect } = gameController.accuse(
-    lobbyId,
-    result.data,
-  );
+  const { isCorrect } = gameController.accuse(lobbyId, result.data);
 
   return c.json({ success: true, data: { isCorrect } });
 };
@@ -59,8 +56,12 @@ export const addSuspicion = async (c) => {
 
 export const confirmDisprove = async (c) => {
   const { disprove } = await c.req.parseBody();
-  const gameController = c.get("gameController");
   const lobbyId = getCookie(c, "lobbyId");
+  const gameController = c.get("gameController");
+  const combo = Object.values(gameController.getSuspicionCombination(lobbyId));
+  if (!combo.includes(disprove)) {
+    return c.json({ success: false, error: "Invalid disproval card" }, 400);
+  }
   return c.json(gameController.confirmDisproval(lobbyId, disprove));
 };
 
