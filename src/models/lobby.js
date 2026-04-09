@@ -53,7 +53,7 @@ export class Lobby {
     const aboveMaxPlayers = playerCount > this.#maxPlayer;
 
     if (!this.isHost(playerId)) {
-      throw new ValidationError("You Can't Start Game");
+      throw new ValidationError(`${playerId}: not allowed to start`);
     }
 
     if (belowMinPlayers || aboveMaxPlayers) {
