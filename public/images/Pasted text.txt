@@ -1,0 +1,157 @@
+diff --git a/public/pages/board.html b/public/pages/board.html
+index b4046a5..5182ec4 100644
+--- a/public/pages/board.html
++++ b/public/pages/board.html
+@@ -622,25 +622,11 @@
+       </div>
+     </template>
+ 
+-    <template id="suspicion-model-temp">
++    <template id="suspicion-container-template">
+       <div id="suspicion-container">
+         <h2>Suspicion</h2>
+         <p class="modal-room-label"></p>
+-        <div class="suspicion-cards">
+-          <div class="sus-card" id="card-suspect">
+-            <span class="card-label">Suspect</span>
+-            <span class="card-value"></span>
+-          </div>
+-          <div class="sus-card" id="card-weapon">
+-            <span class="card-label">Weapon</span>
+-            <span class="card-value"></span>
+-          </div>
+-          <div class="sus-card" id="card-room">
+-            <span class="card-label">Room</span>
+-            <span class="card-value"></span>
+-          </div>
+-        </div>
+-
++        <div class="suspicion-cards"></div>
+         <p id="suspicion-status" class="waiting-text">
+           ....Waiting for players to disprove
+         </p>
+diff --git a/public/scripts/suspicion.js b/public/scripts/suspicion.js
+index 5981259..03e8def 100644
+--- a/public/scripts/suspicion.js
++++ b/public/scripts/suspicion.js
+@@ -1,3 +1,7 @@
++import { createCard } from "./render_player_cards.js";
++import { toId } from "./utils.js";
++import { createClone } from "./utils/ui_service.js";
++
+ const WEAPONS = {
+   dagger: "https://cdn-icons-png.flaticon.com/128/3863/3863317.png",
+   rope: "https://cdn-icons-png.flaticon.com/128/3539/3539196.png",
+@@ -127,25 +131,26 @@ const showWeaponPopup = (x, y) => {
+   show(popup);
+ };
+ 
+-const fillModalCards = (clone, data) => {
+-  clone.querySelector("#card-suspect .card-value").textContent = data.suspect;
+-  clone.querySelector("#card-weapon .card-value").textContent = data.weapon;
+-  clone.querySelector("#card-room .card-value").textContent = data.room;
+-};
++export const showModal = ({ room, suspect, weapon }) => {
++  const suspicionContainer = createClone("suspicion-container-template");
++  const suspicionCardsContainer = suspicionContainer.querySelector(
++    ".suspicion-cards",
++  );
+ 
+-export const showModal = (data) => {
+-  const modal = getEl("suspicion-modal");
+-  const suspicionClone = document
+-    .querySelector("#suspicion-model-temp")
+-    .content.cloneNode(true);
++  const overlay = document.createElement("our-overlay");
++  overlay.appendChild(suspicionContainer);
+ 
+-  fillModalCards(suspicionClone, data);
+-  modal.querySelector(".modal-content").innerHTML =
+-    suspicionClone.querySelector("#suspicion-container").innerHTML;
++  document.body.appendChild(overlay);
++  overlay.open();
+ 
+-  modal.addEventListener("click", (e) => e.target === modal && hide(modal));
+-  show(modal);
+-  return modal;
++  const cardTemplate = document.getElementById("card-template");
++  suspicionCardsContainer.innerHTML = "";
++
++  Object.entries({ room, suspect, weapon }).forEach(([key, card]) => {
++    const cardClone = cardTemplate.content.cloneNode(true);
++    createCard(cardClone, toId(card), [`card-${key}`]);
++    suspicionCardsContainer.appendChild(cardClone);
++  });
+ };
+ 
+ const getHighlightId = (result, data) => {
+@@ -161,7 +166,10 @@ export const showResult = (data, result) => {
+     return;
+   }
+ 
+-  getEl(getHighlightId(result, data))?.classList.add("card-revealed");
++  const highlightedCard = getHighlightId(result, data);
++  const cardElement = document.querySelector(`.${highlightedCard}`);
++  cardElement?.classList.add("card-revealed");
++
+   statusEl.textContent = `${result.by} revealed the card`;
+ };
+ 
+@@ -183,7 +191,7 @@ const moveSuspectPawn = (suspicion) =>
+     }),
+   });
+ 
+-const mockFetchSuspicion = async (suspicion) => {
++const fetchSuspicion = async (suspicion) => {
+   removePawnHighlight();
+   await moveSuspectPawn(suspicion);
+   await saveSuspicion(suspicion);
+@@ -199,7 +207,7 @@ const getSuspicion = () => ({
+ const submitSuspicion = async () => {
+   const suspicion = getSuspicion();
+   showModal(suspicion);
+-  await mockFetchSuspicion(suspicion);
++  await fetchSuspicion(suspicion);
+   state.hasMadeSuspicion = true;
+ };
+ 
+@@ -245,7 +253,8 @@ const startSuspicion = ({ position }, suspects) => {
+ export const suspicionBtnListener = (
+   { canSuspect, activePlayer, pawns, currentPlayer },
+ ) => {
+-  if (canSuspect && activePlayer.id === currentPlayer.id) {
++  const isCurrentPlayer = activePlayer.id === currentPlayer.id;
++  if (canSuspect && isCurrentPlayer) {
+     startSuspicion(activePlayer.pawn, pawns);
+     return;
+   }
+diff --git a/public/styles/announce.css b/public/styles/announce.css
+index 3a38007..b1d43a3 100644
+--- a/public/styles/announce.css
++++ b/public/styles/announce.css
+@@ -43,12 +43,7 @@
+ }
+ 
+ .sus-card {
+-  width: 150px;
+-  height: 220px;
+   border-radius: 16px;
+-  display: flex;
+-  align-items: center;
+-  justify-content: center;
+   cursor: pointer;
+ 
+   background: linear-gradient(145deg, #c69214, #8a640d);
+diff --git a/public/styles/suspicion.css b/public/styles/suspicion.css
+index 2112413..20d7ec2 100644
+--- a/public/styles/suspicion.css
++++ b/public/styles/suspicion.css
+@@ -228,7 +228,7 @@ input[type="radio"] {
+ }
+ 
+ .card-revealed {
+-  border-color: gold;
++  border-color: 2px solid gold;
+   box-shadow: 0 0 10px gold, 0 0 4px gold inset;
+   background: #2a2500;
+ }

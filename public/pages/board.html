@@ -574,21 +574,8 @@
 
     <div id="players-cards-details"></div>
 
+    <div id="weapon-popup" class="weapon-popup hidden"></div>
     <div class="action-buttons" class="hide">
-      <div id="weapon-popup" class="weapon-popup hidden"></div>
-
-      <div id="suspicion-modal" class="modal hidden">
-        <div class="modal-content">
-          <h2>Suspicion</h2>
-          <p id="suspicion-text"></p>
-          <p id="suspicion-status"></p>
-
-          <div id="revealed-card" class="revealed-card hidden"></div>
-
-          <button id="close-modal">OK</button>
-        </div>
-      </div>
-
       <button id="accuse-button">🔍<span class="tooltip">Accuse</span></button>
       <button id="dice-button">🎲<span class="tooltip">Roll Dice</span></button>
       <button id="pass-button">
@@ -622,25 +609,11 @@
       </div>
     </template>
 
-    <template id="suspicion-model-temp">
+    <template id="suspicion-container-template">
       <div id="suspicion-container">
         <h2>Suspicion</h2>
         <p class="modal-room-label"></p>
-        <div class="suspicion-cards">
-          <div class="sus-card" id="card-suspect">
-            <span class="card-label">Suspect</span>
-            <span class="card-value"></span>
-          </div>
-          <div class="sus-card" id="card-weapon">
-            <span class="card-label">Weapon</span>
-            <span class="card-value"></span>
-          </div>
-          <div class="sus-card" id="card-room">
-            <span class="card-label">Room</span>
-            <span class="card-value"></span>
-          </div>
-        </div>
-
+        <div class="suspicion-cards"></div>
         <p id="suspicion-status" class="waiting-text">
           ....Waiting for players to disprove
         </p>

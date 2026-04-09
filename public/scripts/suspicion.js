@@ -1,3 +1,7 @@
+import { createCard } from "./render_player_cards.js";
+import { toId } from "./utils.js";
+import { createClone } from "./utils/ui_service.js";
+
 const WEAPONS = {
   dagger: "https://cdn-icons-png.flaticon.com/128/3863/3863317.png",
   rope: "https://cdn-icons-png.flaticon.com/128/3539/3539196.png",
@@ -127,25 +131,26 @@ const showWeaponPopup = (x, y) => {
   show(popup);
 };
 
-const fillModalCards = (clone, data) => {
-  clone.querySelector("#card-suspect .card-value").textContent = data.suspect;
-  clone.querySelector("#card-weapon .card-value").textContent = data.weapon;
-  clone.querySelector("#card-room .card-value").textContent = data.room;
-};
+export const showModal = ({ room, suspect, weapon }) => {
+  const suspicionContainer = createClone("suspicion-container-template");
+  const suspicionCardsContainer = suspicionContainer.querySelector(
+    ".suspicion-cards",
+  );
 
-export const showModal = (data) => {
-  const modal = getEl("suspicion-modal");
-  const suspicionClone = document
-    .querySelector("#suspicion-model-temp")
-    .content.cloneNode(true);
+  const overlay = document.createElement("our-overlay");
+  overlay.appendChild(suspicionContainer);
 
-  fillModalCards(suspicionClone, data);
-  modal.querySelector(".modal-content").innerHTML =
-    suspicionClone.querySelector("#suspicion-container").innerHTML;
+  document.body.appendChild(overlay);
+  overlay.open();
 
-  modal.addEventListener("click", (e) => e.target === modal && hide(modal));
-  show(modal);
-  return modal;
+  const cardTemplate = document.getElementById("card-template");
+  suspicionCardsContainer.innerHTML = "";
+
+  Object.entries({ room, suspect, weapon }).forEach(([key, card]) => {
+    const cardClone = cardTemplate.content.cloneNode(true);
+    createCard(cardClone, toId(card), [`card-${key}`]);
+    suspicionCardsContainer.appendChild(cardClone);
+  });
 };
 
 const getHighlightId = (result, data) => {
@@ -161,7 +166,10 @@ export const showResult = (data, result) => {
     return;
   }
 
-  getEl(getHighlightId(result, data))?.classList.add("card-revealed");
+  const highlightedCard = getHighlightId(result, data);
+  const cardElement = document.querySelector(`.${highlightedCard}`);
+  cardElement?.classList.add("card-revealed");
+
   statusEl.textContent = `${result.by} revealed the card`;
 };
 
@@ -172,10 +180,20 @@ const saveSuspicion = (suspicion) =>
     headers: { "content-type": "application/json" },
   });
 
-const fetchSuspicion = async (suspicion) => {
-  console.log(suspicion);
+const moveSuspectPawn = (suspicion) =>
+  fetch(`/board/update-pawn-position/${suspicion.suspectId}`, {
+    method: "put",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      newNodeId: suspicion.room,
+      tiles: [suspicion.room],
+      isUsingSecretPassage: false,
+    }),
+  });
 
+const fetchSuspicion = async (suspicion) => {
   removePawnHighlight();
+  await moveSuspectPawn(suspicion);
   await saveSuspicion(suspicion);
 };
 
@@ -235,7 +253,8 @@ const startSuspicion = ({ position }, suspects) => {
 export const suspicionBtnListener = (
   { canSuspect, activePlayer, pawns, currentPlayer },
 ) => {
-  if (canSuspect && activePlayer.id === currentPlayer.id) {
+  const isCurrentPlayer = activePlayer.id === currentPlayer.id;
+  if (canSuspect && isCurrentPlayer) {
     startSuspicion(activePlayer.pawn, pawns);
     return;
   }
