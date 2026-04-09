@@ -468,8 +468,17 @@ path.room.highlight-room {
 }
 
 .active-pawn {
-  stroke: rgb(1, 0, 6);
-  stroke-width: 2;
-  cursor: pointer;
-  filter: drop-shadow(0 0 5px gold);
+  stroke: cyan;
+  stroke-width: 1;
+  animation: pulsar 1.5s ease-out infinite alternate;
+}
+
+@keyframes pulsar {
+  from {
+    r: 2;
+  }
+
+  to {
+    r: 4;
+  }
 }

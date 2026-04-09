@@ -204,7 +204,6 @@ const submitSuspicion = async () => {
 
 export const removePawnHighlight = () => {
   document.querySelectorAll("[data-occupied-by]").forEach((p) => {
-    console.log({ p });
     p.classList.remove("highlight-suspect");
     p.removeEventListener("click", p.clickListener);
     delete p.clickListener;
