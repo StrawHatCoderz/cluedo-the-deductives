@@ -5,12 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cluedo Board</title>
     <link rel="stylesheet" href="/styles/board.css" />
-    <link rel="stylesheet" href="/styles/suspicion.css" />
     <link rel="stylesheet" href="/styles/accusation.css" />
     <link rel="stylesheet" href="/styles/dice.css" />
-    <link rel="stylesheet" href="/styles/disprove.css">
-    <link rel="stylesheet" href="/styles/announce.css">
     <link rel="stylesheet" href="/styles/accusation_result.css">
+    <link rel="stylesheet" href="/styles/suspicion.css">
+    <link rel="stylesheet" href="/styles/suspicion_result.css">
+    <link rel="stylesheet" href="/styles/suspicion_passive.css">
+    <link rel="stylesheet" href="/styles/suspicion_announce.css">
+
     <script type="module" src="/scripts/script.js"></script>
     <script type="module" src="/components/overlay.js"></script>
   </head>
@@ -620,35 +622,32 @@
       </div>
     </template>
 
-    <template id="announce-suspicion">
+    <template id="announce-suspicion-template">
       <div id="announce-container">
         <h2>Suspicion</h2>
         <p class="modal-room-label" id="suspector"></p>
         <div class="suspicion-cards">
           <div class="dis-card" id="dis-suspect">
             <input type="radio" name="disprove" id="suspect" value="suspect" />
-            <label class="sus-card" for="suspect">
-              <span class="card-title">Suspect</span>
-            </label>
+
+            <img class="player-card" src="" alt="">
           </div>
           <div class="dis-card" id="dis-weapon">
             <input type="radio" name="disprove" id="weapon" value="weapon" />
-            <label class="sus-card" for="weapon">
-              <span class="card-title">Weapon</span>
-            </label>
+
+            <img class="player-card" src="" alt="">
           </div>
 
           <div class="dis-card" id="dis-room">
             <input type="radio" name="disprove" id="room" value="room" />
-            <label class="sus-card" for="room">
-              <span class="card-title">Room</span>
-            </label>
+
+            <img class="player-card" src="" alt="">
           </div>
         </div>
       </div>
     </template>
 
-    <template id="disprove-model">
+    <template id="disprove-model-template">
       <div id="disproval-container">
         <form action="/game/disprove" method="post">
           <h2>Disprove Suspicion</h2>
@@ -663,7 +662,7 @@
                 required
               />
               <label class="sus-card" for="suspect">
-                <span class="card-title">Suspect</span>
+                <img class="player-card" src="" alt="">
               </label>
             </div>
             <div class="dis-card" id="dis-weapon">
@@ -675,7 +674,7 @@
                 required
               />
               <label class="sus-card" for="weapon">
-                <span class="card-title">Weapon</span>
+                <img class="player-card" src="" alt="">
               </label>
             </div>
 
@@ -688,7 +687,7 @@
                 required
               />
               <label class="sus-card" for="room">
-                <span class="card-title">Room</span>
+                <img class="player-card" src="" alt="">
               </label>
             </div>
           </div>

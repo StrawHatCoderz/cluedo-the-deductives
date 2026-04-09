@@ -1,0 +1,65 @@
+#announce-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px;
+}
+
+#announce-container {
+  background: linear-gradient(160deg, #3b0a0a, #5a1010);
+  border-radius: 16px;
+  padding: 28px 32px;
+  width: 100%;
+  max-width: 520px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+  color: #f5e6e6;
+  gap: 20px;
+}
+
+#announce-container h2 {
+  font-size: 1.6rem;
+  font-weight: 600;
+  text-align: center;
+  color: #ffe5e5;
+}
+
+#announce-container .modal-room-label {
+  text-align: center;
+  font-size: 0.95rem;
+  color: #d6b3b3;
+}
+
+#announce-container .suspicion-cards {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+}
+
+#announce-container .disabled-Card {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+#announce-container .player-card {
+  width: 100%;
+  max-width: 130px;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 12px;
+  background: #2a0606;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+  opacity: 0.6;
+  filter: grayscale(30%);
+}
+
+@media (max-width: 520px) {
+  #announce-container .suspicion-cards {
+    gap: 10px;
+  }
+
+  #announce-container .player-card {
+    height: 150px;
+  }
+}

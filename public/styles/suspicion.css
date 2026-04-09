@@ -172,83 +172,6 @@
   color: black;
 }
 
-.revealed-card {
-  margin-top: 15px;
-  padding: 10px;
-  border: 2px solid gold;
-  box-shadow: 0 0 10px gold;
-  font-weight: bold;
-}
-
-.suspicion-cards {
-  display: flex;
-  gap: 12px;
-  justify-content: center;
-  margin: 18px 0;
-}
-
-.sus-card {
-  display: flex;
-  flex-direction: column;
-  text-transform: uppercase;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  width: 200px;
-  height: 300px;
-  padding: 15px 8px;
-  background: goldenrod;
-  border: 2px solid #555;
-  border-radius: 10px;
-  text-align: center;
-}
-
-input[type="radio"] {
-  display: none;
-}
-
-.card > input:checked + label {
-  background-color: grey;
-}
-
-.card-label {
-  color: white;
-  font-weight: 400;
-  font-size: 18px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.card-value {
-  color: #fff;
-  font-weight: bold;
-  font-size: 12px;
-  font-size: 25px;
-  word-break: break-word;
-}
-
-.card-revealed {
-  border-color: 2px solid gold;
-  box-shadow: 0 0 10px gold, 0 0 4px gold inset;
-  background: #2a2500;
-}
-
-.card-revealed .card-value {
-  color: gold;
-}
-
-.modal-room-label {
-  color: #aaa;
-  font-size: 15px;
-  margin: 0;
-}
-
-.waiting-text {
-  color: #bbb;
-  font-size: 15px;
-  margin-top: 10px;
-}
-
 .weapon-item {
   width: 56px;
   height: 70px;
@@ -273,11 +196,6 @@ input[type="radio"] {
 
 .weapon-item.weapon-selected .weapon-img {
   filter: none;
-}
-
-#suspicion-status {
-  font-size: 30px;
-  color: black;
 }
 
 .clickable {

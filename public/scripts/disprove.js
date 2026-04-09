@@ -1,5 +1,6 @@
 import { showResult } from "./suspicion.js";
-import { displayPopup } from "./utils.js";
+import { displayPopup, toId } from "./utils.js";
+import { createClone } from "./utils/ui_service.js";
 
 const sendDisprovedCard = async (e) => {
   e.preventDefault();
@@ -11,15 +12,19 @@ const sendDisprovedCard = async (e) => {
   document.querySelector("#disproval-container")?.remove();
 };
 
-const registerListeners = (container, temp) => {
+const registerListeners = (container) => {
   const form = container.querySelector("form");
-  form.addEventListener("submit", (e) => sendDisprovedCard(e, temp));
+  form.addEventListener("submit", sendDisprovedCard);
 };
 
-const setValues = (combo, cards, disprovableCards) =>
+const fillDisprovalCards = (combo, cards, disprovableCards) =>
   Object.values(combo).forEach((card, i) => {
+    console.log(cards[i]);
+
     cards[i].querySelector("input").value = card;
-    cards[i].querySelector("label").textContent = card;
+    const img = cards[i].querySelector("img");
+    img.src = `/images/${toId(card)}.jpg`;
+
     if (!disprovableCards?.includes(card)) {
       cards[i].setAttribute("class", "disabled-Card");
       cards[i].querySelector("input").setAttribute("disabled", true);
@@ -34,17 +39,27 @@ const createDisprovePopUp = ({ currentPlayer, suspicionCombo }) => {
     room: suspicionCombo.room,
   };
 
-  const disproveTemp = document
-    .querySelector("#disprove-model")
-    .content.cloneNode(true);
+  const disproveBroadcastContainer = createClone("disprove-model-template");
+  const disprovalContainer = disproveBroadcastContainer.querySelector(
+    "#disproval-container",
+  );
+  const suspicionCards = disprovalContainer.querySelector(
+    "form .suspicion-cards",
+  );
+
+  const overlay = document.createElement("our-overlay");
+  overlay.appendChild(disproveBroadcastContainer);
+
+  document.body.appendChild(overlay);
+  overlay.open();
 
   const disprovableCards = Object.values(suspicionCombo).filter((card) =>
     hand.includes(card)
   );
-  const cards = disproveTemp.querySelectorAll(".dis-card");
-  setValues(combo, cards, disprovableCards);
-  registerListeners(disproveTemp);
-  document.body.appendChild(disproveTemp);
+
+  const cards = suspicionCards.querySelectorAll(".dis-card");
+  fillDisprovalCards(combo, cards, disprovableCards);
+  registerListeners(disprovalContainer);
 };
 
 const showDisproval = async (state) => {
@@ -67,19 +82,30 @@ const announceSuspicion = (state) => {
     room: state.suspicionCombo.room,
   };
 
-  const announceTemp = document
-    .querySelector("#announce-suspicion")
-    .content.cloneNode(true);
-  const cards = announceTemp.querySelectorAll(".dis-card");
-  setValues(combo, cards);
+  const suspicionBroadcastContainer = createClone(
+    "announce-suspicion-template",
+  );
 
-  announceTemp.querySelector("h2").textContent =
+  const announceContainer = suspicionBroadcastContainer.querySelector(
+    "#announce-container",
+  );
+
+  const suspicionCards = suspicionBroadcastContainer.querySelector(
+    "#announce-container .suspicion-cards",
+  );
+
+  const cards = suspicionCards.querySelectorAll(".dis-card");
+
+  const overlay = document.createElement("our-overlay");
+  overlay.appendChild(suspicionBroadcastContainer);
+
+  document.body.appendChild(overlay);
+  overlay.open();
+
+  fillDisprovalCards(combo, cards);
+
+  announceContainer.querySelector("h2").textContent =
     `${state.activePlayer.name} suspects`;
-  document.body.append(announceTemp);
-
-  document.addEventListener("click", () => {
-    document.querySelector("#announce-container")?.remove();
-  });
 };
 
 export const disproveASuspicion = (state) => {
