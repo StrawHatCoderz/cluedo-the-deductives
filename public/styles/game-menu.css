@@ -15,67 +15,10 @@ body {
   --font-body: "Crimson Pro", serif;
 }
 
-#form {
-  background: rgba(20, 18, 14, 0.85);
-  backdrop-filter: blur(1px);
-  padding: 30px;
-  border-radius: 10px;
-  text-align: center;
-  width: 300px;
-  margin-top: 80px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(179, 138, 58, 0.35);
-}
-
-label {
-  display: block;
-  margin-bottom: 10px;
-  color: white;
-  font-size: 18px;
-}
-
-#name {
-  width: 90%;
-  padding: 10px;
-  margin-bottom: 20px;
-  border-radius: 5px;
-  border: none;
-}
-
-#hostBtn {
-  background-color: darkred;
-  color: white;
-  padding: 10px 15px;
-  border: none;
-  margin-right: 10px;
-  cursor: pointer;
-  border-radius: 5px;
-}
-
-#hostBtn:hover {
-  background-color: red;
-}
-
-#joinBtn {
-  background-color: black;
-  color: white;
-  padding: 10px 15px;
-  border: 1px solid white;
-  cursor: pointer;
-  border-radius: 5px;
-}
-
-#joinBtn:hover {
-  background-color: gray;
-}
-
 body {
-  min-height: 100vh;
-  font-family: var(--font-body);
-
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
+  width: 100vw;
+  height: 100vh;
+  font-family: var(--font-display);
 
   background-image:
     linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
@@ -83,6 +26,7 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
   z-index: -1;
+  position: relative;
 }
 
 body::after {
@@ -95,6 +39,57 @@ body::after {
     rgba(0, 0, 0, 0.7)
   );
   pointer-events: none;
+}
+
+#form {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  background: rgba(20, 18, 14, 0.85);
+  backdrop-filter: blur(1px);
+  padding: 48px 32px;
+  border-radius: 10px;
+  text-align: center;
+
+  width: 30%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(179, 138, 58, 0.35);
+}
+
+label {
+  display: block;
+  margin-bottom: 10px;
+  color: white;
+  font-size: 32px;
+  text-transform: capitalize;
+}
+
+#name {
+  width: 95%;
+  padding: 10px;
+  font-size: 24px;
+  border-radius: 2px;
+  border: none;
+}
+
+#name::placeholder {
+  text-transform: capitalize;
+}
+
+.lobby-action-btns {
+  width: 100%;
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr 1fr;
 }
 
 #alert-toast {

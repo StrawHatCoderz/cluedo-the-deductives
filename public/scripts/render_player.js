@@ -1,4 +1,4 @@
-import { isActivePlayer, isCurrentPlayer } from "./utils.js";
+import { isActivePlayer, isCurrentPlayer, toId } from "./utils.js";
 
 const createPlayer = (node, player, activePlayer, currentPlayer) => {
   const playerNode = node.querySelector(".player");
@@ -11,7 +11,11 @@ const createPlayer = (node, player, activePlayer, currentPlayer) => {
   }
 
   const icon = node.querySelector(".player-icon");
+  icon.src = `/images/${toId(player.pawn)}_profile.avif`;
   icon.setAttribute("id", `${player.pawn}-icon`);
+
+  const playerPawnColor = node.querySelector(".player-pawn-color");
+  playerPawnColor.setAttribute("id", `${player.pawn}-icon`);
 
   const playerName = node.querySelector(".player-name");
   playerName.textContent = isCurrentPlayer(player.id, currentPlayer)

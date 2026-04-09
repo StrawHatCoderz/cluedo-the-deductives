@@ -199,7 +199,19 @@ body::after {
   border-radius: 50%;
 
   background: rgba(255, 255, 255, 0.08);
-  border: 2px solid rgba(179, 138, 58, 0.35);
+  backdrop-filter: blur(6px);
+
+  border: 2px solid rgba(179, 138, 58, 0.5);
+
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), 0 0 8px rgba(179, 138, 58, 0.3);
+
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.profile-image:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5), 0 0 12px rgba(179, 138, 58, 0.5);
 }
 
 .pawn-name {
@@ -224,43 +236,4 @@ body::after {
 #lobby-status {
   font-style: italic;
   color: var(--text-muted);
-}
-
-#lobby-start-btn {
-  font-family: var(--font-display);
-  font-size: 13px;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-
-  padding: 12px 32px;
-
-  border-radius: 5px;
-  border: 1px solid rgba(179, 138, 58, 0.45);
-
-  background: linear-gradient(to bottom, #6b1d12, #2e0c09);
-  color: var(--text-primary);
-
-  cursor: pointer;
-
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
-
-  transition: all 0.2s ease;
-}
-
-#lobby-start-btn:hover {
-  background: var(--gold-dim);
-  transform: translateY(-2px);
-}
-
-#lobby-start-btn:disabled {
-  cursor: not-allowed;
-
-  background: linear-gradient(to bottom, #3a2a28, #1f1615);
-  color: rgba(245, 241, 232, 0.5);
-
-  border: 1px solid rgba(179, 138, 58, 0.2);
-
-  box-shadow: none;
-
-  opacity: 0.7;
 }

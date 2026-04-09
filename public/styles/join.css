@@ -11,52 +11,10 @@
   --font-body: "Crimson Pro", serif;
 }
 
-#form {
-  background: rgba(20, 18, 14, 0.85);
-  padding: 30px;
-  border-radius: 10px;
-  text-align: center;
-  width: 300px;
-  margin: 70px auto;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(179, 138, 58, 0.35);
-}
-
-label {
-  display: block;
-  margin-bottom: 10px;
-  color: white;
-  font-size: 18px;
-}
-
-#room {
-  width: 90%;
-  padding: 10px;
-  margin-bottom: 20px;
-  border-radius: 5px;
-  border: none;
-}
-
-#joinBtn {
-  background-color: darkred;
-  color: white;
-  padding: 10px 15px;
-  border: 1px solid white;
-  cursor: pointer;
-  border-radius: 5px;
-}
-
-#joinBtn:hover {
-  background-color: red;
-}
-
 body {
-  min-height: 100vh;
-  font-family: var(--font-body);
-
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
+  width: 100vw;
+  height: 100vh;
+  font-family: var(--font-display);
 
   background-image:
     linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
@@ -64,6 +22,7 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
   z-index: -1;
+  position: relative;
 }
 
 body::after {
@@ -76,6 +35,60 @@ body::after {
     rgba(0, 0, 0, 0.7)
   );
   pointer-events: none;
+}
+
+#form {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  background: rgba(20, 18, 14, 0.85);
+  backdrop-filter: blur(1px);
+  padding: 24px 32px 48px 32px;
+  border-radius: 10px;
+  text-align: center;
+
+  width: 30%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(179, 138, 58, 0.35);
+}
+
+.room-id-form {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  gap: 12px;
+}
+
+label {
+  display: block;
+  margin-bottom: 10px;
+  color: white;
+  font-size: 32px;
+  text-transform: capitalize;
+}
+
+#room {
+  width: 95%;
+  padding: 10px;
+  font-size: 24px;
+  border-radius: 2px;
+  border: none;
+}
+
+#room:focus {
+  outline: none;
+}
+
+#room::placeholder {
+  text-transform: capitalize;
 }
 
 #alert-toast {

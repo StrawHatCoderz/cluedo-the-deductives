@@ -53,19 +53,14 @@ const renderAccusationCards = (accusationDetails, currentPlayer) => {
 };
 
 const renderAccusationStatus = ({ isCorrect, accusedBy }, currentPlayer) => {
-  const el = document.querySelector("#accusation-status");
+  const statusElement = document.querySelector("#accusation-status");
 
   const isSelf = currentPlayer.id === accusedBy.id;
 
-  if (isSelf) {
-    el.textContent = isCorrect ? "You won the game" : "You lost the game";
-  } else {
-    const name = accusedBy.name;
+  const subject = isSelf ? "You" : accusedBy.name;
+  const result = isCorrect ? "won" : "lost";
 
-    el.textContent = isCorrect
-      ? `Player ${name} won the game`
-      : `Player ${name} lost the game`;
-  }
+  statusElement.textContent = `${subject} ${result} the game`;
 };
 
 export const renderAccusationResult = (

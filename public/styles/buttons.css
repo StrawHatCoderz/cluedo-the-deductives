@@ -1,0 +1,128 @@
+@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap");
+
+:root {
+  --color-bg-dark: #0f0f12;
+  --color-surface: #1a1b1f;
+  --color-gold: #c9a24a;
+  --color-gold-dim: #8c6b2a;
+
+  --color-gold-soft: #e0c27a;
+  --color-red-deep: #2e0c09;
+  --color-red: #6b1d12;
+  --color-red-light: #b23a48;
+  --color-border-gold: rgba(179, 138, 58, 0.45);
+  --color-text: #f5f5f5;
+  --color-text-muted: #b8b8b8;
+  --color-disabled: #555;
+
+  --font-display: "Cinzel", serif;
+  --font-body: "Crimson Pro", serif;
+
+  --text-primary: #f5f1e8;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: 5px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  border: 1px solid transparent;
+  color: var(--color-text);
+  letter-spacing: 0.25em;
+
+  transition: all 0.2s ease;
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  background: linear-gradient(to bottom, #3a2a28, #1f1615);
+  color: rgba(245, 241, 232, 0.5);
+  border: 1px solid rgba(179, 138, 58, 0.2);
+  opacity: 0.6;
+}
+
+.btn--primary {
+  border: 1px solid var(--color-border-gold);
+  color: var(--text-primary);
+  background: linear-gradient(
+    to bottom,
+    var(--color-red),
+    var(--color-red-deep)
+  );
+}
+
+.btn--primary:hover {
+  background: var(--color-gold-dim);
+}
+
+.btn--primary:active {
+  transform: scale(0.96);
+}
+
+.btn--medium {
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.btn--large {
+  font-size: 24px;
+  font-weight: 1000;
+  padding: 14px 42px;
+}
+
+.btn--secondary {
+  background: linear-gradient(135deg, var(--color-red), var(--color-red-light));
+  color: var(--color-gold-soft);
+  border: 1px solid var(--color-border-gold);
+}
+
+.btn--secondary:hover {
+  background: linear-gradient(
+    135deg,
+    var(--color-red-deep),
+    var(--color-red-light)
+  );
+}
+
+.btn--ghost {
+  background: transparent;
+  border: 1px solid var(--color-border-gold);
+  color: var(--color-gold-soft);
+}
+
+.btn--ghost:hover {
+  background: rgba(201, 162, 74, 0.1);
+}
+
+.btn--danger {
+  background: linear-gradient(135deg, #3b0a0f, var(--color-red));
+  border: 1px solid rgba(140, 28, 43, 0.6);
+}
+
+.btn--danger:hover {
+  background: linear-gradient(135deg, #4a0d14, var(--color-red-light));
+}
+
+.btn--icon {
+  width: 100px;
+  height: 100px;
+  padding: 0;
+  font-size: 1.8rem;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--color-surface), var(--color-red));
+  border: 1px solid var(--color-border-gold);
+}
+
+.btn--icon:hover {
+  background: linear-gradient(135deg, #23242a, var(--color-red-light));
+}
+
+.btn--icon:active {
+  transform: scale(0.92);
+}

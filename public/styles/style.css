@@ -33,99 +33,41 @@
 }
 
 body {
-  background-color: var(--bg-base);
-  color: var(--text-primary);
-  font-family: var(--font-body);
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 100vw;
+  height: 100vh;
   background-image:
     linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
     url("../images/home_page_dark1.avif");
   background-repeat: no-repeat;
   background-size: cover;
   z-index: -1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.landing::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(
+    circle at center,
+    transparent 35%,
+    rgba(0, 0, 0, 0.7)
+  );
+  pointer-events: none;
 }
 
 .landing {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  width: 100%;
-  min-height: 100vh;
-  background-image: radial-gradient(
-    ellipse 60% 50% at 50% 50%,
-    rgba(0, 0, 0, 0.15) 0%,
-    transparent 70%
-  );
-}
-
-.landing-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 24px;
-  text-align: center;
-}
-
-.landing-subtitle {
-  font-family: var(--font-body);
-  font-size: 22px;
-  font-style: italic;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: var(--gold-dim);
-}
-
-.landing-title {
-  font-family: var(--font-display);
-  font-size: clamp(56px, 10vw, 96px);
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  color: var(--text-primary);
-  line-height: 1;
-}
-
-.btn-start {
-  text-decoration: none;
-  font-family: var(--font-display);
-  font-size: 14px;
-  font-weight: 1000;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-
-  color: var(--bg-base);
-  background: linear-gradient(to bottom, #541108, #5a2a2a);
-  border: 1px solid var(--gold-border);
-  padding: 14px 42px;
-  border-radius: 4px;
-
-  cursor: pointer;
-  box-shadow: 0 2px 6px var(--shadow-soft);
-
-  text-align: left;
-  margin-top: 35vh;
-
-  transition:
-    background-color 0.25s ease,
-    color 0.25s ease,
-    transform 0.15s ease,
-    box-shadow 0.15s ease;
-}
-
-.btn-start:hover {
-  background-color: var(--gold-dim);
-  color: var(--bg-base);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px var(--shadow-soft);
-}
-
-.btn-start:active {
-  background-color: var(--gold);
-  color: var(--bg-base);
-  transform: translateY(0);
-  box-shadow: 0 2px 4px var(--shadow-soft);
+  position: absolute;
+  max-width: 600px;
+  padding: 20px;
+  bottom: 25%;
 }

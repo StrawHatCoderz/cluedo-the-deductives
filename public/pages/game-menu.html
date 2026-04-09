@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/styles/game-menu.css">
+    <link rel="stylesheet" href="/styles/buttons.css">
+
     <script type="module" src="/scripts/game_menu.js"></script>
     <title>Cluedo Lobby</title>
   </head>
@@ -13,9 +15,15 @@
 
     <form id="form">
       <label for="name">name</label>
-      <input type="text" name="name" id="name" placeholder="name" +>
-      <button type="button" id="hostBtn">Host</button>
-      <button type="button" id="joinBtn">Join</button>
+      <input type="text" name="name" id="name" placeholder="player name" />
+      <div class="lobby-action-btns">
+        <button type="button" class="btn btn--primary btn--medium" id="hostBtn">
+          Host
+        </button>
+        <button type="button" class="btn btn--primary btn--medium" id="joinBtn">
+          Join
+        </button>
+      </div>
     </form>
   </body>
 </html>

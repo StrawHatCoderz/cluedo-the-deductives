@@ -1,4 +1,4 @@
-import { fetchLobbyState, sendRequest } from "./utils.js";
+import { fetchLobbyState, sendRequest, toId } from "./utils.js";
 
 const handleCopyLobbyId = (_e, lobbyId) => {
   const copyToast = document.getElementById("copy-toast");
@@ -35,10 +35,11 @@ const setupPlayerProfiles = (
   const pawnName = profileContainer.querySelector(".pawn-name");
   pawnName.textContent = profileData.character.name;
 
+  const pawnImage = profileContainer.querySelector(".profile-image");
+  pawnImage.src = `/images/${toId(profileData.character.name)}_profile.avif`;
+
   const playerName = profileContainer.querySelector(".player-name");
-
   const isCurrentPlayer = profileData.id === currentPlayerId;
-
   playerName.textContent = isCurrentPlayer ? "You" : profileData.name;
 };
 
