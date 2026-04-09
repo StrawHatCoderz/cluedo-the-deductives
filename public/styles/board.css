@@ -466,3 +466,10 @@ path.room.highlight-room {
 .hide {
   display: none;
 }
+
+.active-pawn {
+  stroke: rgb(1, 0, 6);
+  stroke-width: 2;
+  cursor: pointer;
+  filter: drop-shadow(0 0 5px gold);
+}

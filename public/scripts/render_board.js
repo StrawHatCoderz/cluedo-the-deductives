@@ -30,9 +30,32 @@ const renderPawnOnTile = (pawnId, x, y) => {
   }
 };
 
+const getPawnElement = (char) => {
+  const tile = document.querySelector(`#${char}_pawn`);
+  return tile.querySelector("circle");
+};
+
+const highlightActivePlayer = (char) => {
+  const pawn = getPawnElement(char);
+  pawn.classList.add("active-pawn");
+};
+
+const removeHighlight = (char) => {
+  const pawn = getPawnElement(char);
+  pawn.classList.remove("active-pawn");
+};
+
 export const placeCharacters = (boardConfig) => {
+  const { activePlayer, pawns } = boardConfig;
   const roomRegistry = {};
-  for (const { char, pos } of boardConfig.pawns) {
+
+  for (const { char, pos, id } of pawns) {
+    removeHighlight(char);
+
+    if (activePlayer.pawn.id === id) {
+      highlightActivePlayer(char, pos);
+    }
+
     if (pos.room) {
       roomRegistry[pos.room] = roomRegistry[pos.room] ||
         initializeRoomState(pos.room);

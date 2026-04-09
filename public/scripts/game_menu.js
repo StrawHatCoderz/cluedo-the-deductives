@@ -36,6 +36,7 @@ globalThis.window.onload = () => {
   const hostBtn = document.querySelector("#hostBtn");
   const joinBtn = document.querySelector("#joinBtn");
 
+  form.addEventListener("submit", (e) => e.preventDefault());
   hostBtn.addEventListener("click", (e) => handleHost(e, form));
   joinBtn.addEventListener("click", (e) => handleJoin(e, form));
 };
