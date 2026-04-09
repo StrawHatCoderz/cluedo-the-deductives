@@ -1,3 +1,5 @@
+import { ValidationError } from "../utils/custom_errors.js";
+
 export class Lobby {
   #id;
   #maxPlayer;
@@ -19,7 +21,11 @@ export class Lobby {
     return this.#players.find((player) => player.id === playerId);
   }
 
-  getState() {
+  getState(playerId) {
+    if (!this.#findPlayer(playerId)) {
+      throw new ValidationError("Invalid player id");
+    }
+
     return {
       id: this.#id,
       isStarted: this.#isStarted,
@@ -33,10 +39,10 @@ export class Lobby {
 
   addPlayer(id, name, isHost) {
     if (this.#players.length >= this.#maxPlayer) {
-      throw new Error("MaxPlayer reached");
+      throw new ValidationError("MaxPlayer reached");
     }
 
-    if (this.#isStarted) throw new Error("Game already started");
+    if (this.#isStarted) throw new ValidationError("Game already started");
     const character = this.#pawns.pop();
     this.#players.push({ id, name, isHost, character });
   }
@@ -47,11 +53,11 @@ export class Lobby {
     const aboveMaxPlayers = playerCount > this.#maxPlayer;
 
     if (!this.isHost(playerId)) {
-      throw new Error("You Can't Start Game");
+      throw new ValidationError("You Can't Start Game");
     }
 
     if (belowMinPlayers || aboveMaxPlayers) {
-      throw new Error("Invalid Player Count");
+      throw new ValidationError("Invalid Player Count");
     }
 
     this.#isStarted = true;

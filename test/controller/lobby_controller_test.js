@@ -2,11 +2,16 @@ import { assertEquals, assertThrows } from "@std/assert";
 import { expect, fn } from "@std/expect";
 import { describe, it } from "@std/testing/bdd";
 import { LobbyController } from "../../src/controllers/lobby_controller.js";
+import { ValidationError } from "../../src/utils/custom_errors.js";
 
 describe("LOBBY", () => {
   describe("create lobby controller", () => {
     it(" => should throw error if createLobby fn is not provided", () => {
-      assertThrows(() => LobbyController.create());
+      assertThrows(
+        () => LobbyController.create(),
+        ValidationError,
+        "createLobby should be a function",
+      );
     });
 
     it(" => should create lobby controller if createLobby fn is provided", () => {
@@ -81,7 +86,7 @@ describe("LOBBY", () => {
         getState: fn(() => ({ id: 1 })),
       };
       const lobbyController = LobbyController.create(() => lobby);
-      assertThrows(() => lobbyController.joinLobby("thor", 1));
+      assertThrows(() => lobbyController.joinLobby("thor", 1), ValidationError);
     });
   });
   describe("updateLobbyState", () => {
@@ -112,7 +117,10 @@ describe("LOBBY", () => {
 
       const lobbyController = LobbyController.create(() => lobby);
 
-      assertThrows(() => lobbyController.updateLobbyState(1, 1));
+      assertThrows(
+        () => lobbyController.updateLobbyState(1, 1),
+        ValidationError,
+      );
     });
   });
 });

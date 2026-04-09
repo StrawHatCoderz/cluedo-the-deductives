@@ -72,12 +72,12 @@ describe("UTILS", () => {
       ];
 
       const lobby = createLobbyInstance("room-1", pawns);
-
-      const state = lobby.getState();
+      lobby.addPlayer(1, "Tony", true);
+      const state = lobby.getState(1);
 
       assertEquals(state.id, "room-1");
       assertEquals(state.isStarted, false);
-      assertEquals(state.players.length, 0);
+      assertEquals(state.players.length, 1);
     });
 
     it(" => should allow adding players until max limit", () => {
@@ -96,7 +96,7 @@ describe("UTILS", () => {
         lobby.addPlayer(i, `Player-${i}`, i === 0);
       });
 
-      assertEquals(lobby.getState().players.length, 6);
+      assertEquals(lobby.getState(1).players.length, 6);
 
       assertThrows(() => {
         lobby.addPlayer(7, "Extra", false);
@@ -134,7 +134,7 @@ describe("UTILS", () => {
 
       lobby.updateState(1);
 
-      assertEquals(lobby.getState().isStarted, true);
+      assertEquals(lobby.getState(1).isStarted, true);
     });
 
     it(" => should not allow non-host to start game", () => {

@@ -1,3 +1,5 @@
+import { ValidationError } from "../utils/custom_errors.js";
+
 export class LobbyController {
   #createLobby;
   #lobbies;
@@ -13,7 +15,7 @@ export class LobbyController {
 
   static create(createLobby) {
     if (typeof createLobby !== "function") {
-      throw new Error("createLobby is not a function");
+      throw new ValidationError("createLobby should be a function");
     }
 
     return new LobbyController(createLobby);
@@ -21,17 +23,17 @@ export class LobbyController {
 
   hostLobby(name) {
     const lobby = this.#createLobby(++this.#currentLobbyId);
-
-    const id = lobby.getState().id;
-    this.#lobbies[id] = lobby;
     const isHost = true;
     lobby.addPlayer(++this.#currentPlayerId, name, isHost);
+
+    const id = lobby.getState(this.#currentPlayerId).id;
+    this.#lobbies[id] = lobby;
     return { lobbyId: this.#currentLobbyId, playerId: this.#currentPlayerId };
   }
 
   joinLobby(name, lobbyId) {
     const lobby = this.#lobbies[`${lobbyId}`];
-    if (!lobby) throw new Error("Invalid room id");
+    if (!lobby) throw new ValidationError("Invalid room id");
     const isHost = false;
     lobby.addPlayer(++this.#currentPlayerId, name, isHost);
     return { lobbyId, playerId: this.#currentPlayerId };
@@ -39,14 +41,15 @@ export class LobbyController {
 
   updateLobbyState(lobbyId, playerId) {
     const lobby = this.#lobbies[lobbyId];
+    if (!lobby) throw new ValidationError("Invalid lobby id");
     return lobby.updateState(playerId);
   }
 
   getLobbyState(lobbyId, playerId) {
     const lobby = this.#lobbies[lobbyId];
-
+    if (!lobby) throw new ValidationError("Invalid lobby id");
     return {
-      ...lobby.getState(),
+      ...lobby.getState(playerId),
       isHost: lobby.isHost(parseInt(playerId)),
       currentPlayerId: playerId,
     };

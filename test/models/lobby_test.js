@@ -2,6 +2,7 @@ import { assertEquals, assertThrows } from "@std/assert";
 import { beforeEach, describe, it } from "@std/testing/bdd";
 import { PAWNS } from "../../src/constants/game_config.js";
 import { Lobby } from "../../src/models/lobby.js";
+import { ValidationError } from "../../src/utils/custom_errors.js";
 
 describe("LOBBY", () => {
   let lobby;
@@ -13,50 +14,16 @@ describe("LOBBY", () => {
     lobby = new Lobby(id, max, min, pawns);
   });
 
-  describe("get state", () => {
-    it(" => should give current lobby state", () => {
-      const state = lobby.getState();
-
-      assertEquals(state, { id, players: [], isStarted: false });
-    });
-
-    it(" => should give current lobby state: one player", () => {
-      lobby.addPlayer(2, "tony", true);
-      const state = lobby.getState();
-      assertEquals(state, {
-        id,
-        players: [{
-          id: 2,
-          name: "tony",
-          character: { color: "violet", name: "professor plum" },
-          isHost: true,
-        }],
-        isStarted: false,
-      });
-    });
-
-    it(" => should give current lobby state: two players", () => {
-      lobby.addPlayer(2, "tony", true);
-      lobby.addPlayer(3, "steve", false);
-
-      const state = lobby.getState();
-
-      assertEquals(state.id, id);
-      assertEquals(state.players.length, 2);
-      assertEquals(state.isStarted, false);
-    });
-  });
-
   describe("add player", () => {
     it(" => should add player into lobby and assign character", () => {
       lobby.addPlayer(1, "name", true);
-      const state = lobby.getState();
+      const state = lobby.getState(1);
 
       assertEquals(state.players, [
         {
           character: {
-            color: "white",
-            name: "mrs white",
+            color: PAWNS[5].color,
+            name: PAWNS[5].name,
           },
           id: 1,
           isHost: true,
@@ -73,7 +40,11 @@ describe("LOBBY", () => {
       lobby.addPlayer(5, "username", true);
       lobby.addPlayer(6, "username", true);
 
-      assertThrows(() => lobby.addPlayer(7, "username", true));
+      assertThrows(
+        () => lobby.addPlayer(7, "username", true),
+        ValidationError,
+        "MaxPlayer reached",
+      );
     });
 
     it(" => should not add player into lobby if looby is not at waiting state", () => {
@@ -81,7 +52,39 @@ describe("LOBBY", () => {
       lobby.addPlayer(2, "username", false);
       lobby.addPlayer(3, "username", false);
       lobby.updateState(1);
-      assertThrows(() => lobby.addPlayer(4, "username", true));
+      assertThrows(
+        () => lobby.addPlayer(4, "username", true),
+        ValidationError,
+        "Game already started",
+      );
+    });
+  });
+
+  describe("get state", () => {
+    it(" => should throw validation error current lobby state if playerId is invalid", () => {
+      assertThrows(
+        () => lobby.getState(5),
+        ValidationError,
+        "Invalid player id",
+      );
+    });
+    it(" => should give current lobby state playerId is valid", () => {
+      lobby.addPlayer(1, "tony", true);
+      const state = lobby.getState(1);
+
+      assertEquals(state.isStarted, false);
+      assertEquals(state.players[0].name, "tony");
+    });
+
+    it(" => should give current lobby state: two players", () => {
+      lobby.addPlayer(2, "tony", true);
+      lobby.addPlayer(3, "steve", false);
+
+      const state = lobby.getState(2);
+
+      assertEquals(state.id, id);
+      assertEquals(state.players.length, 2);
+      assertEquals(state.isStarted, false);
     });
   });
 
@@ -107,7 +110,7 @@ describe("LOBBY", () => {
       lobby.addPlayer(4, "name", false);
       lobby.addPlayer(5, "name", false);
       lobby.updateState(1);
-      const state = lobby.getState();
+      const state = lobby.getState(1);
 
       assertEquals(state.isStarted, true);
     });
