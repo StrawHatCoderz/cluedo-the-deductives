@@ -223,6 +223,8 @@ export class Game {
   }
 
   addSuspicion(suspectCombination) {
+    const pawn = this.getPawnInstance(suspectCombination.suspectId);
+    pawn.updatePosition({ x: null, y: null, room: suspectCombination.room });
     this.#turn.addSuspectCombination(suspectCombination, this.#turnOrder);
   }
 

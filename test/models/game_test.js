@@ -177,7 +177,7 @@ describe("GAME", () => {
       game.changeCurrentState();
 
       const suspectCombination = {
-        suspect: "Scarlet",
+        suspectId: 1,
         room: "BallRoom",
         weapon: "dagger",
       };
@@ -259,7 +259,7 @@ describe("GAME", () => {
       game.start();
 
       const combination = {
-        suspect: "Scarlet",
+        suspectId: 1,
         weapon: "dagger",
         room: "kitchen",
       };
@@ -345,7 +345,7 @@ describe("GAME", () => {
 
     it(" => should throw if player already suspected", () => {
       game.addSuspicion({
-        suspect: "Scarlet",
+        suspectId: 1,
         weapon: "dagger",
         room: "study",
       });

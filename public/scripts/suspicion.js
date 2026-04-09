@@ -172,20 +172,10 @@ const saveSuspicion = (suspicion) =>
     headers: { "content-type": "application/json" },
   });
 
-const moveSuspectPawn = (suspicion) =>
-  fetch(`/board/update-pawn-position/${suspicion.suspectId}`, {
-    method: "put",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify({
-      newNodeId: suspicion.room,
-      tiles: [suspicion.room],
-      isUsingSecretPassage: false,
-    }),
-  });
+const fetchSuspicion = async (suspicion) => {
+  console.log(suspicion);
 
-const mockFetchSuspicion = async (suspicion) => {
   removePawnHighlight();
-  await moveSuspectPawn(suspicion);
   await saveSuspicion(suspicion);
 };
 
@@ -199,7 +189,7 @@ const getSuspicion = () => ({
 const submitSuspicion = async () => {
   const suspicion = getSuspicion();
   showModal(suspicion);
-  await mockFetchSuspicion(suspicion);
+  await fetchSuspicion(suspicion);
   state.hasMadeSuspicion = true;
 };
 
