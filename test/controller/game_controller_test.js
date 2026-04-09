@@ -1,6 +1,7 @@
 import { assertEquals, assertThrows } from "@std/assert";
 import { beforeEach, describe, it } from "@std/testing/bdd";
 import { GameController } from "../../src/controllers/game_controller.js";
+import { ValidationError } from "../../src/utils/custom_errors.js";
 
 describe("GAME CONTROLLER", () => {
   let createGameMock;
@@ -119,7 +120,11 @@ describe("GAME CONTROLLER", () => {
     });
 
     it(" => should throw if game does not exist", () => {
-      assertThrows(() => controller.getGameState(999));
+      assertThrows(
+        () => controller.getGameState(999),
+        ValidationError,
+        "Invalid game id",
+      );
     });
   });
 

@@ -1,4 +1,5 @@
 import { Player } from "../models/player.js";
+import { ValidationError } from "../utils/custom_errors.js";
 
 export class GameController {
   #games;
@@ -30,7 +31,9 @@ export class GameController {
   }
 
   getGameState(gameId, playerId) {
-    return this.#games[gameId].getState(playerId);
+    const game = this.#games[gameId];
+    if (!game) throw new ValidationError("Invalid game id");
+    return game.getState(playerId);
   }
 
   getDisprovablePlayer(gameId) {

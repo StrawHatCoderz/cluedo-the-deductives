@@ -86,6 +86,10 @@ export class Game {
   }
 
   getState(playerId) {
+    if (!this.#findPlayer(playerId)) {
+      throw new ValidationError("Invalid player id");
+    }
+
     const shouldShowDicePopup = this.#turn?.getIsDiceRolled() &&
       !this.#turn?.hasPlayerSeenDicePopup(playerId);
 

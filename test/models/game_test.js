@@ -81,6 +81,19 @@ describe("GAME", () => {
   });
 
   describe("game state", () => {
+    it(" => should throw validation error if playerId is invalid", () => {
+      const add3Players = () => {
+        game.addPlayer(new Player(1, "A", true), { name: "miss scarlett" });
+        game.addPlayer(new Player(2, "B", false), { name: "colonel mustard" });
+        game.addPlayer(new Player(3, "C", false), { name: "professor plum" });
+      };
+
+      add3Players();
+      game.start();
+
+      assertThrows(() => game.getState(), ValidationError, "Invalid player id");
+    });
+
     it(" => should change state from setup to running", () => {
       const add3Players = () => {
         game.addPlayer(new Player(1, "A", true), { name: "miss scarlett" });
@@ -328,7 +341,7 @@ describe("GAME", () => {
 
       game.addSuspicion(combination);
 
-      assertEquals(game.getState().disprovalData.disprovablePlayer, 2);
+      assertEquals(game.getState(1).disprovalData.disprovablePlayer, 2);
     });
   });
 
