@@ -206,7 +206,7 @@ describe("GAME", () => {
       game.start();
       game.changeCurrentState();
 
-      moveCurrentPlayerToRoom();
+      moveCurrentPlayerToRoom("BallRoom");
 
       const suspectCombination = {
         suspectId: 1,
@@ -214,7 +214,9 @@ describe("GAME", () => {
         weapon: "dagger",
       };
 
-      game.addSuspicion(suspectCombination);
+      const currentPlayer = game.getCurrentPlayer();
+
+      game.addSuspicion(currentPlayer.getPlayerData().id, suspectCombination);
 
       assertEquals(game.getSuspectCombination(), suspectCombination);
     });
@@ -224,7 +226,7 @@ describe("GAME", () => {
       game.start();
       game.changeCurrentState();
 
-      moveCurrentPlayerToRoom();
+      moveCurrentPlayerToRoom("BallRoom");
 
       const suspectCombination = {
         suspectId: 1,
@@ -232,10 +234,16 @@ describe("GAME", () => {
         weapon: "dagger",
       };
 
-      game.addSuspicion(suspectCombination);
+      const currentPlayer = game.getCurrentPlayer();
+
+      game.addSuspicion(currentPlayer.getPlayerData().id, suspectCombination);
 
       assertThrows(
-        () => game.addSuspicion(suspectCombination),
+        () =>
+          game.addSuspicion(
+            currentPlayer.getPlayerData().id,
+            suspectCombination,
+          ),
         ValidationError,
       );
     });
@@ -245,7 +253,7 @@ describe("GAME", () => {
       game.start();
       game.changeCurrentState();
 
-      moveCurrentPlayerToRoom();
+      moveCurrentPlayerToRoom("kitchen");
 
       const suspectCombination = {
         suspectId: 2,
@@ -253,7 +261,9 @@ describe("GAME", () => {
         weapon: "dagger",
       };
 
-      game.addSuspicion(suspectCombination);
+      const currentPlayer = game.getCurrentPlayer();
+
+      game.addSuspicion(currentPlayer.getPlayerData().id, suspectCombination);
 
       const pawn = game.getPawnInstance(2);
 
@@ -338,8 +348,13 @@ describe("GAME", () => {
         weapon: "dagger",
         room: "kitchen",
       };
+      const currentPlayer = game.getCurrentPlayer();
 
-      game.addSuspicion(combination);
+      const pawn = game.getPawnInstance(
+        currentPlayer.getPlayerData().pawn.id,
+      );
+      pawn.updatePosition({ room: "kitchen" });
+      game.addSuspicion(currentPlayer.getPlayerData().id, combination);
 
       assertEquals(game.getState(1).disprovalData.disprovablePlayer, 2);
     });
@@ -420,7 +435,14 @@ describe("GAME", () => {
     });
 
     it(" => should throw if player already suspected", () => {
-      game.addSuspicion({
+      const currentPlayer = game.getCurrentPlayer();
+      const pawn = game.getPawnInstance(
+        currentPlayer.getPlayerData().pawn.id,
+      );
+
+      pawn.updatePosition({ room: "study" });
+
+      game.addSuspicion(currentPlayer.getPlayerData().id, {
         suspectId: 1,
         weapon: "dagger",
         room: "study",

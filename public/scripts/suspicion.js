@@ -196,7 +196,6 @@ const submitSuspicion = async () => {
   const suspicion = getSuspicion();
   showModal(suspicion);
   const res = await fetchSuspicion(suspicion);
-
   const { success } = await res.json();
   if (success) {
     state.hasMadeSuspicion = true;

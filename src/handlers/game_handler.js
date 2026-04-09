@@ -51,8 +51,9 @@ export const addSuspicion = async (c) => {
   try {
     const suspicion = await c.req.json();
     const lobbyId = getCookie(c, "lobbyId");
+    const playerId = getCookie(c, "playerId");
     const gameController = c.get("gameController");
-    gameController.addSuspicion(lobbyId, suspicion);
+    gameController.addSuspicion(lobbyId, +playerId, suspicion);
     return c.json({ success: true });
   } catch (error) {
     return c.json({ success: false, error: error.meesage });

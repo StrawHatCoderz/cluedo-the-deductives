@@ -78,9 +78,9 @@ export class GameController {
     return this.#games[gameId].updateTurn();
   }
 
-  addSuspicion(gameId, suspicion) {
+  addSuspicion(gameId, playerId, suspicion) {
     const game = this.#games[gameId];
-    game.addSuspicion(suspicion);
+    game.addSuspicion(playerId, suspicion);
   }
 
   hasSuspected(gameId) {

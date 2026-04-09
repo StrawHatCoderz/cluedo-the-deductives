@@ -230,21 +230,33 @@ export class Game {
       : {};
   }
 
-  addSuspicion(suspectCombination) {
-    const pawn = this.getPawnInstance(suspectCombination.suspectId);
-    const pos = pawn.getPawnData().position;
+  addSuspicion(playerId, suspectCombination) {
+    const playerPawn = this.#getCurrentPlayerData(playerId).pawn;
+    const playerPawnInstance = this.getPawnInstance(playerPawn.id);
+    const playerPawnPos = playerPawnInstance.getPawnData().position;
 
-    if ("room" in pos && !pos.room) {
+    const suspectPawn = this.getPawnInstance(suspectCombination.suspectId);
+
+    if ("room" in playerPawnPos && !playerPawnPos.room) {
       throw new ValidationError(
-        "Player Should be inside a room to make suspicion",
+        "Pawn Should be inside a room to make suspicion",
       );
+    }
+
+    if (playerPawnPos.room !== suspectCombination.room) {
+      throw new ValidationError("suspicion room should be same");
     }
 
     if (this.#turn.getHasSuspected()) {
       throw new ValidationError("Already Suspected");
     }
 
-    pawn.updatePosition({ x: null, y: null, room: suspectCombination.room });
+    suspectPawn.updatePosition({
+      x: null,
+      y: null,
+      room: suspectCombination.room,
+    });
+
     this.#turn.addSuspectCombination(suspectCombination, this.#turnOrder);
   }
 
