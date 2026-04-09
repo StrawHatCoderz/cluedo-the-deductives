@@ -6,3 +6,7 @@ export const accusationSchema = z.object({
   weapon: z.enum(WEAPONS),
   room: z.enum(ROOMS),
 });
+
+export const createLobbySchema = z.object({
+  name: z.string().nonempty(),
+});

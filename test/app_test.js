@@ -244,6 +244,7 @@ describe("APP TEST", () => {
 
         assertEquals(res.status, 400);
         assertEquals(body.success, false);
+        assertEquals(body.error, "Invalid player name");
       });
 
       it(" => should create lobby", async () => {
