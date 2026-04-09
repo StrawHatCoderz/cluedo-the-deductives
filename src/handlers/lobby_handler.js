@@ -30,7 +30,7 @@ export const joinLobby = async (c) => {
 
   const lobbyController = c.get("lobbyController");
   const { playerId, lobbyId } = lobbyController.joinLobby(
-    name,
+    result.data.name,
     result.data.roomId,
   );
   setCookie(c, "lobbyId", lobbyId);

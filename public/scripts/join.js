@@ -28,6 +28,7 @@ const handleJoin = async (e, form) => {
 
 globalThis.window.onload = () => {
   const form = document.querySelector("form");
+
   const joinBtn = document.querySelector("#joinBtn");
 
   joinBtn.addEventListener("click", (e) => handleJoin(e, form));

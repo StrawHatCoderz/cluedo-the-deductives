@@ -18,6 +18,7 @@ const createPlayer = (node, player, activePlayer, currentPlayer) => {
   playerPawnColor.setAttribute("id", `${player.pawn}-icon`);
 
   const playerName = node.querySelector(".player-name");
+
   playerName.textContent = isCurrentPlayer(player.id, currentPlayer)
     ? "You"
     : player.name;

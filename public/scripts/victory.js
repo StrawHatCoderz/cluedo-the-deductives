@@ -23,7 +23,6 @@ globalThis.window.onload = async () => {
   );
   const winner = gameConfig.players.find((player) => player.isWon);
   displayWinner(winner);
-  console.log(gameConfig);
 
   displayCardsCombination(
     gameConfig.murderCombination,
