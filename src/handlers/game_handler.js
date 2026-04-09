@@ -48,10 +48,15 @@ export const handleAccusation = async (c) => {
 };
 
 export const addSuspicion = async (c) => {
-  const suspicion = await c.req.json();
-  const lobbyId = getCookie(c, "lobbyId");
-  const gameController = c.get("gameController");
-  return c.json(gameController.addSuspicion(lobbyId, suspicion));
+  try {
+    const suspicion = await c.req.json();
+    const lobbyId = getCookie(c, "lobbyId");
+    const gameController = c.get("gameController");
+    gameController.addSuspicion(lobbyId, suspicion);
+    return c.json({ success: true });
+  } catch (error) {
+    return c.json({ success: false, error: error.meesage });
+  }
 };
 
 export const confirmDisprove = async (c) => {

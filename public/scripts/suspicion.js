@@ -180,20 +180,8 @@ const saveSuspicion = (suspicion) =>
     headers: { "content-type": "application/json" },
   });
 
-const moveSuspectPawn = (suspicion) =>
-  fetch(`/board/update-pawn-position/${suspicion.suspectId}`, {
-    method: "put",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify({
-      newNodeId: suspicion.room,
-      tiles: [suspicion.room],
-      isUsingSecretPassage: false,
-    }),
-  });
-
 const fetchSuspicion = async (suspicion) => {
   removePawnHighlight();
-  await moveSuspectPawn(suspicion);
   await saveSuspicion(suspicion);
 };
 
@@ -207,8 +195,11 @@ const getSuspicion = () => ({
 const submitSuspicion = async () => {
   const suspicion = getSuspicion();
   showModal(suspicion);
-  await fetchSuspicion(suspicion);
-  state.hasMadeSuspicion = true;
+  const res = await fetchSuspicion(suspicion);
+  const { success } = res.body();
+  if (success) {
+    state.hasMadeSuspicion = true;
+  }
 };
 
 export const removePawnHighlight = () => {

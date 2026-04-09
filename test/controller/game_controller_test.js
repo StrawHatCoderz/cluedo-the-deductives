@@ -8,8 +8,6 @@ describe("GAME CONTROLLER", () => {
   let controller;
 
   beforeEach(() => {
-    // createPawnsMock = () => pawns;
-
     gameMock = {
       addPlayer: () => {},
       start: () => {},
@@ -292,14 +290,19 @@ describe("GAME CONTROLLER", () => {
         },
       ]);
 
-      const result = controller.addSuspicion(1, { suspect: "A" });
+      controller.addSuspicion(1, { suspect: "A" });
 
       assertEquals(received, { suspect: "A" });
-      assertEquals(result, { status: true });
     });
 
     it(" => should return false if cannot suspect", () => {
+      let called = false;
+
       gameMock.canSuspect = () => false;
+
+      gameMock.addSuspicion = () => {
+        called = true;
+      };
 
       controller.startGame(1, [
         {
@@ -312,7 +315,9 @@ describe("GAME CONTROLLER", () => {
 
       const result = controller.addSuspicion(1, { suspect: "A" });
 
-      assertEquals(result, { status: false });
+      assertEquals(result, undefined);
+
+      assertEquals(called, true);
     });
   });
 

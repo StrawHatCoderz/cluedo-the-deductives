@@ -10,6 +10,7 @@ import { DeckManager } from "../../src/models/deck_manager.js";
 import { Game } from "../../src/models/game.js";
 import { Pawn } from "../../src/models/pawn.js";
 import { Player } from "../../src/models/player.js";
+import { ValidationError } from "../../src/utils/custom_errors.js";
 
 describe("GAME", () => {
   let game;
@@ -170,11 +171,19 @@ describe("GAME", () => {
   });
 
   describe("add suspect combination", () => {
+    const moveCurrentPlayerToRoom = (room = "study") => {
+      const currentPlayer = game.getCurrentPlayer();
+      const pawn = game.getPawnInstance(currentPlayer.getPlayerData().pawn.id);
+
+      pawn.updatePosition({ room });
+    };
+
     it(" => should store suspicion", () => {
       add3Players();
-
       game.start();
       game.changeCurrentState();
+
+      moveCurrentPlayerToRoom();
 
       const suspectCombination = {
         suspectId: 1,
@@ -185,6 +194,49 @@ describe("GAME", () => {
       game.addSuspicion(suspectCombination);
 
       assertEquals(game.getSuspectCombination(), suspectCombination);
+    });
+
+    it(" => should throw if already suspected in same turn", () => {
+      add3Players();
+      game.start();
+      game.changeCurrentState();
+
+      moveCurrentPlayerToRoom();
+
+      const suspectCombination = {
+        suspectId: 1,
+        room: "BallRoom",
+        weapon: "dagger",
+      };
+
+      game.addSuspicion(suspectCombination);
+
+      assertThrows(
+        () => game.addSuspicion(suspectCombination),
+        ValidationError,
+      );
+    });
+
+    it(" => should move suspect pawn to the suspected room", () => {
+      add3Players();
+      game.start();
+      game.changeCurrentState();
+
+      moveCurrentPlayerToRoom();
+
+      const suspectCombination = {
+        suspectId: 2,
+        room: "kitchen",
+        weapon: "dagger",
+      };
+
+      game.addSuspicion(suspectCombination);
+
+      const pawn = game.getPawnInstance(2);
+
+      assertEquals(pawn.getPawnData().position.room, "kitchen");
+      assertEquals(pawn.getPawnData().position.x, null);
+      assertEquals(pawn.getPawnData().position.y, null);
     });
   });
 
@@ -279,6 +331,7 @@ describe("GAME", () => {
       assertEquals(game.getDisprovedCard(), { disprovedCard });
     });
   });
+
   describe("secret passage", () => {
     let p1, p2, p3;
 

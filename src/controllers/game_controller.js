@@ -77,11 +77,7 @@ export class GameController {
 
   addSuspicion(gameId, suspicion) {
     const game = this.#games[gameId];
-    if (game.canSuspect()) {
-      game.addSuspicion(suspicion);
-      return { status: true };
-    }
-    return { status: false };
+    game.addSuspicion(suspicion);
   }
 
   hasSuspected(gameId) {

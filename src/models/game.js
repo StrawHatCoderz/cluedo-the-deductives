@@ -1,3 +1,4 @@
+import { ValidationError } from "../utils/custom_errors.js";
 import { Player } from "./player.js";
 import { Turn } from "./turn.js";
 
@@ -224,6 +225,18 @@ export class Game {
 
   addSuspicion(suspectCombination) {
     const pawn = this.getPawnInstance(suspectCombination.suspectId);
+    const pos = pawn.getPawnData().position;
+
+    if ("room" in pos && !pos.room) {
+      throw new ValidationError(
+        "Player Should be inside a room to make suspicion",
+      );
+    }
+
+    if (this.#turn.getHasSuspected()) {
+      throw new ValidationError("Already Suspected");
+    }
+
     pawn.updatePosition({ x: null, y: null, room: suspectCombination.room });
     this.#turn.addSuspectCombination(suspectCombination, this.#turnOrder);
   }
