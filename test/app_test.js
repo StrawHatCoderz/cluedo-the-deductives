@@ -367,6 +367,70 @@ describe("APP TEST", () => {
     });
   });
 
+  describe("POST /turn/suspect", () => {
+    it(" => should add a suspect combination", async () => {
+      const { cookie } = setupLobby();
+
+      await app.request("/game/start", {
+        method: "POST",
+        headers: { Cookie: cookie },
+      });
+
+      const suspicion = {
+        weapon: "dagger",
+        suspect: "scarlet",
+        room: "hall",
+      };
+      await app.request(`/board/update-pawn-position/1`, {
+        method: "PUT",
+        headers: {
+          Cookie: cookie,
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          newNodeId: "hall",
+          tiles: ["hall"],
+          isUsingSecretPassage: false,
+        }),
+      });
+
+      const res = await app.request("/turn/suspect", {
+        method: "POST",
+        body: JSON.stringify(suspicion),
+        headers: { "content-type": "application/json", Cookie: cookie },
+      });
+
+      assertEquals(res.status, 200);
+    });
+  });
+
+  describe("POST /game/confirmSuspicion", () => {
+    it(" => shouldn't allowed to disprove without suspicion", async () => {
+      const { cookie } = setupLobby();
+
+      await app.request("/game/start", {
+        method: "POST",
+        headers: { Cookie: cookie },
+      });
+
+      const formData = new FormData();
+      formData.append("disprove", "scarlet");
+
+      const res = await app.request("/game/disprove", {
+        method: "post",
+        headers: {
+          Cookie: cookie,
+        },
+        body: formData,
+      });
+      assertEquals(res.status, 400);
+      assertEquals(await res.json(), {
+        success: false,
+        error: "Invalid game state",
+      });
+    });
+  });
+
   describe("POST /game/disprove", () => {
     it("=> should throw invalid game state", async () => {
       const { cookie } = setupLobby();

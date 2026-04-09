@@ -1,3 +1,5 @@
+import { getCookie } from "hono/cookie";
+
 export const isAllowedToDisprove = async (c, next) => {
   const lobbyId = getCookie(c, "lobbyId");
   const playerId = getCookie(c, "playerId");

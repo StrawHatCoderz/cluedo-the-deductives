@@ -387,7 +387,6 @@ export class Game {
   movePawn(pawnId, { newNodeId, isUsingSecretPassage, tiles }, tileId, pos) {
     const pawn = this.getPawnInstance(pawnId);
     const pawnPrevPosition = this.parsePawnPosition(pawn.getPawnData());
-
     if (isUsingSecretPassage) this.setUsedSecretPassage();
     if (this.#isValidMove(tileId, tiles)) {
       pawn.updatePosition(pos);
