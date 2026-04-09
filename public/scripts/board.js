@@ -1,6 +1,6 @@
 import { displayAccusationOverlay } from "./accusation.js";
 import { showDiceAnimation } from "./dice_animation.js";
-import { displayPopup, getHighlightPath, toId } from "./utils.js";
+import { displayPopup, toId } from "./utils.js";
 
 const removePlayerIcon = (pawn) => {
   const pawnId = toId(pawn.name);
@@ -69,7 +69,6 @@ const handleMovePlayer = async (e, tiles, pawn) => {
     body: JSON.stringify({ newNodeId, tiles, isUsingSecretPassage: false }),
   });
 
-  localStorage.removeItem("reachableNodes");
   removePlayerIcon(pawn);
   clearHighlights();
   const passBtn = document.querySelector("#pass-button");
@@ -108,7 +107,6 @@ const handleDiceClick = async (event, dice, pawn) => {
   showDiceAnimation(diceValues, async () => {
     displayPopup(`dice value is ${diceValues[0] + diceValues[1]}`, "info");
     const { reachableNodes } = await fetchReachableNodes();
-    localStorage.setItem("reachableNodes", JSON.stringify(reachableNodes));
     highlightTiles(reachableNodes);
     movePlayer(reachableNodes, pawn);
   });
@@ -156,8 +154,6 @@ const handleSecretPassageClick = async (e, pawn) => {
     removePlayerIcon(pawn);
     clearAllSecretPassages();
     clearHighlights();
-
-    localStorage.removeItem("reachableNodes");
   }
 };
 
@@ -227,7 +223,7 @@ const showDiceAnimationForPassivePlayer = (boardConfig) => {
 
 export const renderActions = (boardConfig) => {
   showDiceAnimationForPassivePlayer(boardConfig);
-  const path = getHighlightPath();
+  const path = boardConfig.possiblePaths;
 
   renderDice(boardConfig);
   renderPassBtn();
@@ -236,8 +232,7 @@ export const renderActions = (boardConfig) => {
     boardConfig.currentPlayer.pawn,
   );
 
-  if (boardConfig.canRoll) localStorage.removeItem("reachableNodes");
-  if (path.length) {
+  if (path.length && boardConfig.isPlayerActive) {
     highlightTiles(path);
     movePlayer(path, boardConfig.currentPlayer.pawn);
   }

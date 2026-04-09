@@ -122,6 +122,7 @@ export const fetchGameConfig = async (url, etag) => {
     shouldShowAccusationResult: gameContext.shouldShowAccusationResult,
     accusationDetails: gameContext.accusationDetails,
     murderCombination: gameContext.murderCombination,
+    possiblePaths: gameContext.possiblePaths,
   };
   return { etag: res.etag, changed: res.changed, gameConfig };
 };
@@ -155,17 +156,12 @@ export const displayPopup = (message, type = "default") => {
   }, 2000);
 };
 
-export const getHighlightPath = () => {
-  const reachableNodes = localStorage.getItem("reachableNodes") ?? "[]";
-  return JSON.parse(reachableNodes);
-};
-
-const disableButtons = () => {
+const disableButtons = (boardConfig) => {
   const accuseBtn = document.querySelector("#accuse-button");
   const passBtn = document.querySelector("#pass-button");
-  const path = getHighlightPath();
+  const path = boardConfig.possiblePaths;
 
-  if (path.length) {
+  if (path.length && boardConfig.isPlayerActive) {
     passBtn?.setAttribute("disabled", "");
     accuseBtn?.setAttribute("disabled", "");
     removePawnHighlight();
@@ -201,8 +197,8 @@ export const polling = (playerCardsContainer) => {
     );
     prevEtag = etag;
 
-    disableButtons();
     if (changed) {
+      disableButtons(gameConfig);
       handleRedirectBasedOnGameState(gameConfig);
       renderBoard(gameConfig);
       renderPlayers(gameConfig);

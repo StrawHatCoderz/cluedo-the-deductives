@@ -115,6 +115,7 @@ export class Game {
 
       diceValues: this.#turn?.getDiceValue(),
       shouldShowDicePopup,
+      possiblePaths: this.#turn.getPossiblePaths(),
 
       canRoll: this.#isRollAllowed(playerId),
       secretPassageId: this.#getSecretPassageId(playerId),
@@ -241,7 +242,15 @@ export class Game {
   }
 
   getReachableNodes(position, steps) {
-    return this.#board.getReachableNodes(position, steps);
+    const isDiceRolled = this.#turn.getIsDiceRolled();
+
+    if (!isDiceRolled) {
+      throw new Error("Can not get reachable nodes without rolling dice");
+    }
+
+    const reachableNodes = this.#board.getReachableNodes(position, steps);
+    this.#turn.setPossiblePaths(reachableNodes);
+    return reachableNodes;
   }
 
   #isMatchingCombination(murderCombination, playerCombination) {
@@ -325,7 +334,7 @@ export class Game {
     this.#turn?.setUsedSecretPassage();
   }
 
-  #getSecretPassageId(playerId) {
+  #getSecretPassageId(playerId, shouldValidate = false) {
     const room = this.#activePlayer?.getPlayerData().pawn.position.room;
     const secretPassages = this.#board.getSecretPassages();
 
@@ -334,6 +343,15 @@ export class Game {
     const playerCanRollDice = this.#isRollAllowed(playerId);
     const playerCanSuspect = this.#turn?.canSuspect();
     const playerHasNotUsedSecretPassage = !this.#turn?.getUsedSecretPassage();
+
+    if (shouldValidate) {
+      this.validateScretPassage(
+        isSecretPassage,
+        playerCanRollDice,
+        playerCanSuspect,
+        playerHasNotUsedSecretPassage,
+      );
+    }
 
     if (
       isSecretPassage &&
@@ -373,40 +391,43 @@ export class Game {
       pawn.updatePosition(pos);
       this.#toggleIsOccupied(pawnPrevPosition);
       this.#toggleIsOccupied(newNodeId);
+      this.#turn.setPossiblePaths([]);
       return { status: true };
     }
 
     return { status: false };
   }
 
-  useSecretPassage(playerId) {
-    const player = this.#getCurrentPlayerData(playerId);
-    const pawnId = player.pawn.id;
-    const pawn = this.getPawnInstance(pawnId);
-    const room = pawn?.getPawnData().position.room;
-    const secretPassages = this.#board.getSecretPassages();
-
-    const isSecretPassage = room in secretPassages;
+  validateScretPassage(
+    isSecretPassage,
+    playerCanRollDice,
+    playerCanSuspect,
+    playerHasNotUsedSecretPassage,
+  ) {
     if (!isSecretPassage) {
       throw new Error("Room Has No Secret Passage");
     }
 
-    const playerCanRollDice = this.#isRollAllowed(playerId);
     if (!playerCanRollDice) {
       throw new Error("Can not use secret passage after rolling the dice");
     }
 
-    const playerCanSuspect = this.#turn?.canSuspect();
     if (!playerCanSuspect) {
       throw new Error("Can not use secret passage after suspicion");
     }
 
-    const playerHasNotUsedSecretPassage = !this.#turn?.getUsedSecretPassage();
     if (!playerHasNotUsedSecretPassage) {
       throw new Error("Player Has Already Used Secret Passage");
     }
+  }
 
-    pawn.updatePosition({ x: null, y: null, room: secretPassages[room] });
+  useSecretPassage(playerId) {
+    const player = this.#getCurrentPlayerData(playerId);
+    const pawnId = player.pawn.id;
+    const pawn = this.getPawnInstance(pawnId);
+    const secretPassageId = this.#getSecretPassageId(playerId, true);
+
+    pawn.updatePosition({ x: null, y: null, room: secretPassageId });
     this.setUsedSecretPassage();
   }
 }

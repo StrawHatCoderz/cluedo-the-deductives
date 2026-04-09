@@ -320,6 +320,7 @@ describe("GAME", () => {
       game.useSecretPassage(p1.getPlayerData().id);
 
       const pawn = game.getPawnInstance(1);
+
       assertEquals(pawn.getPawnData().position.room, "kitchen");
     });
 

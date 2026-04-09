@@ -19,11 +19,8 @@ export const serveGetReachableNodes = (c) => {
   const pawn = activePlayer?.pawn;
   const position = getPosition(pawn);
   const steps = gameController.getDiceValue(lobbyId);
-  const reachableNodes = gameController.getReachableNodes(
-    lobbyId,
-    position,
-    steps[0] + steps[1],
-  );
+  const reachableNodes = gameController
+    .getReachableNodes(lobbyId, position, steps[0] + steps[1]);
 
   return c.json({ reachableNodes });
 };
