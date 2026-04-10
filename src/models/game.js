@@ -47,13 +47,20 @@ export class Game {
     return this.#getAllPlayers().filter((player) => !player.isEliminated);
   }
 
+  isPlayerAllowedToPass() {
+    const hasDiceRolled = this.#turn.getIsDiceRolled();
+    const hasUsedSecretPassage = this.#getHasUsedSecretPassage();
+    const hasSuspected = this.hasSuspected();
+
+    return hasDiceRolled || hasUsedSecretPassage || hasSuspected;
+  }
+
   updateTurn() {
     if (this.#gameState !== "running") {
       throw new ValidationError("Game is not running");
     }
 
     this.#updateActivePlayer(this.#turnNum++ % this.#turnOrder.length);
-
     if (this.#activePlayer.getPlayerData().isEliminated) {
       this.updateTurn();
     }
@@ -123,6 +130,7 @@ export class Game {
       possiblePaths: this.#turn.getPossiblePaths(),
 
       canRoll: this.#isRollAllowed(playerId),
+      canPass: this.isPlayerAllowedToPass(),
       secretPassageId: this.#getSecretPassageId(playerId),
       canSuspect: this.canSuspect(),
       disprovalData: data,

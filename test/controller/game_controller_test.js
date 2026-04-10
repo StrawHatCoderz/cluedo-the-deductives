@@ -263,6 +263,10 @@ describe("GAME CONTROLLER", () => {
         return { id: 1 };
       };
 
+      gameMock.isPlayerAllowedToPass = () => {
+        return true;
+      };
+
       controller.startGame(1, [
         {
           id: 1,
@@ -276,6 +280,27 @@ describe("GAME CONTROLLER", () => {
 
       assertEquals(called, true);
       assertEquals(result, { id: 1 });
+    });
+
+    it(" => should thorw error if roll is not allowed", () => {
+      gameMock.updateTurn = () => {
+        return { id: 1 };
+      };
+
+      gameMock.isPlayerAllowedToPass = () => {
+        return false;
+      };
+
+      controller.startGame(1, [
+        {
+          id: 1,
+          name: "tony",
+          isHost: true,
+          character: { name: "Scarlet" },
+        },
+      ]);
+
+      assertThrows(() => controller.updateTurn(1), ValidationError);
     });
   });
 

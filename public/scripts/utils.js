@@ -125,6 +125,7 @@ export const fetchGameConfig = async (url, etag) => {
     accusationDetails: gameContext.accusationDetails,
     murderCombination: gameContext.murderCombination,
     possiblePaths: gameContext.possiblePaths,
+    canPass: gameContext.canPass,
   };
   return { etag: res.etag, changed: res.changed, gameConfig };
 };
@@ -168,6 +169,12 @@ const disableButtons = (boardConfig) => {
   if (boardConfig.hasDisproved) {
     accuseBtn?.setAttribute("disabled", "");
     return;
+  }
+
+  if (boardConfig.canPass) {
+    passBtn?.removeAttribute("disabled");
+  } else {
+    passBtn?.setAttribute("disabled", "");
   }
 
   accuseBtn?.removeAttribute("disabled");

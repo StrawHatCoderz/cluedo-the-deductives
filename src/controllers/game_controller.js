@@ -75,7 +75,12 @@ export class GameController {
   }
 
   updateTurn(gameId) {
-    return this.#games[gameId].updateTurn();
+    const game = this.#games[gameId];
+    if (game.isPlayerAllowedToPass()) {
+      return game.updateTurn();
+    }
+
+    throw new ValidationError("You Have To Perform Any Action Before Pass");
   }
 
   addSuspicion(gameId, playerId, suspicion) {
