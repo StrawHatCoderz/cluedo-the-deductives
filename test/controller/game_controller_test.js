@@ -15,7 +15,9 @@ describe("GAME CONTROLLER", () => {
       getState: () => ({
         state: "running",
         currentPlayer: { hand: ["card-1"] },
-        suspicionCombo: { weapon: "card-1", suspect: "card-2" },
+        disprovalData: {
+          suspicionCombo: { weapon: "card-1", suspect: "card-2" },
+        },
       }),
       rollDice: () => [1, 2],
       getReachableNodes: () => [1, 2, 3, 4],

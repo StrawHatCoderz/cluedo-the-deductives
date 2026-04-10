@@ -87,9 +87,9 @@ export class GameController {
     return this.#games[gameId].hasSuspected();
   }
 
-  isValidDisproval({ currentPlayer, suspicionCombo }, disprove) {
+  isValidDisproval({ currentPlayer, disprovalData }, disprove) {
     return (
-      Object.values(suspicionCombo)?.includes(disprove) &&
+      Object.values(disprovalData.suspicionCombo)?.includes(disprove) &&
       currentPlayer?.hand.includes(disprove)
     );
   }

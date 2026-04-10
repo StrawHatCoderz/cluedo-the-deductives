@@ -166,7 +166,7 @@ const disableButtons = (boardConfig) => {
   }
 
   if (boardConfig.hasDisproved) {
-    accuseBtn?.setAttribute("disabled");
+    accuseBtn?.setAttribute("disabled", "");
     return;
   }
 
