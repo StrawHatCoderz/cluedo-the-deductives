@@ -3,9 +3,10 @@ import { fetchLobbyStateWithEtag, sendRequest, toId } from "./utils.js";
 const handleCopyLobbyId = (_e, lobbyId) => {
   const copyToast = document.getElementById("copy-toast");
   navigator.clipboard.writeText(lobbyId);
-
+  copyToast.removeAttribute("hidden", "");
   copyToast.classList.add("toast");
   setTimeout(() => {
+    copyToast.setAttribute("hidden", "");
     copyToast.classList.remove("toast");
   }, 2000);
 };
