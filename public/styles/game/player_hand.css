@@ -1,0 +1,45 @@
+#players-cards-details {
+  position: absolute;
+  top: 5%;
+  right: 1%;
+
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: 10px;
+  row-gap: 56px;
+
+  padding: 18px 12px;
+}
+
+#players-cards-details .card {
+  display: flex;
+  justify-content: center;
+}
+
+#players-cards-details .player-card {
+  width: 140px;
+  height: 180px;
+  object-fit: contain;
+  background: #2a0606;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+#players-cards-details .player-card:hover {
+  transform: translateY(-6px) scale(1.05);
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.75);
+  z-index: 2;
+}
+
+@media (max-width: 520px) {
+  #players-cards-details {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    padding: 10px;
+  }
+
+  #players-cards-details .player-card {
+    max-width: 70px;
+    height: 100px;
+  }
+}

@@ -12,7 +12,6 @@
 #accusation-info {
   width: 1000px;
   height: 400px;
-  background: var(--bg-surface);
   border: 2px solid var(--frame);
   border-radius: 8px;
   padding: 24px 28px;
