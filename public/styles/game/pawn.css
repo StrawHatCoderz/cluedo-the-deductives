@@ -1,0 +1,31 @@
+:root {
+  --pawn-shadow: rgba(0, 0, 0, 0.35);
+  --pawn-inner-shadow: rgba(0, 0, 0, 0.25);
+
+  --pawn-highlight: rgba(255, 200, 120, 0.8);
+}
+
+@keyframes radar-pulse {
+  from {
+    r: 2;
+  }
+
+  to {
+    r: 4;
+  }
+}
+
+.active-pawn {
+  stroke: var(--pawn-highlight);
+  animation: radar-pulse 1.8s ease-in-out infinite;
+}
+
+.highlight-suspect {
+  position: relative;
+
+  box-shadow:
+    0 0 0 2px rgba(255, 180, 100, 0.6),
+    0 0 12px 4px var(--pawn-highlight),
+    inset 0 2px 4px var(--pawn-inner-shadow),
+    0 3px 6px var(--pawn-shadow);
+}

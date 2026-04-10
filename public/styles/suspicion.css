@@ -1,13 +1,13 @@
 .hidden {
   display: none;
 }
-
+/*
 .highlight-suspect {
   stroke: gold;
   stroke-width: 2;
   cursor: pointer;
   filter: drop-shadow(0 0 5px gold);
-}
+} */
 
 .modal {
   position: fixed;

@@ -56,10 +56,11 @@ svg {
 .room {
   filter: brightness(0.6);
 }
-/* 
+/*
 .tiles rect:hover {
   fill: #7a1a1a;
   opacity: 0.8;
+  opacity: 0.7;
   cursor: pointer;
 } */
 
@@ -71,12 +72,12 @@ path,
 
 .room {
   stroke: #5a1010;
-  stroke-width: 2;
+  stroke-width: 1;
   transition: fill 0.2s ease, filter 0.2s ease;
 }
 
 .envelope {
-  stroke-width: 2;
+  stroke-width: 1;
   stroke: #5a1010;
 }
 
@@ -123,10 +124,15 @@ path,
 }
 
 .weapon {
-  opacity: 0.65;
+  opacity: 0.85;
   width: 15px;
   height: 15px;
   transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.candle {
+  width: 20px;
+  height: 20px;
 }
 
 .weapon:hover {
@@ -157,12 +163,6 @@ path.room.highlight-room {
   animation: roomGlow 1s ease-in-out infinite alternate;
 }
 
-.highlight-suspect {
-  stroke: #e04b4b;
-  stroke-width: 3;
-  filter: drop-shadow(0 0 4px rgba(224, 75, 75, 0.8));
-}
-
 @keyframes pulse {
   0% {
     stroke-width: 1;
@@ -177,21 +177,5 @@ path.room.highlight-room {
   100% {
     stroke-width: 1;
     opacity: 1;
-  }
-}
-
-.active-pawn {
-  stroke: cyan;
-  stroke-width: 1;
-  animation: pulsar 1.5s ease-out infinite alternate;
-}
-
-@keyframes pulsar {
-  from {
-    r: 2;
-  }
-
-  to {
-    r: 4;
   }
 }
