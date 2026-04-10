@@ -6,6 +6,7 @@ import {
   getPosition,
   parseNode,
 } from "../../src/utils/game.js";
+import { ValidationError } from "../../src/utils/custom_errors.js";
 
 describe("UTILS", () => {
   describe("UTILS: PARSE NODE TEST", () => {
@@ -98,9 +99,7 @@ describe("UTILS", () => {
 
       assertEquals(lobby.getState(1).players.length, 6);
 
-      assertThrows(() => {
-        lobby.addPlayer(7, "Extra", false);
-      });
+      assertThrows(() => lobby.addPlayer(7, "Extra", false), ValidationError);
     });
 
     it(" => should not allow game start below min players", () => {
@@ -114,9 +113,7 @@ describe("UTILS", () => {
 
       lobby.addPlayer(1, "Host", true);
 
-      assertThrows(() => {
-        lobby.updateState(1);
-      });
+      assertThrows(() => lobby.updateState(1), ValidationError);
     });
 
     it(" => should start game when valid conditions are met", () => {
@@ -150,9 +147,7 @@ describe("UTILS", () => {
       lobby.addPlayer(2, "P2", false);
       lobby.addPlayer(3, "P3", false);
 
-      assertThrows(() => {
-        lobby.updateState(2);
-      });
+      assertThrows(() => lobby.updateState(2), ValidationError);
     });
   });
 });

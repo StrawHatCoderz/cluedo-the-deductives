@@ -6,6 +6,7 @@ import { boardRoutes } from "./routes/board_routes.js";
 import { gameRoutes } from "./routes/game_routes.js";
 import { lobbyRoutes } from "./routes/lobby_routes.js";
 import { turnRouteCreator } from "./routes/turn_routes.js";
+import { ValidationError } from "./utils/custom_errors.js";
 
 export const createApp = ({
   lobbyController,
@@ -30,7 +31,10 @@ export const createApp = ({
 
   app.get("*", serveStatic({ root: "./public" }));
   app.onError((e, c) => {
-    return c.json({ success: false, error: e.message }, 400);
+    if (e instanceof ValidationError) {
+      return c.json({ success: false, error: e.message }, 400);
+    }
+    return c.json({ success: false, error: "Internal Server Error" }, 500);
   });
 
   return app;

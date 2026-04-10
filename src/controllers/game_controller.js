@@ -12,7 +12,7 @@ export class GameController {
 
   static create(createGame) {
     if (typeof createGame !== "function") {
-      throw new Error("Create Game Shold be valid function");
+      throw new ValidationError("Create Game Should be valid function");
     }
 
     return new GameController(createGame);

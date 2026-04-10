@@ -118,14 +118,14 @@ describe("LOBBY", () => {
     it(" => should not update state if invalid player count", () => {
       lobby.addPlayer(1, "username", true);
 
-      assertThrows(() => lobby.updateState(1));
+      assertThrows(() => lobby.updateState(1), ValidationError);
     });
 
     it(" => should not update state if requester is not host", () => {
       lobby.addPlayer(1, "username1", true);
       lobby.addPlayer(2, "username2", false);
 
-      assertThrows(() => lobby.updateState(2));
+      assertThrows(() => lobby.updateState(2), ValidationError);
     });
   });
 });

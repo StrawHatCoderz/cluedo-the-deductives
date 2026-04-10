@@ -3,6 +3,7 @@ import { beforeEach, describe, it } from "@std/testing/bdd";
 import { Pawn } from "../../src/models/pawn.js";
 import { Player } from "../../src/models/player.js";
 import { Turn } from "../../src/models/turn.js";
+import { ValidationError } from "../../src/utils/custom_errors.js";
 
 describe("Turn Management", () => {
   let turn;
@@ -34,8 +35,7 @@ describe("Turn Management", () => {
         turn.rollDice(
           () => 1,
           (x) => x,
-        )
-      );
+        ), ValidationError);
     });
   });
 

@@ -21,6 +21,7 @@ const silentLogger = () => (_, next) => next();
 describe("APP TEST", () => {
   let app;
   let lobbyController;
+  let gameController;
 
   const setupApp = () => {
     const pawns = PAWNS.map(({ name, color }) => ({ name, color }));
@@ -35,7 +36,7 @@ describe("APP TEST", () => {
         rooms: ROOMS,
       });
 
-    const gameController = GameController.create(createGame);
+    gameController = GameController.create(createGame);
 
     app = createApp({
       gameController,
@@ -56,6 +57,8 @@ describe("APP TEST", () => {
       lobbyId: host.lobbyId,
       playerId: host.playerId,
       cookie: `lobbyId=${host.lobbyId}; playerId=${host.playerId}`,
+      players: lobbyController.getLobbyState(host.lobbyId, host.playerId)
+        ?.players,
     };
   };
 
@@ -382,7 +385,7 @@ describe("APP TEST", () => {
 
       const body = await res.json();
 
-      assertEquals(res.status, 200);
+      assertEquals(res.status, 400);
       assertEquals(body.success, false);
       assertEquals(body.error, "Room Has No Secret Passage");
     });
@@ -390,30 +393,22 @@ describe("APP TEST", () => {
 
   describe("POST /turn/suspect", () => {
     it(" => should add a suspect combination", async () => {
-      const { cookie } = setupLobby();
-
-      await app.request("/game/start", {
-        method: "POST",
-        headers: { Cookie: cookie },
+      const { cookie, lobbyId, playerId, players } = setupLobby();
+      gameController.startGame(lobbyId, players);
+      gameController.rollDice(lobbyId, () => 12, (n) => n);
+      gameController.getReachableNodes(lobbyId, "dining_room", 4);
+      gameController.movePawn(lobbyId, playerId, "lounge", {
+        x: null,
+        y: null,
+        room: "lounge",
       });
 
       const suspicion = {
         weapon: "dagger",
         suspect: "scarlet",
-        room: "hall",
+        room: "lounge",
+        suspectId: 1,
       };
-      await app.request(`/board/update-pawn-position/1`, {
-        method: "PUT",
-        headers: {
-          Cookie: cookie,
-          "content-type": "application/json",
-        },
-        body: JSON.stringify({
-          newNodeId: "hall",
-          tiles: ["hall"],
-          isUsingSecretPassage: false,
-        }),
-      });
 
       const res = await app.request("/turn/suspect", {
         method: "POST",
@@ -421,7 +416,10 @@ describe("APP TEST", () => {
         headers: { "content-type": "application/json", Cookie: cookie },
       });
 
+      const body = await res.json();
+
       assertEquals(res.status, 200);
+      assertEquals(body.success, true);
     });
   });
 

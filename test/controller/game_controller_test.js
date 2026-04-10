@@ -32,7 +32,11 @@ describe("GAME CONTROLLER", () => {
 
   describe("create()", () => {
     it(" => should throw if createGame is not a function", () => {
-      assertThrows(() => GameController.create(null, () => []));
+      assertThrows(
+        () => GameController.create(null, () => []),
+        ValidationError,
+        "Create Game Should be valid function",
+      );
     });
 
     it("should create controller if valid functions are passed", () => {

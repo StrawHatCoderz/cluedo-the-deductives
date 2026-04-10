@@ -76,7 +76,10 @@ describe("GAME", () => {
     });
 
     it(" => should throw error for invalid player", () => {
-      assertThrows(() => game.addPlayer({}, { name: "miss scarlett" }), Error);
+      assertThrows(
+        () => game.addPlayer({}, { name: "miss scarlett" }),
+        ValidationError,
+      );
     });
   });
 
@@ -116,7 +119,7 @@ describe("GAME", () => {
       game.addPlayer(p1, { name: "miss scarlett" });
       game.addPlayer(p2, { name: "colonel mustard" });
 
-      assertThrows(() => game.start());
+      assertThrows(() => game.start(), ValidationError, "Invalid player count");
     });
 
     it(" => should distribute cards", () => {
@@ -132,7 +135,7 @@ describe("GAME", () => {
     it(" => should throw if updateTurn before running", () => {
       add3Players();
 
-      assertThrows(() => game.updateTurn(), Error);
+      assertThrows(() => game.updateTurn(), ValidationError);
     });
 
     it(" => should roll dice correctly", () => {
@@ -147,7 +150,7 @@ describe("GAME", () => {
     });
 
     it(" => should throw if rollDice before turn init", () => {
-      assertThrows(() => game.rollDice(), Error);
+      assertThrows(() => game.rollDice(), ValidationError);
     });
   });
 
@@ -421,7 +424,7 @@ describe("GAME", () => {
 
       assertThrows(
         () => game.useSecretPassage(p1.getPlayerData().id),
-        Error,
+        ValidationError,
       );
     });
 
@@ -430,7 +433,7 @@ describe("GAME", () => {
 
       assertThrows(
         () => game.useSecretPassage(p1.getPlayerData().id),
-        Error,
+        ValidationError,
       );
     });
 
@@ -450,7 +453,7 @@ describe("GAME", () => {
 
       assertThrows(
         () => game.useSecretPassage(p1.getPlayerData().id),
-        Error,
+        ValidationError,
       );
     });
 
@@ -459,7 +462,7 @@ describe("GAME", () => {
 
       assertThrows(
         () => game.useSecretPassage(p1.getPlayerData().id),
-        Error,
+        ValidationError,
       );
     });
   });

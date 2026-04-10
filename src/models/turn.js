@@ -1,3 +1,5 @@
+import { ValidationError } from "../utils/custom_errors.js";
+
 export class Turn {
   #player;
   #isDiceRolled;
@@ -73,7 +75,9 @@ export class Turn {
   }
 
   rollDice(randomGenerator, ceilFn) {
-    if (this.#isDiceRolled) throw new Error("Player already rolled the dice");
+    if (this.#isDiceRolled) {
+      throw new ValidationError("Player already rolled the dice");
+    }
     this.#isDiceRolled = true;
     this.#diceValue.push(ceilFn(randomGenerator() * 6));
     this.#diceValue.push(ceilFn(randomGenerator() * 6));

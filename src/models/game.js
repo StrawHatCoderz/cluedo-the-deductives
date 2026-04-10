@@ -33,7 +33,7 @@ export class Game {
     const totalPlayers = Object.keys(this.#players).length;
 
     if (totalPlayers < 3 || totalPlayers > 6) {
-      throw new Error("Invalid player count");
+      throw new ValidationError("Invalid player count");
     }
 
     this.#setTurnOrder();
@@ -49,7 +49,7 @@ export class Game {
 
   updateTurn() {
     if (this.#gameState !== "running") {
-      throw new Error("Game is not running");
+      throw new ValidationError("Game is not running");
     }
 
     this.#updateActivePlayer(this.#turnNum++ % this.#turnOrder.length);
@@ -153,7 +153,7 @@ export class Game {
 
   addPlayer(player, character) {
     if (!(player instanceof Player)) {
-      throw new Error("Invalid player");
+      throw new ValidationError("Invalid player");
     }
 
     const pawn = this.#findPawn(character.name);
@@ -181,7 +181,7 @@ export class Game {
   }
 
   rollDice(randomFn = Math.random, ceilFn = Math.ceil) {
-    if (!this.#turn) throw new Error("Invalid player turn");
+    if (!this.#turn) throw new ValidationError("Invalid player turn");
     return this.#turn.rollDice(randomFn, ceilFn);
   }
 
@@ -281,7 +281,9 @@ export class Game {
     const isDiceRolled = this.#turn.getIsDiceRolled();
 
     if (!isDiceRolled) {
-      throw new Error("Can not get reachable nodes without rolling dice");
+      throw new ValidationError(
+        "Can not get reachable nodes without rolling dice",
+      );
     }
 
     const reachableNodes = this.#board.getReachableNodes(position, steps);
@@ -444,19 +446,21 @@ export class Game {
     playerHasNotUsedSecretPassage,
   ) {
     if (!isSecretPassage) {
-      throw new Error("Room Has No Secret Passage");
+      throw new ValidationError("Room Has No Secret Passage");
     }
 
     if (!playerCanRollDice) {
-      throw new Error("Can not use secret passage after rolling the dice");
+      throw new ValidationError(
+        "Can not use secret passage after rolling the dice",
+      );
     }
 
     if (!playerCanSuspect) {
-      throw new Error("Can not use secret passage after suspicion");
+      throw new ValidationError("Can not use secret passage after suspicion");
     }
 
     if (!playerHasNotUsedSecretPassage) {
-      throw new Error("Player Has Already Used Secret Passage");
+      throw new ValidationError("Player Has Already Used Secret Passage");
     }
   }
 

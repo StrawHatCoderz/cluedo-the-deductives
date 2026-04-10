@@ -44,7 +44,11 @@ describe("LOBBY", () => {
 
       const lobbyController = LobbyController.create(() => lobby);
       lobbyController.hostLobby("loki");
-      assertThrows(() => lobbyController.getLobbyState(3, 1), ValidationError);
+      assertThrows(
+        () => lobbyController.getLobbyState(3, 1),
+        ValidationError,
+        "Invalid lobby id",
+      );
     });
   });
 
@@ -96,7 +100,11 @@ describe("LOBBY", () => {
         getState: fn(() => ({ id: 1 })),
       };
       const lobbyController = LobbyController.create(() => lobby);
-      assertThrows(() => lobbyController.joinLobby("thor", 1), ValidationError);
+      assertThrows(
+        () => lobbyController.joinLobby("thor", 1),
+        ValidationError,
+        "Invalid room id",
+      );
     });
   });
   describe("updateLobbyState", () => {
@@ -130,12 +138,17 @@ describe("LOBBY", () => {
       assertThrows(
         () => lobbyController.updateLobbyState(1, 1),
         ValidationError,
+        "1 Invalid Lobby Id",
       );
     });
 
     it(" => should throw if lobby id is invalid for getting state", () => {
       const lobbyController = new LobbyController();
-      assertThrows(() => lobbyController.getLobbyState(1, 1), ValidationError);
+      assertThrows(
+        () => lobbyController.getLobbyState(1, 1),
+        ValidationError,
+        "Invalid lobby id",
+      );
     });
   });
 });
