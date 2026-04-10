@@ -130,7 +130,7 @@ describe("isAllowedToGetDisprovedCard", () => {
       gameController: {
         getGameState: () => ({
           activePlayer: { id: 1 },
-          hasDisproved: false,
+          disprovalData: { hasDisproved: false },
         }),
         isValidLobby: () => true,
       },
@@ -155,7 +155,7 @@ describe("isAllowedToGetDisprovedCard", () => {
       gameController: {
         getGameState: () => ({
           activePlayer: { id: 1 },
-          hasDisproved: false,
+          disprovalData: { hasDisproved: false },
         }),
         isValidLobby: () => false,
       },
@@ -180,7 +180,7 @@ describe("isAllowedToGetDisprovedCard", () => {
       gameController: {
         getGameState: () => ({
           activePlayer: { id: 1 },
-          hasDisproved: true,
+          disprovalData: { hasDisproved: true },
         }),
         isValidLobby: () => true,
       },

@@ -146,8 +146,13 @@ export const showModal = ({ room, suspect, weapon }) => {
   const cardTemplate = document.getElementById("card-template");
   suspicionCardsContainer.innerHTML = "";
 
-  Object.entries({ room, suspect, weapon }).forEach(([key, card]) => {
+  [
+    ["suspect", suspect],
+    ["weapon", weapon],
+    ["room", room],
+  ].forEach(([key, card]) => {
     const cardClone = cardTemplate.content.cloneNode(true);
+
     createCard(cardClone, toId(card), [`card-${key}`]);
     suspicionCardsContainer.appendChild(cardClone);
   });
@@ -168,7 +173,7 @@ export const showResult = (data, result) => {
   }
 
   const highlightedCard = getHighlightId(result, data);
-  const cardElement = document.querySelector(`.${highlightedCard}`);
+  const cardElement = container.querySelector(`.${highlightedCard}`);
   cardElement?.classList.add("card-revealed");
 
   statusEl.textContent = `${result.by} revealed the card`;

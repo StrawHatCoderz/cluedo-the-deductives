@@ -55,14 +55,14 @@ export const isAllowedToGetDisprovedCard = (
   const lobbyId = parseCookie(c, "lobbyId");
   const playerId = +parseCookie(c, "playerId");
   const controller = c.get("gameController");
-  const { hasDisproved, activePlayer } = controller.getGameState(
+  const { disprovalData, activePlayer } = controller.getGameState(
     lobbyId,
     playerId,
   );
   if (!controller.isValidLobby(lobbyId)) {
     throw new ValidationError(`${lobbyId}: invalid lobby id`);
   }
-  if (!(activePlayer.id === playerId && hasDisproved)) {
+  if (!(activePlayer.id === playerId && disprovalData.hasDisproved)) {
     throw new ValidationError(`${playerId}: invalid gameState or playerId`);
   }
   return next();

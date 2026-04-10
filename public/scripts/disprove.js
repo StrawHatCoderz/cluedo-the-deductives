@@ -107,8 +107,6 @@ const announceSuspicion = (state) => {
 };
 
 export const disproveASuspicion = (state) => {
-  console.log(state);
-
   if (state.hasDisproved && state.activePlayer?.id === state.currentPlayer.id) {
     return showDisproval(state);
   }
