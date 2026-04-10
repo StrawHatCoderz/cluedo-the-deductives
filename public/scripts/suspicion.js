@@ -170,7 +170,9 @@ export const showResult = (data, result) => {
 
   if (!result.disproved) {
     const ele = getEl("suspicion-status");
-    ele.innerText = "No One Could Disprove";
+    if (ele !== null) {
+      ele.innerText = "No One Could Disprove";
+    }
     return;
   }
 
