@@ -1,9 +1,9 @@
 import { getCookie } from "hono/cookie";
 import { ValidationError } from "../utils/custom_errors.js";
 
-export const isRollAllowed = async (c, next) => {
-  const lobbyId = getCookie(c, "lobbyId");
-  const playerId = +getCookie(c, "playerId");
+export const isRollAllowed = (c, next, parseCookie = getCookie) => {
+  const lobbyId = parseCookie(c, "lobbyId");
+  const playerId = +parseCookie(c, "playerId");
   const gameController = c.get("gameController");
 
   if (!gameController.isValidLobby(lobbyId)) {
@@ -12,23 +12,23 @@ export const isRollAllowed = async (c, next) => {
   if (!gameController.isRollAllowed(lobbyId, playerId)) {
     throw new ValidationError(`${playerId}: invalid player id`);
   }
-  await next();
+  return next();
 };
 
-export const isAllowedToDisprove = async (c, next) => {
-  const lobbyId = getCookie(c, "lobbyId");
-  const playerId = +getCookie(c, "playerId");
+export const isAllowedToDisprove = (c, next, parseCookie = getCookie) => {
+  const lobbyId = parseCookie(c, "lobbyId");
+  const playerId = +parseCookie(c, "playerId");
   const gameController = c.get("gameController");
+  if (!gameController.isValidLobby(lobbyId)) {
+    throw new ValidationError(`${lobbyId}: invalid lobby id`);
+  }
   if (!gameController.hasSuspected(lobbyId)) {
-    return c.json({ success: false, error: "Invalid game state" }, 400);
+    throw new ValidationError(`Invalid game state`);
   }
   if (gameController.getDisprovablePlayer(lobbyId) !== playerId) {
-    return c.json(
-      { success: false, error: `${playerId}: Invalid player Id` },
-      400,
-    );
+    throw new ValidationError(`${playerId}: Invalid player Id`);
   }
-  await next();
+  return next();
 };
 
 export const restrictNonActivePlayer = (c, next) => {
@@ -44,5 +44,26 @@ export const restrictNonActivePlayer = (c, next) => {
     );
   }
 
+  return next();
+};
+
+export const isAllowedToGetDisprovedCard = (
+  c,
+  next,
+  parseCookie = getCookie,
+) => {
+  const lobbyId = parseCookie(c, "lobbyId");
+  const playerId = +parseCookie(c, "playerId");
+  const controller = c.get("gameController");
+  const { hasDisproved, activePlayer } = controller.getGameState(
+    lobbyId,
+    playerId,
+  );
+  if (!controller.isValidLobby(lobbyId)) {
+    throw new ValidationError(`${lobbyId}: invalid lobby id`);
+  }
+  if (!(activePlayer.id === playerId && hasDisproved)) {
+    throw new ValidationError(`${playerId}: invalid gameState or playerId`);
+  }
   return next();
 };

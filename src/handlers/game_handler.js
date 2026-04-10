@@ -63,8 +63,9 @@ export const addSuspicion = async (c) => {
 export const confirmDisprove = async (c) => {
   const { disprove } = await c.req.parseBody();
   const lobbyId = getCookie(c, "lobbyId");
+  const playerId = +getCookie(c, "playerId");
   const gameController = c.get("gameController");
-  return c.json(gameController.confirmDisproval(lobbyId, disprove));
+  return c.json(gameController.confirmDisproval(lobbyId, playerId, disprove));
 };
 
 export const getDisprovedCard = (c) => {
