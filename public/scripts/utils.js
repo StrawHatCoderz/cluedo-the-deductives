@@ -161,9 +161,15 @@ const disableButtons = (boardConfig) => {
     passBtn?.setAttribute("disabled", "");
     accuseBtn?.setAttribute("disabled", "");
     removePawnHighlight();
-  } else {
-    accuseBtn?.removeAttribute("disabled");
+    return;
   }
+
+  if (boardConfig.hasDisproved) {
+    accuseBtn?.setAttribute("disabled");
+    return;
+  }
+
+  accuseBtn?.removeAttribute("disabled");
 };
 
 const toggleActionButton = ({ isPlayerActive }) => {
