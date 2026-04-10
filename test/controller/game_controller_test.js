@@ -16,6 +16,7 @@ describe("GAME CONTROLLER", () => {
       rollDice: () => [1, 2],
       getReachableNodes: () => [1, 2, 3, 4],
       getDiceValue: () => [1, 2],
+      getActivePlayer: () => 1,
     };
 
     createGameMock = () => gameMock;
@@ -363,6 +364,31 @@ describe("GAME CONTROLLER", () => {
       const result = controller.getDisprovedCard(1);
 
       assertEquals(result, { card: "card-123" });
+    });
+  });
+
+  describe("getActivePlayer()", () => {
+    it(" => should return active player from game", () => {
+      let called = false;
+
+      gameMock.getActivePlayer = () => {
+        called = true;
+        return { id: 1 };
+      };
+
+      controller.startGame(1, [
+        {
+          id: 1,
+          name: "tony",
+          isHost: true,
+          character: { name: "Scarlet" },
+        },
+      ]);
+
+      const result = controller.getActivePlayer(1);
+
+      assertEquals(called, true);
+      assertEquals(result, { id: 1 });
     });
   });
 });

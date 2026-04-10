@@ -157,7 +157,7 @@ describe("GAME", () => {
 
       game.start();
 
-      const current = game.getCurrentPlayer();
+      const current = game.getActivePlayer();
 
       assertEquals(current, p3);
     });
@@ -195,7 +195,7 @@ describe("GAME", () => {
 
   describe("add suspect combination", () => {
     const moveCurrentPlayerToRoom = (room = "study") => {
-      const currentPlayer = game.getCurrentPlayer();
+      const currentPlayer = game.getActivePlayer();
       const pawn = game.getPawnInstance(currentPlayer.getPlayerData().pawn.id);
 
       pawn.updatePosition({ room });
@@ -214,7 +214,7 @@ describe("GAME", () => {
         weapon: "dagger",
       };
 
-      const currentPlayer = game.getCurrentPlayer();
+      const currentPlayer = game.getActivePlayer();
 
       game.addSuspicion(currentPlayer.getPlayerData().id, suspectCombination);
 
@@ -234,7 +234,7 @@ describe("GAME", () => {
         weapon: "dagger",
       };
 
-      const currentPlayer = game.getCurrentPlayer();
+      const currentPlayer = game.getActivePlayer();
 
       game.addSuspicion(currentPlayer.getPlayerData().id, suspectCombination);
 
@@ -261,7 +261,7 @@ describe("GAME", () => {
         weapon: "dagger",
       };
 
-      const currentPlayer = game.getCurrentPlayer();
+      const currentPlayer = game.getActivePlayer();
 
       game.addSuspicion(currentPlayer.getPlayerData().id, suspectCombination);
 
@@ -348,7 +348,7 @@ describe("GAME", () => {
         weapon: "dagger",
         room: "kitchen",
       };
-      const currentPlayer = game.getCurrentPlayer();
+      const currentPlayer = game.getActivePlayer();
 
       const pawn = game.getPawnInstance(
         currentPlayer.getPlayerData().pawn.id,
@@ -435,7 +435,7 @@ describe("GAME", () => {
     });
 
     it(" => should throw if player already suspected", () => {
-      const currentPlayer = game.getCurrentPlayer();
+      const currentPlayer = game.getActivePlayer();
       const pawn = game.getPawnInstance(
         currentPlayer.getPlayerData().pawn.id,
       );

@@ -64,7 +64,8 @@ export const sendRequest = async ({ method, body, url }) => {
       },
     }
     : { method };
-  return await fetch(url, requestConfig).then((data) => data.json());
+  return await fetch(url, requestConfig)
+    .then((data) => data.json());
 };
 
 export const getWithEtagEnabled = async ({ method, body, url, etag }) => {
@@ -127,11 +128,6 @@ export const fetchGameConfig = async (url, etag) => {
   return { etag: res.etag, changed: res.changed, gameConfig };
 };
 
-export const fetchLobbyState = async (url) => {
-  const { data } = await sendRequest({ url });
-  return data;
-};
-
 const DOT_COLORS = {
   success: "#1D9E75",
   error: "#E24B4A",
@@ -185,6 +181,20 @@ const toggleActionButton = ({ isPlayerActive }) => {
     localStorage.setItem("isTurnPopUpShown", "1");
     displayPopup("It's Your Turn");
   }
+};
+
+export const fetchLobbyStateWithEtag = async (url, etag) => {
+  const res = await getWithEtagEnabled({ url, etag });
+
+  if (!res.changed) {
+    return res;
+  }
+
+  return {
+    etag: res.etag,
+    changed: true,
+    lobby: res.body.data,
+  };
 };
 
 export const polling = (playerCardsContainer) => {

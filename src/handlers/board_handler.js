@@ -25,7 +25,7 @@ export const serveGetReachableNodes = (c) => {
 
     return c.json({ success: true, data: reachableNodes });
   } catch (error) {
-    return c.json({ success: false, error: error.message });
+    return c.json({ success: false, error: error.message }, 400);
   }
 };
 

@@ -56,7 +56,7 @@ export const addSuspicion = async (c) => {
     gameController.addSuspicion(lobbyId, +playerId, suspicion);
     return c.json({ success: true });
   } catch (error) {
-    return c.json({ success: false, error: error.meesage });
+    return c.json({ success: false, error: error.message });
   }
 };
 

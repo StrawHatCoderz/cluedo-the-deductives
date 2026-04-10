@@ -107,4 +107,9 @@ export class GameController {
     const card = game.getDisprovedCard();
     return { card };
   }
+
+  getActivePlayer(gameId) {
+    const game = this.#games[gameId];
+    return game.getActivePlayer();
+  }
 }

@@ -97,6 +97,7 @@ path,
 #conservatory {
   fill: var(--conservatory);
 }
+
 #dining_room {
   fill: var(--dining);
 }
@@ -480,5 +481,35 @@ path.room.highlight-room {
 
   to {
     r: 4;
+  }
+}
+
+.pawn-enter {
+  animation: enterPassage 400ms forwards;
+}
+
+.pawn-exit {
+  animation: exitPassage 400ms forwards;
+}
+
+@keyframes enterPassage {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.2);
+    opacity: 0;
+  }
+}
+
+@keyframes exitPassage {
+  0% {
+    transform: scale(0.2);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
   }
 }

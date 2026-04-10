@@ -138,7 +138,7 @@ export class Game {
     this.#turn = new Turn(this.#activePlayer);
   }
 
-  getCurrentPlayer() {
+  getActivePlayer() {
     return this.#activePlayer;
   }
 

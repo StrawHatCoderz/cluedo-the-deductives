@@ -1,4 +1,4 @@
-import { fetchLobbyState, sendRequest, toId } from "./utils.js";
+import { fetchLobbyStateWithEtag, sendRequest, toId } from "./utils.js";
 
 const handleCopyLobbyId = (_e, lobbyId) => {
   const copyToast = document.getElementById("copy-toast");
@@ -18,7 +18,7 @@ const setupLobbyId = (lobbyId, isHost, hostActions) => {
   if (isHost) {
     const copyButton = hostActions.querySelector("#copy-lobby-id-btn");
     copyButton.addEventListener("click", (e) => handleCopyLobbyId(e, lobbyId));
-    lobbyIdContainer.appendChild(copyButton);
+    lobbyIdContainer.replaceChildren(lobbyIdText, copyButton);
   }
 };
 
@@ -90,28 +90,34 @@ const assignStartBtn = (isHost, playersCount, hostActions) => {
   }
 };
 
-const setupWaitingPage = async () => {
-  const initialLobby = await fetchLobbyState("/lobby");
-  let prevState = "";
+const renderUi = (lobby, profilesTemplate, profilesContainer, hostActions) => {
+  setupLobbyId(lobby.id, lobby.isHost, hostActions);
+  setupProfiles(lobby, profilesTemplate, profilesContainer);
+  setupLobbyStatus(lobby.isHost, lobby.players.length);
+  assignStartBtn(lobby.isHost, lobby.players.length, hostActions);
+};
+
+const setupWaitingPage = () => {
+  let prevEtag = null;
+
   const hostActionsTemplate = document.getElementById("host-actions");
   const profilesTemplate = document.getElementById("player-profile-template");
   const profilesContainer = document.querySelector(".profile-container");
-  const hostActions = hostActionsTemplate.content.cloneNode(true);
 
-  setupLobbyId(initialLobby.id, initialLobby.isHost, hostActions);
   setInterval(async () => {
-    const lobby = await fetchLobbyState("/lobby");
-    if (JSON.stringify(prevState) !== JSON.stringify(lobby)) {
-      const hostActions = hostActionsTemplate.content.cloneNode(true);
-      const totalPlayers = lobby.players.length;
+    const { etag, lobby, changed } = await fetchLobbyStateWithEtag(
+      "/lobby",
+      prevEtag,
+    );
 
-      setupProfiles(lobby, profilesTemplate, profilesContainer);
-      setupLobbyStatus(lobby.isHost, totalPlayers);
-      assignStartBtn(lobby.isHost, totalPlayers, hostActions);
-      redirectToSetupPage(lobby.isStarted);
-      prevState = lobby;
-    }
-  }, 500);
+    prevEtag = etag;
+
+    if (!changed) return;
+
+    const hostActions = hostActionsTemplate.content.cloneNode(true);
+    renderUi(lobby, profilesTemplate, profilesContainer, hostActions);
+    redirectToSetupPage(lobby.isStarted);
+  }, 1000);
 };
 
 globalThis.window.onload = setupWaitingPage;

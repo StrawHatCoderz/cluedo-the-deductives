@@ -30,3 +30,19 @@ export const isAllowedToDisprove = async (c, next) => {
   }
   await next();
 };
+
+export const restrictNonActivePlayer = (c, next) => {
+  const lobbyId = getCookie(c, "lobbyId");
+  const playerId = +getCookie(c, "playerId");
+  const gameController = c.get("gameController");
+  const activePlayer = gameController.getActivePlayer(lobbyId);
+
+  if (activePlayer.getPlayerData().id !== playerId) {
+    return c.json(
+      { success: false, error: "Only Active Player Can Perform Action" },
+      400,
+    );
+  }
+
+  return next();
+};

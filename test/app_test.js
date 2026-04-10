@@ -105,6 +105,24 @@ describe("APP TEST", () => {
         });
         assertEquals(res.status, 200);
       });
+
+      it(" => should return error if dice not rolled", async () => {
+        const { cookie } = setupLobby();
+
+        await app.request("/game/start", {
+          method: "POST",
+          headers: { Cookie: cookie },
+        });
+
+        const res = await app.request("/board/reachable-nodes", {
+          headers: { Cookie: cookie },
+        });
+
+        const body = await res.json();
+
+        assertEquals(res.status, 400);
+        assertEquals(body.success, false);
+      });
     });
 
     describe("POST /board/update-pawn-position", () => {
