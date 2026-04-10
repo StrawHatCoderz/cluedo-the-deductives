@@ -7,6 +7,12 @@ import { renderPlayerCards } from "./render_player_cards.js";
 import { removePawnHighlight, suspicionBtnListener } from "./suspicion.js";
 import { handleRedirectBasedOnGameState } from "./victory.js";
 
+export const closeOverlay = (overlay, ms = 5000) => {
+  setTimeout(() => {
+    overlay?.close();
+  }, ms);
+};
+
 export const isActivePlayer = (playerId, activePlayer) =>
   playerId === activePlayer.id;
 

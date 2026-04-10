@@ -1,8 +1,9 @@
 import { showResult } from "./suspicion.js";
-import { displayPopup, toId } from "./utils.js";
+import { closeOverlay, displayPopup, toId } from "./utils.js";
 import { createClone } from "./utils/ui_service.js";
 
-const sendDisprovedCard = async (e) => {
+const sendDisprovedCard = async (e, overlay) => {
+  overlay.close();
   e.preventDefault();
   const data = new FormData(e.target);
   await fetch("/game/disprove", {
@@ -12,9 +13,9 @@ const sendDisprovedCard = async (e) => {
   document.querySelector("#disproval-container")?.remove();
 };
 
-const registerListeners = (container) => {
+const registerListeners = (container, overlay) => {
   const form = container.querySelector("form");
-  form.addEventListener("submit", sendDisprovedCard);
+  form.addEventListener("submit", (e) => sendDisprovedCard(e, overlay));
 };
 
 const fillDisprovalCards = (combo, cards, disprovableCards) =>
@@ -57,10 +58,12 @@ const createDisprovePopUp = ({ currentPlayer, suspicionCombo }) => {
 
   const cards = suspicionCards.querySelectorAll(".dis-card");
   fillDisprovalCards(combo, cards, disprovableCards);
-  registerListeners(disprovalContainer);
+  registerListeners(disprovalContainer, overlay);
 };
 
 const showDisproval = async (state) => {
+  const overlay = document.querySelector("our-overlay");
+
   const res = await fetch("/game/disprove-card");
   const data = await res.json();
   const { name } = state.players.find(
@@ -70,6 +73,7 @@ const showDisproval = async (state) => {
   data.disproved = true;
   const suspicion = state.suspicionCombo;
   showResult(suspicion, data);
+  closeOverlay(overlay);
 };
 
 const announceSuspicion = (state) => {
@@ -104,6 +108,8 @@ const announceSuspicion = (state) => {
 
   announceContainer.querySelector("h2").textContent =
     `${state.activePlayer.name} suspects`;
+
+  closeOverlay(overlay);
 };
 
 export const disproveASuspicion = (state) => {
