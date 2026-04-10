@@ -12,7 +12,11 @@ describe("GAME CONTROLLER", () => {
     gameMock = {
       addPlayer: () => {},
       start: () => {},
-      getState: () => ({ state: "running" }),
+      getState: () => ({
+        state: "running",
+        currentPlayer: { hand: ["card-1"] },
+        suspicionCombo: { weapon: "card-1", suspect: "card-2" },
+      }),
       rollDice: () => [1, 2],
       getReachableNodes: () => [1, 2, 3, 4],
       getDiceValue: () => [1, 2],
@@ -30,7 +34,10 @@ describe("GAME CONTROLLER", () => {
     });
 
     it("should create controller if valid functions are passed", () => {
-      const result = GameController.create(() => ({}), () => []);
+      const result = GameController.create(
+        () => ({}),
+        () => [],
+      );
       assertEquals(typeof result, "object");
     });
   });
@@ -115,9 +122,9 @@ describe("GAME CONTROLLER", () => {
         },
       ]);
 
-      const state = controller.getGameState(1);
+      const gameState = controller.getGameState(1);
 
-      assertEquals(state, { state: "running" });
+      assertEquals(gameState.state, "running");
     });
 
     it(" => should throw if game does not exist", () => {
@@ -199,18 +206,9 @@ describe("GAME CONTROLLER", () => {
         },
       ]);
 
-      const result = controller.movePawn(
-        1,
-        1,
-        "tile-1",
-        { x: 1, y: 2 },
-      );
+      const result = controller.movePawn(1, 1, "tile-1", { x: 1, y: 2 });
 
-      assertEquals(receivedArgs, [
-        1,
-        "tile-1",
-        { x: 1, y: 2 },
-      ]);
+      assertEquals(receivedArgs, [1, "tile-1", { x: 1, y: 2 }]);
 
       assertEquals(result, undefined);
     });
@@ -341,10 +339,30 @@ describe("GAME CONTROLLER", () => {
         },
       ]);
 
-      const result = controller.confirmDisproval(1, "card-1");
+      const result = controller.confirmDisproval(1, 1, "card-1");
 
       assertEquals(received, "card-1");
       assertEquals(result, { status: true });
+    });
+
+    it(" => should throw error on invalid card", () => {
+      gameMock.addDisprovedCard = (card) => {
+        received = card;
+      };
+
+      controller.startGame(1, [
+        {
+          id: 1,
+          name: "tony",
+          isHost: true,
+          character: { name: "Scarlet" },
+        },
+      ]);
+
+      assertThrows(
+        () => controller.confirmDisproval(1, 1, "card-2"),
+        ValidationError,
+      );
     });
   });
 

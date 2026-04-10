@@ -64,10 +64,6 @@ export const confirmDisprove = async (c) => {
   const { disprove } = await c.req.parseBody();
   const lobbyId = getCookie(c, "lobbyId");
   const gameController = c.get("gameController");
-  const combo = Object.values(gameController.getSuspicionCombination(lobbyId));
-  if (!combo.includes(disprove)) {
-    return c.json({ success: false, error: "Invalid disproval card" }, 400);
-  }
   return c.json(gameController.confirmDisproval(lobbyId, disprove));
 };
 

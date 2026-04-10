@@ -87,8 +87,18 @@ export class GameController {
     return this.#games[gameId].hasSuspected();
   }
 
-  confirmDisproval(gameId, disprove) {
+  isValidDisproval({ currentPlayer, suspicionCombo }, disprove) {
+    return (
+      Object.values(suspicionCombo)?.includes(disprove) &&
+      currentPlayer?.hand.includes(disprove)
+    );
+  }
+
+  confirmDisproval(gameId, playerId, disprove) {
     const game = this.#games[gameId];
+    if (!this.isValidDisproval(game.getState(playerId), disprove)) {
+      throw new ValidationError(`${disprove}: not valid card`);
+    }
     game.addDisprovedCard(disprove);
     return { status: true };
   }
