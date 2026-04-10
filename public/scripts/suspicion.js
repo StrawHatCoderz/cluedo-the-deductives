@@ -169,6 +169,8 @@ export const showResult = (data, result) => {
   const statusEl = container?.querySelector("#suspicion-status");
 
   if (!result.disproved) {
+    const ele = getEl("suspicion-status");
+    ele.innerText = "No One Could Disprove";
     return;
   }
 
