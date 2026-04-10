@@ -1,5 +1,5 @@
 import { createCard } from "./render_player_cards.js";
-import { toId } from "./utils.js";
+import { toId, toSentenceCase } from "./utils.js";
 import { createClone } from "./utils/ui_service.js";
 
 const WEAPONS = {
@@ -37,7 +37,7 @@ const applyWeaponSelection = (card, selectedLabel, weapon) => {
   card.classList.add("weapon-selected");
   state.selectedWeaponEl = card;
   state.selectedWeapon = weapon;
-  selectedLabel.textContent = weapon;
+  selectedLabel.textContent = toSentenceCase(weapon);
 };
 
 const isSameCard = (card) => state.selectedWeaponEl === card;

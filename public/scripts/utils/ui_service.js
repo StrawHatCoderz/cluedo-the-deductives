@@ -1,4 +1,4 @@
-import { toId, toSentenceCase } from "../utils.js";
+import { toId, toNormalCase } from "../utils.js";
 
 export const createOption = (option, optionLabel, optionFor) => {
   const optionClone = createClone("option-template");
@@ -12,7 +12,7 @@ export const createOption = (option, optionLabel, optionFor) => {
   input.value = option;
   input.id = optionId;
 
-  label.textContent = toSentenceCase(option);
+  label.textContent = toNormalCase(option);
   label.setAttribute("for", optionId);
 
   return optionElement;
