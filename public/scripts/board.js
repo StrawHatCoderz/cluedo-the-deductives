@@ -133,7 +133,7 @@ const handlePass = async (event) => {
 
   if (res.status === 200) {
     const { currentPlayer } = await res.json();
-    displayPopup(`${currentPlayer.name} turns!`, "info");
+    displayPopup(`${currentPlayer.name}'s turn!`, "info");
     localStorage.clear();
   }
 };
@@ -213,7 +213,11 @@ const renderPassBtn = () => {
 };
 
 const showDiceAnimationForPassivePlayer = (boardConfig) => {
-  if (!boardConfig.isPlayerActive && boardConfig.shouldShowDicePopup) {
+  if (
+    !boardConfig.isPlayerActive &&
+    boardConfig.shouldShowDicePopup &&
+    !boardConfig.hasSuspected
+  ) {
     showDiceAnimation(boardConfig.diceValues, () => {
       displayPopup(
         `${boardConfig.activePlayer.name} rolled the dice and got ${

@@ -107,26 +107,32 @@ const announceSuspicion = (state) => {
 };
 
 export const disproveASuspicion = (state) => {
+  console.log(state);
+
   if (state.hasDisproved && state.activePlayer?.id === state.currentPlayer.id) {
     return showDisproval(state);
   }
+
   if (!state.canDisproved) {
-    showResult(state.suspicion, { disproved: false });
+    showResult(state.suspicionCombo, { disproved: false });
     announceSuspicion(state);
     return displayPopup("No one could disprove");
   }
+
   if (state.hasDisproved) {
     const { name } = state.players.find(
       ({ id }) => id === state.disprovablePlayer,
     );
     return displayPopup(`${name} has disproved`);
   }
+
   if (
     state.currentPlayer.id === state.disprovablePlayer &&
     !state.hasDisproved
   ) {
     return createDisprovePopUp(state);
   }
+
   if (!state.hasDisproved && state.activePlayer.id !== state.currentPlayer.id) {
     announceSuspicion(state);
   }

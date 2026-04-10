@@ -160,9 +160,10 @@ const getHighlightId = (result, data) => {
 };
 
 export const showResult = (data, result) => {
-  const statusEl = getEl("suspicion-status");
+  const container = document.querySelector("#suspicion-container");
+  const statusEl = container?.querySelector("#suspicion-status");
+
   if (!result.disproved) {
-    statusEl.textContent = "No one could disprove!";
     return;
   }
 
