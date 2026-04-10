@@ -1,4 +1,9 @@
-import { isActivePlayer, isCurrentPlayer, toId } from "./utils.js";
+import {
+  isActivePlayer,
+  isCurrentPlayer,
+  toId,
+  toNormalCase,
+} from "./utils.js";
 
 const createPlayer = (node, player, activePlayer, currentPlayer) => {
   const playerNode = node.querySelector(".player");
@@ -24,7 +29,7 @@ const createPlayer = (node, player, activePlayer, currentPlayer) => {
     : player.name;
 
   const playerPawn = node.querySelector(".player-pawn");
-  playerPawn.textContent = player.pawn;
+  playerPawn.textContent = toNormalCase(player.pawn);
 };
 
 export const renderPlayers = (boardConfig) => {

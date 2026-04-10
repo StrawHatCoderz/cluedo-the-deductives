@@ -23,23 +23,6 @@
     <script type="module" src="/components/overlay.js"></script>
   </head>
 
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cluedo Board</title>
-    <link rel="stylesheet" href="/styles/board.css" />
-    <link rel="stylesheet" href="/styles/accusation.css" />
-    <link rel="stylesheet" href="/styles/dice.css" />
-    <link rel="stylesheet" href="/styles/accusation_result.css">
-    <link rel="stylesheet" href="/styles/suspicion.css">
-    <link rel="stylesheet" href="/styles/suspicion_result.css">
-    <link rel="stylesheet" href="/styles/suspicion_passive.css">
-    <link rel="stylesheet" href="/styles/suspicion_announce.css">
-
-    <script type="module" src="/scripts/script.js"></script>
-    <script type="module" src="/components/overlay.js"></script>
-  </head>
-
   <body>
     <div id="players-details-container"></div>
 
@@ -1104,10 +1087,17 @@
 
     <div id="weapon-popup" class="weapon-popup hidden"></div>
     <div class="action-buttons" class="hide">
-      <button id="accuse-button">🔍<span class="tooltip">Accuse</span></button>
-      <button id="dice-button">🎲<span class="tooltip">Roll Dice</span></button>
+      <button id="accuse-button">
+        <img src="/assets/accuse.svg" alt="accuse">
+        <span class="tooltip">Accuse</span>
+      </button>
+      <button id="dice-button">
+        <img src="/assets/dice.svg" alt="dice">
+        <span class="tooltip">Roll Dice</span>
+      </button>
       <button id="pass-button">
-        &gt;&gt;<span class="tooltip">Pass</span>
+        <img src="/assets/pass.svg" alt="pass">
+        <span class="tooltip">Pass</span>
       </button>
     </div>
 
