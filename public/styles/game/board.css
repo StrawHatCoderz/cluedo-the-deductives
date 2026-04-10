@@ -60,48 +60,24 @@ svg {
 
 path,
 #cluedo {
-  fill: var(--room-base);
   stroke: var(--wall);
   stroke-width: 1;
 }
 
 .room {
   stroke: #5a1010;
-  stroke-width: 1.2;
+  stroke-width: 2;
   transition: fill 0.2s ease, filter 0.2s ease;
+}
+
+.envelope {
+  stroke-width: 2;
+  stroke: #5a1010;
 }
 
 .room:hover {
   filter: brightness(1.1);
   cursor: pointer;
-}
-
-#kitchen {
-  fill: var(--kitchen);
-}
-#ballroom {
-  fill: var(--ballroom);
-}
-#conservatory {
-  fill: var(--conservatory);
-}
-#dining_room {
-  fill: var(--dining);
-}
-#lounge {
-  fill: var(--lounge);
-}
-#hall {
-  fill: var(--hall);
-}
-#study {
-  fill: var(--study);
-}
-#library {
-  fill: var(--library);
-}
-#billiard_room {
-  fill: var(--billiard);
 }
 
 #cluedo {
