@@ -228,7 +228,7 @@ export const polling = (playerCardsContainer) => {
         renderAccusationResult(gameConfig);
       }
     }
-  }, 100);
+  }, 1000);
 };
 
 export const displayInitialMessage = async () => {
