@@ -20,11 +20,11 @@ export const WEAPONS = [
 ];
 
 export const ROOMS = [
-  "dining room",
+  "dining_room",
   "kitchen",
   "ballroom",
   "conservatory",
-  "billiard room",
+  "billiard_room",
   "library",
   "study",
   "hall",

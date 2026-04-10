@@ -12,7 +12,7 @@ export class Turn {
   #dicePopupShownMap;
   #accusationResult;
   #accusationResultSeenMap;
-  #possiblepaths;
+  #possiblePaths;
 
   constructor(player) {
     this.#player = player;
@@ -27,15 +27,15 @@ export class Turn {
     this.#dicePopupShownMap = {};
     this.#accusationResult = null;
     this.#accusationResultSeenMap = {};
-    this.#possiblepaths = [];
+    this.#possiblePaths = [];
   }
 
   setPossiblePaths(paths) {
-    this.#possiblepaths = [...paths];
+    this.#possiblePaths = [...paths];
   }
 
   getPossiblePaths() {
-    return this.#possiblepaths;
+    return this.#possiblePaths;
   }
 
   setUsedSecretPassage() {

@@ -126,7 +126,6 @@ export class Game {
       secretPassageId: this.#getSecretPassageId(playerId),
       canSuspect: this.canSuspect(),
       disprovalData: data,
-
       shouldShowAccusationResult,
       accusationDetails,
       murderCombination,
@@ -303,8 +302,10 @@ export class Game {
 
   #advanceTurnAfterAccusation(accusationResult) {
     if (accusationResult.isCorrect) return;
+    const activePlayers = this.#getActivePlayers();
 
-    if (this.#getActivePlayers().length <= 1) {
+    if (activePlayers.length <= 1) {
+      this.updateTurn();
       this.#finishGame();
       return;
     }
@@ -380,7 +381,7 @@ export class Game {
     const playerHasNotUsedSecretPassage = !this.#turn?.getUsedSecretPassage();
 
     if (shouldValidate) {
-      this.validateScretPassage(
+      this.validateSecretPassage(
         isSecretPassage,
         playerCanRollDice,
         playerCanSuspect,
@@ -436,7 +437,7 @@ export class Game {
     this.#turn.setPossiblePaths([]);
   }
 
-  validateScretPassage(
+  validateSecretPassage(
     isSecretPassage,
     playerCanRollDice,
     playerCanSuspect,
