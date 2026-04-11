@@ -1,0 +1,99 @@
+* {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+}
+
+.about {
+  position: relative;
+  height: 95vh;
+  max-width: 900px;
+  margin: auto;
+  padding: 30px;
+  border-radius: 12px;
+  line-height: 1.6;
+  overflow-y: scroll;
+  z-index: 1;
+}
+
+.about {
+  font-family: var(--font-display);
+  background: rgba(20, 18, 14, 0.85);
+  backdrop-filter: blur(5px);
+  border-radius: 10px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(179, 138, 58, 0.35);
+  color: white;
+}
+
+.about .video {
+  margin: 30px auto;
+}
+
+.about h1 {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 20px;
+  color: var(--color-gold);
+}
+
+.about h2 {
+  color: #34495e;
+  margin-top: 25px;
+  color: var(--color-gold);
+  text-shadow: 2px 2px 3px var(--color-red);
+}
+
+.about p {
+  margin: 10px 0;
+}
+
+.about ul {
+  margin-left: 20px;
+}
+
+.about li {
+  margin-bottom: 8px;
+}
+
+.about h3 {
+  color: var(--color-gold);
+}
+
+.highlight {
+  background: transparent;
+  padding: 10px;
+  border: 1px solid var(--color-gold);
+  border-left: 4px solid var(--color-gold);
+  border-radius: 4px;
+  margin: 15px 0;
+}
+
+.example {
+  font-style: italic;
+  color: var(--color-gold);
+  border: 1px solid var(--color-red);
+  border-radius: 2px;
+}
+
+.close-btn {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  cursor: pointer;
+  height: 40px;
+  width: 40px;
+  object-fit: contain;
+}
+
+.about img {
+  height: 45px;
+  width: 45px;
+  object-fit: contain;
+}

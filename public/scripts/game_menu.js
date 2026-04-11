@@ -1,8 +1,9 @@
 import { displayAlertToast } from "./utils.js";
 
 const hostLobby = (formData) =>
-  fetch("/lobby/create", { method: "post", body: formData })
-    .then((res) => res.json());
+  fetch("/lobby/create", { method: "post", body: formData }).then((res) =>
+    res.json()
+  );
 
 const handleHost = async (e, form) => {
   e.preventDefault();
@@ -31,11 +32,24 @@ const handleJoin = (e, form) => {
   globalThis.window.location.href = "/pages/join.html";
 };
 
+const displayRules = () => {
+  const rules = document.querySelector("#game-rules");
+  rules.toggleAttribute("hidden");
+};
+
+const closeRules = (e) => {
+  const rules = e.target.closest("#game-rules");
+  rules.toggleAttribute("hidden");
+};
+
 globalThis.window.onload = () => {
   const form = document.querySelector("form");
   const hostBtn = document.querySelector("#hostBtn");
   const joinBtn = document.querySelector("#joinBtn");
-
+  const about = document.querySelector("#about-btn");
+  const close = document.querySelector("#close");
+  close.addEventListener("click", closeRules);
+  about.addEventListener("click", displayRules);
   form.addEventListener("submit", (e) => e.preventDefault());
   hostBtn.addEventListener("click", (e) => handleHost(e, form));
   joinBtn.addEventListener("click", (e) => handleJoin(e, form));

@@ -1,18 +1,132 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/styles/game-menu.css">
-    <link rel="stylesheet" href="/styles/buttons.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/styles/game-menu.css" />
+    <link rel="stylesheet" href="/styles/buttons.css" />
+    <link rel="stylesheet" href="/styles/about.css" />
 
     <script type="module" src="/scripts/game_menu.js"></script>
     <title>Cluedo Lobby</title>
+    <style>
+      .about-icon {
+        position: absolute;
+        right: 20px;
+        top: 20px;
+        cursor: pointer;
+      }
+    </style>
   </head>
 
   <body>
     <p id="alert-toast"></p>
+    <span class="about-icon" id="about-btn">
+      <img src="/assets/about.svg" alt="" />
+    </span>
+    <div class="about" id="game-rules" hidden>
+      <span id="close" class="close-btn"><img
+          src="/assets/closeBtn.svg"
+          alt=""
+        /></span>
+      <h1>Detective Mystery Game Guide</h1>
 
+      <h2>The Scenario: You are a Detective</h2>
+      <p>
+        You arrive at a mansion where Mr. Black has been murdered. Your goal is
+        to solve the mystery before anyone else.
+      </p>
+
+      <div class="highlight">
+        <strong>To win, you must figure out:</strong>
+        <ul>
+          <li><strong>WHO</strong> committed the crime</li>
+          <li><strong>WHERE</strong> it happened</li>
+          <li><strong>HOW</strong> it was done</li>
+        </ul>
+      </div>
+
+      <h2>1. Setting Up the Game</h2>
+      <ul>
+        <li>Place all character pawns on starting squares.</li>
+        <li>Put weapons in different rooms.</li>
+        <li>Separate cards into Suspects, Rooms, and Weapons.</li>
+        <li>Place one of each into a secret envelope (the solution).</li>
+        <li>Shuffle and deal remaining cards to players.</li>
+        <li>Mark your cards on your Detective Pad.</li>
+      </ul>
+
+      <h2>2. How to Take Your Turn</h2>
+
+      <h3>A. Moving Your Pawn</h3>
+      <ul>
+        <li>Roll the die and move (no diagonal moves).</li>
+        <li>Cannot pass through occupied spaces.</li>
+        <li>Enter rooms to gather clues.</li>
+        <li>Use secret passages in corner rooms.</li>
+      </ul>
+
+      <h3>B. Making a Suspicion</h3>
+      <p>When inside a room, you must make a suspicion:</p>
+      <p class="example">
+        "I suspect the crime was committed in the Lounge, by Mr. Green, with the
+        Wrench."
+      </p>
+      <ul>
+        <li>You must name the room you're currently in.</li>
+        <li>Move the suspect and weapon into your room.</li>
+      </ul>
+
+      <h3>C. Disproving a Suspicion</h3>
+      <ul>
+        <li>Players check cards starting from your left.</li>
+        <li>If they have a matching card, they show one secretly.</li>
+        <li>If no one can disprove, your suspicion gains strength.</li>
+        <li>Update your Detective Pad accordingly.</li>
+      </ul>
+
+      <h2>3. Winning the Game</h2>
+      <p>When confident, make an accusation:</p>
+      <p class="example">
+        "I accuse Colonel Mustard, in the Library, with the Candlestick."
+      </p>
+
+      <ul>
+        <li>If correct: You win!</li>
+        <li>
+          If wrong: You are out of the game but still show cards when asked.
+        </li>
+      </ul>
+
+      <h2>Important Extra Rules</h2>
+      <ul>
+        <li>If your character is suspected, you are moved into that room.</li>
+        <li>You can bluff by suspecting cards you already have.</li>
+      </ul>
+      <iframe
+        width="835"
+        height="560"
+        src="https://www.youtube.com/embed/KHSxaCs1DEs?si=yCJ07MR5XJC3VN2J"
+        title="YouTube video player"
+        frameborder="0"
+        allow="
+          accelerometer;
+          autoplay;
+          clipboard-write;
+          encrypted-media;
+          gyroscope;
+          picture-in-picture;
+          web-share;
+        "
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen
+        class="video"
+      ></iframe>
+      <div class="highlight">
+        <strong>Tip:</strong> Pay attention, take notes, and think like a
+        detective!
+      </div>
+    </div>
     <form id="form">
       <label for="name">name</label>
       <input type="text" name="name" id="name" placeholder="player name" />
