@@ -51,8 +51,9 @@ export class Game {
     const hasDiceRolled = this.#turn.getIsDiceRolled();
     const hasUsedSecretPassage = this.#getHasUsedSecretPassage();
     const hasSuspected = this.hasSuspected();
+    const hasMoved = !this.#turn.getPossiblePaths().length;
 
-    return hasDiceRolled || hasUsedSecretPassage || hasSuspected;
+    return (hasDiceRolled && hasMoved) || hasUsedSecretPassage || hasSuspected;
   }
 
   updateTurn() {

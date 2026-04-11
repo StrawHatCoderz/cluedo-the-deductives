@@ -180,3 +180,12 @@ path.room.highlight-room {
     opacity: 1;
   }
 }
+
+.door {
+  filter: drop-shadow(0 0 2px #ffffff) drop-shadow(0 0 6px #000000) drop-shadow(
+    0
+    0
+    8px
+    #000000
+  );
+}

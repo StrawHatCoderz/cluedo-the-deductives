@@ -120,7 +120,7 @@ export const disproveASuspicion = (state) => {
   if (!state.canDisproved) {
     showResult(state.suspicionCombo, { disproved: false });
     announceSuspicion(state);
-    return displayPopup("No one could disprove");
+    return displayPopup("No one could disprove it");
   }
 
   if (state.hasDisproved) {

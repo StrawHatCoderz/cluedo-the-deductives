@@ -109,6 +109,18 @@ describe("GAME", () => {
 
       assertEquals(game.getState(1).state, "running");
     });
+
+    it(" => should fallback to 'finished' when states exhausted", () => {
+      add3Players();
+
+      game.start();
+      game.changeCurrentState();
+      game.changeCurrentState();
+
+      const state = game.getState(1);
+
+      assertEquals(state.state, "finished");
+    });
   });
 
   describe("start game", () => {
@@ -186,6 +198,19 @@ describe("GAME", () => {
       const currentPlayer = game.updateTurn();
 
       assertEquals(currentPlayer.id, p2.getPlayerData().id);
+    });
+
+    it(" => should skip eliminated active player recursively", () => {
+      add3Players();
+
+      game.start();
+
+      const first = game.getActivePlayer();
+      first.eliminate();
+
+      const next = game.updateTurn();
+
+      assertEquals(next.id !== first.getPlayerData().id, true);
     });
   });
 
@@ -305,6 +330,55 @@ describe("GAME", () => {
 
       assertEquals(result.isCorrect, false);
     });
+
+    it(" => should show accusation result and mark seen", () => {
+      add3Players();
+      game.updateTurn();
+
+      const combo = {
+        suspect: SUSPECTS[0],
+        weapon: WEAPONS[0],
+        room: ROOMS[0],
+      };
+
+      game.accuse(combo);
+
+      const state = game.getState(1);
+
+      assertEquals(state.shouldShowAccusationResult, true);
+      assertEquals(state.accusationDetails.isCorrect, true);
+    });
+
+    it(" => should not include murderCombination for non-accuser", () => {
+      add3Players();
+      const combo = {
+        suspect: SUSPECTS[0],
+        weapon: WEAPONS[0],
+        room: ROOMS[0],
+      };
+
+      game.accuse(combo);
+
+      const state = game.getState(2);
+
+      assertEquals(state.accusationDetails.murderCombination, undefined);
+    });
+
+    it(" => should eliminate player on wrong accusation and advance turn", () => {
+      add3Players();
+
+      const wrongCombo = {
+        suspect: SUSPECTS[1],
+        weapon: WEAPONS[0],
+        room: ROOMS[0],
+      };
+
+      game.accuse(wrongCombo);
+
+      const state = game.getState(2);
+
+      assertEquals(state.players.some((p) => p.isEliminated), true);
+    });
   });
 
   describe("secret passage", () => {
@@ -360,6 +434,25 @@ describe("GAME", () => {
       game.addSuspicion(currentPlayer.getPlayerData().id, combination);
 
       assertEquals(game.getState(1).disprovalData.disprovablePlayer, 2);
+    });
+
+    it(" => should return disprovable player directly", () => {
+      add3Players();
+      game.start();
+
+      const combination = {
+        suspectId: 1,
+        weapon: "dagger",
+        room: "kitchen",
+      };
+
+      const current = game.getActivePlayer();
+      const pawn = game.getPawnInstance(current.getPlayerData().pawn.id);
+      pawn.updatePosition({ room: "kitchen" });
+
+      game.addSuspicion(current.getPlayerData().id, combination);
+
+      assertEquals(game.getDisprovablePlayer(), 2);
     });
   });
 
@@ -465,6 +558,39 @@ describe("GAME", () => {
         ValidationError,
       );
     });
+
+    it(" => should throw if pawn not inside room", () => {
+      add3Players();
+      game.changeCurrentState();
+
+      const current = game.getActivePlayer();
+
+      assertThrows(() =>
+        game.addSuspicion(current.getPlayerData().id, {
+          suspectId: 1,
+          weapon: "dagger",
+          room: "kitchen",
+        })
+      );
+    });
+
+    it(" => should throw if suspicion room mismatch", () => {
+      add3Players();
+      game.changeCurrentState();
+
+      const current = game.getActivePlayer();
+      const pawn = game.getPawnInstance(current.getPlayerData().pawn.id);
+
+      pawn.updatePosition({ room: "study" });
+
+      assertThrows(() =>
+        game.addSuspicion(current.getPlayerData().id, {
+          suspectId: 1,
+          weapon: "dagger",
+          room: "kitchen",
+        })
+      );
+    });
   });
 
   describe("movePawn()", () => {
@@ -525,6 +651,14 @@ describe("GAME", () => {
         ValidationError,
         "Provide Valid Path to move",
       );
+    });
+
+    it(" => should parse pawn position to tile when no room", () => {
+      const result = game.parsePawnPosition({
+        position: { x: 2, y: 3, room: null },
+      });
+
+      assertEquals(result, "tile-2-3");
     });
   });
 });

@@ -347,7 +347,7 @@ describe("APP TEST", () => {
 
         assertEquals(res.status, 400);
         assertEquals(body.success, false);
-        assertEquals(body.error, "Invalid room id");
+        assertEquals(body.error, "Lobby id 5 is invalid");
       });
     });
 
@@ -474,6 +474,34 @@ describe("APP TEST", () => {
       const body = await res.json();
       assertEquals(res.status, 400);
       assertEquals(body.success, false);
+    });
+  });
+
+  describe("throw error", () => {
+    it(" => should return 500 for unknown errors", async () => {
+      const brokenApp = createApp({
+        gameController,
+        lobbyController,
+        getRandom: () => {
+          throw new Error("Random failed");
+        },
+        roundUp: (x) => x,
+        logger: () => (_, __) => {
+          throw new Error("Unexpected failure");
+        },
+      });
+
+      const res = await brokenApp.request("/lobby", {
+        headers: {
+          Cookie: "lobbyId=1; playerId=1",
+        },
+      });
+
+      const body = await res.json();
+
+      assertEquals(res.status, 500);
+      assertEquals(body.success, false);
+      assertEquals(body.error, "Internal Server Error");
     });
   });
 });

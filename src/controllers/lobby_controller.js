@@ -33,7 +33,7 @@ export class LobbyController {
 
   joinLobby(name, lobbyId) {
     const lobby = this.#lobbies[lobbyId];
-    if (!lobby) throw new ValidationError("Invalid room id");
+    if (!lobby) throw new ValidationError(`Lobby id ${lobbyId} is invalid`);
     const isHost = false;
     lobby.addPlayer(++this.#currentPlayerId, name, isHost);
     return { lobbyId, playerId: this.#currentPlayerId };
@@ -53,5 +53,12 @@ export class LobbyController {
       isHost: lobby.isHost(parseInt(playerId)),
       currentPlayerId: playerId,
     };
+  }
+
+  leaveLobby(lobbyId, playerId) {
+    const lobby = this.#lobbies[lobbyId];
+    if (!lobby) throw new ValidationError("Invalid lobby id");
+
+    return lobby.leaveLobby(playerId);
   }
 }

@@ -74,21 +74,40 @@ const handleGameStart = async () => {
   globalThis.window.location = "/pages/setup.html";
 };
 
+const handleLeaveLobby = async (btn) => {
+  btn.disabled = true;
+
+  const { success } = await sendRequest({
+    url: "/lobby/leave",
+    method: "post",
+  });
+
+  if (success) {
+    globalThis.window.location = "/pages/game-menu.html";
+  }
+};
+
 const assignStartBtn = (isHost, playersCount, hostActions) => {
   const lobbyInfo = document.getElementById("lobby-status-actions");
+
   const startBtn = hostActions.querySelector("#lobby-start-btn");
+  const leaveBtn = hostActions.querySelector("#leave-lobby-btn");
 
   startBtn.addEventListener("click", handleGameStart);
+  leaveBtn.addEventListener("click", () => handleLeaveLobby(leaveBtn));
+
   const isWaiting = playersCount < 3;
 
   if (!isWaiting) {
     startBtn.removeAttribute("disabled");
-    startBtn.setAttribute("enabled", true);
   }
 
   if (isHost) {
-    lobbyInfo.replaceChildren(startBtn);
+    lobbyInfo.replaceChildren(startBtn, leaveBtn);
+    return;
   }
+
+  lobbyInfo.replaceChildren(leaveBtn);
 };
 
 const renderUi = (lobby, profilesTemplate, profilesContainer, hostActions) => {

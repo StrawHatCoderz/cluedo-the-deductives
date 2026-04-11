@@ -103,7 +103,7 @@ describe("LOBBY", () => {
       assertThrows(
         () => lobbyController.joinLobby("thor", 1),
         ValidationError,
-        "Invalid room id",
+        "Lobby id 1 is invalid",
       );
     });
   });
@@ -146,6 +146,41 @@ describe("LOBBY", () => {
       const lobbyController = new LobbyController();
       assertThrows(
         () => lobbyController.getLobbyState(1, 1),
+        ValidationError,
+        "Invalid lobby id",
+      );
+    });
+  });
+  describe("leaveLobby", () => {
+    it(" => should call leaveLobby on the correct lobby with playerId", () => {
+      const lobby = {
+        leaveLobby: fn(() => "left"),
+        addPlayer: fn(),
+        getState: fn(() => ({ id: 1 })),
+      };
+
+      const lobbyController = LobbyController.create(() => lobby);
+
+      lobbyController.hostLobby("loki");
+
+      const result = lobbyController.leaveLobby(1, 1);
+
+      assertEquals(result, "left");
+      expect(lobby.leaveLobby).toHaveBeenCalledWith(1);
+      expect(lobby.leaveLobby).toHaveBeenCalledTimes(1);
+    });
+
+    it(" => should throw error if lobby id is invalid", () => {
+      const lobby = {
+        leaveLobby: fn(),
+        addPlayer: fn(),
+        getState: fn(() => ({ id: 1 })),
+      };
+
+      const lobbyController = LobbyController.create(() => lobby);
+
+      assertThrows(
+        () => lobbyController.leaveLobby(999, 1),
         ValidationError,
         "Invalid lobby id",
       );

@@ -109,7 +109,7 @@ const handleDiceClick = async (event, dice, pawn) => {
   const { diceValues } = await fetchRollDice();
 
   showDiceAnimation(diceValues, async () => {
-    displayPopup(`dice value is ${diceValues[0] + diceValues[1]}`, "info");
+    displayPopup(`You Rolled ${diceValues[0] + diceValues[1]}`, "info");
     const { data } = await fetchReachableNodes();
     highlightTiles(data);
     movePlayer(data, pawn);
@@ -220,7 +220,7 @@ const showDiceAnimationForPassivePlayer = (boardConfig) => {
   ) {
     showDiceAnimation(boardConfig.diceValues, () => {
       displayPopup(
-        `${boardConfig.activePlayer.name} rolled the dice and got ${
+        `${boardConfig.activePlayer.name} rolled ${
           boardConfig.diceValues[0] + boardConfig.diceValues[1]
         }`,
         "info",

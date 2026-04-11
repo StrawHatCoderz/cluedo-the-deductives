@@ -1,4 +1,4 @@
-import { getCookie, setCookie } from "hono/cookie";
+import { deleteCookie, getCookie, setCookie } from "hono/cookie";
 import { createLobbySchema, joinLobbySchema } from "../validators/schema.js";
 
 export const createLobby = async (c) => {
@@ -48,4 +48,15 @@ export const serveLobbyState = (c) => {
     data: lobbyController.getLobbyState(parseInt(lobbyId), parseInt(playerId)),
     currentPlayer: +playerId,
   });
+};
+
+export const leaveLobby = (c) => {
+  const lobbyController = c.get("lobbyController");
+  const lobbyId = getCookie(c, "lobbyId");
+  const playerId = getCookie(c, "playerId");
+  lobbyController.leaveLobby(parseInt(lobbyId), parseInt(playerId));
+
+  deleteCookie(c, "lobbyId");
+  deleteCookie(c, "playerId");
+  return c.json({ success: true });
 };

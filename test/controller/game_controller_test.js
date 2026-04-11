@@ -440,4 +440,48 @@ describe("GAME CONTROLLER", () => {
       assertEquals(result, { id: 1 });
     });
   });
+
+  describe("getDisprovablePlayer()", () => {
+    it(" => should return disprovable player from game", () => {
+      gameMock.getDisprovablePlayer = () => 42;
+
+      controller.startGame(1, [
+        {
+          id: 1,
+          name: "tony",
+          isHost: true,
+          character: { name: "Scarlet" },
+        },
+      ]);
+
+      const result = controller.getDisprovablePlayer(1);
+
+      assertEquals(result, 42);
+    });
+  });
+
+  describe("getSuspicionCombination()", () => {
+    it(" => should return suspicion combination from game", () => {
+      const combo = {
+        suspect: "scarlet",
+        weapon: "dagger",
+        room: "kitchen",
+      };
+
+      gameMock.getSuspectCombination = () => combo;
+
+      controller.startGame(1, [
+        {
+          id: 1,
+          name: "tony",
+          isHost: true,
+          character: { name: "Scarlet" },
+        },
+      ]);
+
+      const result = controller.getSuspicionCombination(1);
+
+      assertEquals(result, combo);
+    });
+  });
 });

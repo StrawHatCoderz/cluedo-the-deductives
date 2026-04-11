@@ -21,6 +21,10 @@ export class Lobby {
     return this.#players.find((player) => player.id === playerId);
   }
 
+  #findPlayerIndex(playerId) {
+    return this.#players.findIndex((player) => player.id === playerId);
+  }
+
   getState(playerId) {
     if (!this.#findPlayer(playerId)) {
       throw new ValidationError("Invalid player id");
@@ -65,5 +69,23 @@ export class Lobby {
     }
 
     this.#isStarted = true;
+  }
+
+  leaveLobby(playerId) {
+    const playerIndex = this.#findPlayerIndex(playerId);
+
+    if (playerIndex === -1) {
+      throw new ValidationError("Player is not present");
+    }
+
+    const leavingPlayer = this.#players[playerIndex];
+    const isHostLeaving = leavingPlayer.isHost;
+
+    this.#pawns.unshift(leavingPlayer.character);
+    this.#players.splice(playerIndex, 1);
+
+    if (isHostLeaving && this.#players.length > 0) {
+      this.#players[0].isHost = true;
+    }
   }
 }

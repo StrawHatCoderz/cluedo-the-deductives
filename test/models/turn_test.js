@@ -86,4 +86,56 @@ describe("Turn Management", () => {
       assertEquals(turn.getUsedSecretPassage(), true);
     });
   });
+
+  describe("accusation result tracking", () => {
+    it(" => should set and get accusation result", () => {
+      const result = { isCorrect: true };
+      turn.setAccusationResult(result);
+      assertEquals(turn.getAccusationResult(), result);
+    });
+
+    it(" => should mark player as seen accusation result", () => {
+      turn.setAccusationResult({});
+      turn.markAccusationResultSeen(1);
+      assertEquals(turn.hasPlayerSeenAccusationResult(1), true);
+    });
+
+    it(" => should return false if player has not seen accusation result", () => {
+      turn.setAccusationResult({});
+      assertEquals(turn.hasPlayerSeenAccusationResult(2), undefined);
+    });
+
+    it(" => should track multiple players seeing accusation result", () => {
+      turn.setAccusationResult({});
+      turn.markAccusationResultSeen(1);
+      turn.markAccusationResultSeen(2);
+
+      assertEquals(turn.hasPlayerSeenAccusationResult(1), true);
+      assertEquals(turn.hasPlayerSeenAccusationResult(2), true);
+    });
+
+    it(" => should return false when not all players have seen result", () => {
+      turn.setAccusationResult({});
+      turn.markAccusationResultSeen(1);
+      const result = turn.haveAllPlayersSeen(2);
+      assertEquals(result, false);
+    });
+
+    it(" => should return true when all players have seen result", () => {
+      turn.setAccusationResult({});
+      turn.markAccusationResultSeen(1);
+      turn.markAccusationResultSeen(2);
+      const result = turn.haveAllPlayersSeen(2);
+
+      assertEquals(result, true);
+    });
+
+    it(" => should reset seen map when new accusation result is set", () => {
+      turn.setAccusationResult({});
+      turn.markAccusationResultSeen(1);
+      turn.setAccusationResult({ new: true });
+
+      assertEquals(turn.hasPlayerSeenAccusationResult(1), undefined);
+    });
+  });
 });

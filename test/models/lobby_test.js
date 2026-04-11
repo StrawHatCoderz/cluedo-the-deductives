@@ -127,5 +127,55 @@ describe("LOBBY", () => {
 
       assertThrows(() => lobby.updateState(2), ValidationError);
     });
+
+    it(" => should not update state if game already started", () => {
+      lobby.addPlayer(1, "host", true);
+      lobby.addPlayer(2, "p2", false);
+      lobby.addPlayer(3, "p3", false);
+
+      lobby.updateState(1);
+
+      assertThrows(
+        () => lobby.updateState(1),
+        ValidationError,
+        "Game has already started",
+      );
+    });
+  });
+
+  describe("leave lobby", () => {
+    it(" => should remove player from lobby", () => {
+      lobby.addPlayer(1, "tony", true);
+      lobby.addPlayer(2, "steve", false);
+
+      lobby.leaveLobby(2);
+
+      const state = lobby.getState(1);
+
+      assertEquals(state.players.length, 1);
+      assertEquals(state.players[0].id, 1);
+    });
+
+    it(" => should throw error if player is not present", () => {
+      lobby.addPlayer(1, "tony", true);
+
+      assertThrows(
+        () => lobby.leaveLobby(999),
+        ValidationError,
+        "Player is not present",
+      );
+    });
+
+    it(" => should reassign host if host leaves", () => {
+      lobby.addPlayer(1, "tony", true);
+      lobby.addPlayer(2, "steve", false);
+
+      lobby.leaveLobby(1);
+
+      const state = lobby.getState(2);
+
+      assertEquals(state.players[0].isHost, true);
+      assertEquals(state.players[0].id, 2);
+    });
   });
 });
