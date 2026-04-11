@@ -14,6 +14,7 @@ const renderPawnInRoom = (pawnId, roomId, roomState) => {
   occupied[pawnId] = freeIndex;
 
   const slots = document.querySelectorAll(`#${roomId}-group .room-slot`);
+  slots.forEach((slot) => slot.classList.remove("highlight-suspect"));
   const slot = slots[freeIndex];
 
   if (slot) {
