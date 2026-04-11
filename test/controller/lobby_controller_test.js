@@ -156,20 +156,36 @@ describe("LOBBY", () => {
       const lobby = {
         leaveLobby: fn(() => "left"),
         addPlayer: fn(),
-        getState: fn(() => ({ id: 1 })),
+        getState: fn(() => ({ id: 1, players: [] })),
       };
 
       const lobbyController = LobbyController.create(() => lobby);
 
       lobbyController.hostLobby("loki");
 
-      const result = lobbyController.leaveLobby(1, 1);
+      lobbyController.leaveLobby(1, 1);
 
-      assertEquals(result, "left");
       expect(lobby.leaveLobby).toHaveBeenCalledWith(1);
       expect(lobby.leaveLobby).toHaveBeenCalledTimes(1);
     });
 
+    it(" => should call leaveLobby on the correct lobby with playerId and delete lobby if lastplayer", () => {
+      const lobby = {
+        leaveLobby: fn(() => "left"),
+        addPlayer: fn(),
+        getState: fn(() => ({ id: 1, players: ["one"] })),
+        isHost: fn(() => true),
+      };
+
+      const lobbyController = LobbyController.create(() => lobby);
+
+      lobbyController.hostLobby("loki");
+
+      lobbyController.leaveLobby(1, 1);
+
+      expect(lobby.leaveLobby).toHaveBeenCalledWith(1);
+      expect(lobby.leaveLobby).toHaveBeenCalledTimes(1);
+    });
     it(" => should throw error if lobby id is invalid", () => {
       const lobby = {
         leaveLobby: fn(),

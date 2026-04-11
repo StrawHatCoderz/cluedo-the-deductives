@@ -58,7 +58,11 @@ export class LobbyController {
   leaveLobby(lobbyId, playerId) {
     const lobby = this.#lobbies[lobbyId];
     if (!lobby) throw new ValidationError("Invalid lobby id");
+    const totalPlayers = lobby.getState(playerId).players.length;
+    lobby.leaveLobby(playerId);
 
-    return lobby.leaveLobby(playerId);
+    if (totalPlayers === 1) {
+      delete this.#lobbies[lobbyId];
+    }
   }
 }
