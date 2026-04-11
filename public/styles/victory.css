@@ -2,12 +2,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: "Segoe UI", sans-serif;
-  background: radial-gradient(
-    circle at center,
-    #2b0d0d 0%,
-    #1a0707 60%,
-    #0f0303 100%
-  );
+  background: radial-gradient(circle at center, #5b1414 0%, #220707 80%);
   color: #f5eaea;
   display: flex;
   justify-content: center;

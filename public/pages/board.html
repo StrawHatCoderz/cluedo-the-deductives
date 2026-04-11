@@ -363,6 +363,14 @@
               preserveAspectRatio="xMidYMid slice"
             />
           </pattern>
+
+          <linearGradient id="shimmer" x1="-1" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="white" stop-opacity="0" />
+            <stop offset="45%" stop-color="white" stop-opacity="0" />
+            <stop offset="50%" stop-color="white" stop-opacity="1" />
+            <stop offset="55%" stop-color="white" stop-opacity="0" />
+            <stop offset="100%" stop-color="white" stop-opacity="0" />
+          </linearGradient>
         </defs>
         <g
           id="tiles-group"
@@ -1159,6 +1167,14 @@
             height="98"
             fill="url(#center-img)"
             class="envelope"
+          />
+          <rect
+            x="322"
+            y="182"
+            width="72"
+            height="98"
+            fill="url(#shimmer)"
+            class="shimmer-overlay"
           />
         </g>
         <g id="weapons-group">

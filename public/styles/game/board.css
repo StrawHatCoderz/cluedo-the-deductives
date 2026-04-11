@@ -23,7 +23,7 @@
 body {
   margin: 0;
   padding: 0;
-  background: radial-gradient(circle at center, #4f0e0e 0%, #1a0505 80%);
+  background: radial-gradient(circle at center, #5b1414 0%, #220707 80%);
 
   font-family: "Segoe UI", sans-serif;
   overflow: hidden;
@@ -188,4 +188,34 @@ path.room.highlight-room {
     8px
     #000000
   );
+}
+
+.shimmer-overlay {
+  opacity: 0;
+  pointer-events: none;
+  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.6));
+  mix-blend-mode: screen;
+
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.shimmer-overlay.active {
+  animation: shimmerPass 1.2s ease forwards;
+}
+
+@keyframes shimmerPass {
+  0% {
+    opacity: 0;
+    transform: translateX(0px);
+  }
+
+  15% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(80px);
+  }
 }
