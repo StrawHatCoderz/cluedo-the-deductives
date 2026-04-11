@@ -24,7 +24,7 @@
   position: absolute;
   width: 80px;
   height: 80px;
-  background: #f8f0dc;
+  background: linear-gradient(160deg, #1a0606, #2a0a0a);
   border: 2px solid #b89040;
   border-radius: 10px;
   display: grid;
@@ -62,7 +62,7 @@
 .pip {
   width: 10px;
   height: 10px;
-  background: #2c1a0e;
+  background: #d6b3b3;
   border-radius: 50%;
   place-self: center;
 }
