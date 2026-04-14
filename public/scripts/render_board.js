@@ -1,3 +1,8 @@
+import { displayInitialMessage } from "../components/popup.js";
+import { Shimmer } from "../components/shimmer.js";
+import { accuseBtnListener } from "./board.js";
+import { renderPlayers } from "./render_player.js";
+import { renderPlayerCards } from "./render_player_cards.js";
 import { toSentenceCase } from "./utils/common.js";
 
 const initializeRoomState = (roomId) => {
@@ -124,9 +129,22 @@ const setupWeaponsEvents = (tooltip) => {
   });
 };
 
-export const setupBoard = () => {
+export const setupGame = async (gameConfig) => {
   const tooltip = document.getElementById("tooltip");
+  const playerCardsContainer = document.getElementById("players-cards-details");
+  const shimmerELement = document.querySelector(".shimmer-overlay");
+  const shimmer = new Shimmer(shimmerELement);
+  const accuseBtn = document.querySelector("#accuse-button");
 
   setupSecretPassageEvents(tooltip);
   setupWeaponsEvents(tooltip);
+
+  renderPlayers(gameConfig);
+  renderPlayerCards(gameConfig.currentPlayer.hand, playerCardsContainer);
+  clearAllPawns();
+
+  accuseBtnListener(accuseBtn);
+  await displayInitialMessage();
+
+  shimmer.init();
 };
