@@ -67,7 +67,7 @@ export const placeCharacters = (boardConfig) => {
   }
 };
 
-const clearAllPawns = () => {
+export const clearAllPawns = () => {
   document.querySelectorAll(".room-slot").forEach((slot) => {
     slot.setAttribute("fill", "transparent");
     delete slot.dataset.occupiedBy;
@@ -124,13 +124,9 @@ const setupWeaponsEvents = (tooltip) => {
   });
 };
 
-export const renderBoard = (boardConfig) => {
+export const setupBoard = () => {
   const tooltip = document.getElementById("tooltip");
 
   setupSecretPassageEvents(tooltip);
   setupWeaponsEvents(tooltip);
-
-  clearAllPawns();
-
-  placeCharacters(boardConfig);
 };
