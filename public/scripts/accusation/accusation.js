@@ -1,10 +1,10 @@
+import { createClone, createOption } from "../utils/ui.js";
 import {
   handleAccusationSubmission,
   ROOMS,
   SUSPECTS,
   WEAPONS,
-} from "./utils/accusation_service.js";
-import { createClone, createOption } from "./utils/ui_service.js";
+} from "./accusation_service.js";
 
 const setupSubmitListner = (overlay) => {
   const form = document.querySelector("form");

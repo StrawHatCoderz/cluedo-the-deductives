@@ -1,6 +1,5 @@
-import { createCard } from "./render_player_cards.js";
-import { toId, toSentenceCase } from "./utils.js";
-import { createClone } from "./utils/ui_service.js";
+import { toId, toSentenceCase } from "./utils/common.js";
+import { createCard, createClone } from "./utils/ui.js";
 
 const WEAPONS = {
   dagger: "https://cdn-icons-png.flaticon.com/128/3863/3863317.png",

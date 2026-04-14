@@ -1,4 +1,4 @@
-import { toSentenceCase } from "./utils.js";
+import { toSentenceCase } from "./utils/common.js";
 
 const initializeRoomState = (roomId) => {
   const slots = document.querySelectorAll(`#${roomId}-group .room-slot`);

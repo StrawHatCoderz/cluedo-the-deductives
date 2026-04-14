@@ -1,6 +1,8 @@
+import { closeOverlay } from "../components/overlay.js";
+import { displayPopup } from "../components/popup.js";
 import { showResult } from "./suspicion.js";
-import { closeOverlay, displayPopup, toId } from "./utils.js";
-import { createClone } from "./utils/ui_service.js";
+import { toId } from "./utils/common.js";
+import { createClone } from "./utils/ui.js";
 
 const sendDisprovedCard = async (e, overlay) => {
   overlay.close();

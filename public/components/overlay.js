@@ -32,3 +32,9 @@ class Overlay extends HTMLElement {
 }
 
 customElements.define("our-overlay", Overlay);
+
+export const closeOverlay = (overlay, ms = 5000) => {
+  setTimeout(() => {
+    overlay?.close();
+  }, ms);
+};

@@ -1,5 +1,5 @@
-import { displayCardsCombination } from "./accusation_result.js";
-import { fetchGameConfig } from "./utils.js";
+import { displayCardsCombination } from "./accusation/accusation_result.js";
+import { fetchGameState } from "./api/fetch_service.js";
 
 export const handleRedirectBasedOnGameState = (boardConfig) => {
   if (boardConfig.state === "finished") {
@@ -16,7 +16,7 @@ const displayWinner = (winner) => {
 };
 
 globalThis.window.onload = async () => {
-  const { gameConfig } = await fetchGameConfig("/game");
+  const { gameConfig } = await fetchGameState("/game");
 
   const murderCombinationContainer = document.getElementById(
     "murder-combination",

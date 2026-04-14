@@ -1,4 +1,4 @@
-import { displayAlertToast } from "./utils.js";
+import { displayAlertToast } from "../components/popup.js";
 
 const hostLobby = (formData) =>
   fetch("/lobby/create", { method: "post", body: formData }).then((res) =>

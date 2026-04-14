@@ -1,4 +1,6 @@
-import { fetchLobbyStateWithEtag, sendRequest, toId } from "./utils.js";
+import { sendRequest } from "./api/api_service.js";
+import { fetchLobbyState } from "./api/fetch_service.js";
+import { toId } from "./utils/common.js";
 
 const handleCopyLobbyId = (_e, lobbyId) => {
   const copyToast = document.getElementById("copy-toast");
@@ -125,7 +127,7 @@ const setupWaitingPage = () => {
   const profilesContainer = document.querySelector(".profile-container");
 
   setInterval(async () => {
-    const { etag, lobby, changed } = await fetchLobbyStateWithEtag(
+    const { etag, lobby, changed } = await fetchLobbyState(
       "/lobby",
       prevEtag,
     );

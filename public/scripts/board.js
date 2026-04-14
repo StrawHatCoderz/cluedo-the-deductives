@@ -1,6 +1,7 @@
-import { displayAccusationOverlay } from "./accusation.js";
+import { displayPopup } from "../components/popup.js";
+import { displayAccusationOverlay } from "./accusation/accusation.js";
 import { showDiceAnimation } from "./dice_animation.js";
-import { displayPopup, toId } from "./utils.js";
+import { toId } from "./utils/common.js";
 
 const removePlayerIcon = (pawn) => {
   const pawnId = toId(pawn.name);

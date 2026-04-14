@@ -3,7 +3,7 @@ import {
   isCurrentPlayer,
   toId,
   toNormalCase,
-} from "./utils.js";
+} from "./utils/common.js";
 
 const createPlayer = (node, player, activePlayer, currentPlayer) => {
   const playerNode = node.querySelector(".player");

@@ -1,4 +1,4 @@
-import { displayAlertToast } from "./utils.js";
+import { displayAlertToast } from "../components/popup.js";
 
 const hostJoin = (body) =>
   fetch("/lobby/join", {

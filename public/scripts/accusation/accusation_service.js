@@ -1,5 +1,6 @@
-import { displayPopup, sendRequest } from "../utils.js";
-import { parseFormData } from "./api_service.js";
+import { sendRequest } from "../api/api_service.js";
+import { parseFormData } from "../api/parse_service.js";
+import { displayPopup } from "../../components/popup.js";
 
 export const SUSPECTS = [
   "miss scarlett",

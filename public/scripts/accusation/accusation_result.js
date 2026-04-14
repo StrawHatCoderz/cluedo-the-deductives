@@ -1,5 +1,4 @@
-import { createCard } from "./render_player_cards.js";
-import { createClone } from "./utils/ui_service.js";
+import { createCard, createClone } from "../utils/ui.js";
 
 export const displayCardsCombination = (combination, container) => {
   const cards = Object.values(combination).map((card) => {

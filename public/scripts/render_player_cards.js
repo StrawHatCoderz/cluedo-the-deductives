@@ -1,10 +1,4 @@
-export const createCard = (node, card, cardStyles = ["player-card"]) => {
-  const cardImg = node.querySelector(".player-card");
-  const imgName = card.split(" ").join("_");
-  cardImg.src = `/images/${imgName}.jpg`;
-  cardImg.alt = card;
-  cardImg.classList.add(...cardStyles);
-};
+import { createCard } from "./utils/ui.js";
 
 export const renderPlayerCards = (playerHand, handContainer) => {
   const cardTemplate = document.getElementById("card-template");

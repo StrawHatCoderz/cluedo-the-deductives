@@ -1,4 +1,4 @@
-const getElement = (id) => document.getElementById(id);
+import { getElement } from "./utils/common.js";
 
 const createDeck = (deckId, count) => {
   const deck = getElement(deckId);
